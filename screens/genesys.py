@@ -34,13 +34,11 @@ from kivy.core.window import Window
 class GenerateJsonScreen(GridLayout):
 
     __workflow = None
-    __workflow_type = ""
 
-    def __init__(self, type:str, workflow=Workflow(), **kwargs):
+    def __init__(self, workflow=Workflow(), **kwargs):
         super(GenerateJsonScreen, self).__init__(**kwargs) # One should not forget to call super in order to implement the functionality of the original class being overloaded. Also note that it is good practice not to omit the **kwargs while calling super, as they are sometimes used internally.
         
         self.__workflow = workflow
-        self.__workflow_type = type
         self.rows = 2
         self.cols = 2
         
@@ -75,14 +73,14 @@ class GenerateJsonScreen(GridLayout):
         if check_json_format(json_pathname):
             self.__workflow.generate_json(path=json_pathname) # Call to generate_json Workflow class method
             self.clear_widgets() # Clean the objects in the screen before adding the new ones
-            workflow_screen = WorkflowScreen(type=self.__workflow_type, workflow=self.__workflow)
+            workflow_screen = WorkflowScreen(workflow=self.__workflow)
             self.parent.add_widget(workflow_screen)
         else:
             self.jsonpathname.text = "NOT A JSON FORMAT"
 
     def return_to_workflow_screen(self, instance):
         self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        workflow_screen = WorkflowScreen(type=self.__workflow_type, workflow=self.__workflow)
+        workflow_screen = WorkflowScreen(workflow=self.__workflow)
         self.parent.add_widget(workflow_screen)
 
 ###############################################################################
@@ -94,13 +92,11 @@ class GenerateJsonScreen(GridLayout):
 class GenerateWorkflowFromJsonScreen(GridLayout):
 
     __workflow = None
-    __workflow_type = ""
 
-    def __init__(self, type:str, workflow=Workflow(), **kwargs):
+    def __init__(self, workflow=Workflow(), **kwargs):
         super(GenerateWorkflowFromJsonScreen, self).__init__(**kwargs) # One should not forget to call super in order to implement the functionality of the original class being overloaded. Also note that it is good practice not to omit the **kwargs while calling super, as they are sometimes used internally.
         
         self.__workflow = workflow
-        self.__workflow_type = type
         self.rows = 2
         self.cols = 2
         
@@ -135,14 +131,14 @@ class GenerateWorkflowFromJsonScreen(GridLayout):
         if check_json_format(json_pathname):
             self.__workflow.get_from_json(json_path=json_pathname)            
             self.clear_widgets() # Clean the objects in the screen before adding the new ones
-            workflow_screen = WorkflowScreen(type=self.__workflow_type, workflow=self.__workflow)
+            workflow_screen = WorkflowScreen(workflow=self.__workflow)
             self.parent.add_widget(workflow_screen)
         else:
             self.jsonpathname.text = "NOT A JSON FORMAT"
 
     def return_to_workflow_screen(self, instance):
         self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        workflow_screen = WorkflowScreen(type=self.__workflow_type, workflow=self.__workflow)
+        workflow_screen = WorkflowScreen(workflow=self.__workflow)
         self.parent.add_widget(workflow_screen)
 
 ###############################################################################
@@ -155,14 +151,12 @@ class WorkflowScreen(GridLayout):
     # Label que te diga si actualmente hay alguna tarea ejecutándose o no. Requerirá un booleano en la clase Workflow que especifique si se está ejecutando el objeto workflow o no.
     # Clustering y módulos de ciencia de datos
     __workflow = None # This class stores a GeneSys workflow and implements ways to manipulate it
-    __workflow_type = ""
 
-    def __init__(self, type:str, workflow=Workflow(), **kwargs): # It receives a workflow set as a new, empty workflow by default
+    def __init__(self, workflow=Workflow(), **kwargs): # It receives a workflow set as a new, empty workflow by default
         super(WorkflowScreen, self).__init__(**kwargs) # One should not forget to call super in order to implement the functionality of the original class being overloaded. Also note that it is good practice not to omit the **kwargs while calling super, as they are sometimes used internally.
 
         self.workflow_thread = None # This is the reference to the thread that will run the workflow
         self.__workflow = workflow
-        self.__workflow_type = type
         self.rows = 9
         self.cols = 1
 
@@ -214,8 +208,9 @@ class WorkflowScreen(GridLayout):
         self.show_workflow_info()
     
     def open_add_tasks(self, instance):
+        workflow_type = self.__workflow.get_parameters()['workflow_type']
         self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        if self.__workflow_type.__eq__("PATRIC"):
+        if workflow_type.__eq__("PATRIC"): # Open the menu to manipulate a PATRIC workflow
             task_screen = patric_protein_processing.PatricTaskScreen(workflow=self.__workflow)
             self.parent.add_widget(task_screen)
         # elif sentences if there are more developed task groups for a workflow
@@ -240,12 +235,12 @@ class WorkflowScreen(GridLayout):
 
     def save_workflow(self, instance): # Poder elegir dónde lo guardamos y cómo llamar al fichero .json, lo que requiere una nueva ventana
         self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        save_workflow_screen = GenerateJsonScreen(type=self.__workflow_type, workflow=self.__workflow) # Open the menu that asks the user where to save current workflow
+        save_workflow_screen = GenerateJsonScreen(workflow=self.__workflow)
         self.parent.add_widget(save_workflow_screen)
 
     def load_workflow(self, instance): # We want to choose where to save JSON file and which name should be goven to it, so we define a specific screen for it
         self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        load_workflow_screen = GenerateWorkflowFromJsonScreen(type=self.__workflow_type, workflow=self.__workflow) # Open the menu that asks the user where to save current workflow
+        load_workflow_screen = GenerateWorkflowFromJsonScreen(workflow=self.__workflow)
         self.parent.add_widget(load_workflow_screen)
 
     def run_workflow(self, instance):
@@ -349,13 +344,12 @@ class WorkflowScreen(GridLayout):
 class SelectResultsPathnameWorkflowScreen(GridLayout):
 
     __workflow = None
-    __workflow_type = ""
 
-    def __init__(self, type:str, workflow=Workflow(), **kwargs):
+    def __init__(self, type:str, workflow=Workflow(), **kwargs): # "type" specifies the type of workflow that is going to be created (the module that is going to be used)
         super(SelectResultsPathnameWorkflowScreen, self).__init__(**kwargs) # One should not forget to call super in order to implement the functionality of the original class being overloaded. Also note that it is good practice not to omit the **kwargs while calling super, as they are sometimes used internally.
         
         self.__workflow = workflow
-        self.__workflow_type = type # If it is "PATRIC", the menu that contains tasks for manipulating PATRIC databases will be opened
+        self.__workflow_type = type
         self.rows = 2
         self.cols = 2
         
@@ -390,6 +384,7 @@ class SelectResultsPathnameWorkflowScreen(GridLayout):
         if check_txt_format(txt_pathname):
             tasks_empty_list = []
             workflow_parameters = {
+                'workflow_type': self.__workflow_type,
                 'returned_info': '',
                 'returned_value': -1,
                 'tasks': tasks_empty_list,
@@ -397,7 +392,7 @@ class SelectResultsPathnameWorkflowScreen(GridLayout):
             }
             self.__workflow.set_parameters(workflow_parameters)            
             self.clear_widgets() # Clean the objects in the screen before adding the new ones
-            workflow_screen = WorkflowScreen(type=self.__workflow_type, workflow=self.__workflow)
+            workflow_screen = WorkflowScreen(workflow=self.__workflow)
             self.parent.add_widget(workflow_screen)
         else:
             self.txtpathname.text = "NOT A TXT FORMAT"
@@ -428,6 +423,6 @@ class MenuScreen(GridLayout): # This screen will show via buttons all the availa
 
     def open_patric_workflow_menu(self, instance): # menu_key specifies which set of task can be added to the workflow, and it will determine which workflow manipulation screen must be open
         self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        select_results_screen = SelectResultsPathnameWorkflowScreen(type="PATRIC") # Open the isolate codes menu
+        select_results_screen = SelectResultsPathnameWorkflowScreen(type='PATRIC') # Open the isolate codes menu
         self.parent.add_widget(select_results_screen)
 
