@@ -86,7 +86,7 @@ class GenerateFasta(Task):
                         self._returned_value = 2
 
         except FileNotFoundError:
-            self._returned_info = f"Cannot find '{self.__csv_path}' file"
+            self._returned_info = f"Cannot find '{self.__csv_codes_path}' file"
             self._returned_value = 3
         
         except Exception as e:

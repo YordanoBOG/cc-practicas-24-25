@@ -544,7 +544,7 @@ class PatricTaskScreen(GridLayout):
 
     def open_workflow_menu(self, instance):
         self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        workflow_screen = genesys.WorkflowScreen(type='PATRIC', workflow=self.__workflow) # Open the isolate codes menu
+        workflow_screen = genesys.WorkflowScreen(workflow=self.__workflow) # Open the isolate codes menu
         self.parent.add_widget(workflow_screen)
 
     def show_workflow_info(self): # Workflow info is shown through a function because it might be called from other methods that modify the workflow
