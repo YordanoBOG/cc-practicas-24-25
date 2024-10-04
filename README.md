@@ -10,12 +10,31 @@ El presente proyecto de cloud computing pretende desplegar en la nube la aplicac
 
 El problema que pretende resolver esta aplicación es uno de los pasos que se llevaron a cabo para realizar la siguiente publicación: https://academic.oup.com/nar/article/48/22/12632/6020195?login=false, donde se lleva a cabo un análisis de proteínas vecinas a partir de unas muestras previamente preprocesadas. GeneSys permite automatizar dicho preprocesado de los datos empleados en el estudio para que así se pueda repetir el experimento con más facilidad y empleando nuevas proteínas como objeto de estudio.
 
-De momento, se han añadido los ficheros de la aplicación al repositorio de GitHub al tiempo que se ha aprovechado para resolver una falla de diseño que la aplicación traía de base, que consistía en almacenar como atributo de la interfaz de usuario un dato que realmente iba asociado al flujo de trabajo. Se ha cambiado la declaración de dicho atributo de las clases que implementan la interfaz de usuario a la clase que implementa los flujos de trabajo.
+En concreto, las funcionalidades que tiene la aplicación son las siguientes:
+-> Definir un flujo de trabajo al que se le pueden añadir hasta 5 tareas que se corresponden con los pasos a aplicar para realizar el preprocesamiento. Las tareas son:
+   1) Aislar IDs de proteínas descargadas de la base de datos.
+   2) Obtener las cadenas de proteínas a partir de los IDs.
+   3) Reducir la muestra de proteínas para que solo haya un ejemplar de cada familia evolutiva (tener una muestra de una rama evolutiva que ya está representada se considera ruido, y debe eliminarse).
+   4) Obtener 30000 nucleótidos vecinos previos y posteriores a cada proteína aislada en el paso anterior, que a partir de ahora serán consideradas cebos.
+   5) Revisar las cadenas de nucleótidos en busca de codones de parada (un codón de parada válido equivale a una proteína vecina asociada a la proteína cebo que la contiene). Organizar los resultados obtenidos y devolverlos en un archivo xlsx.
+-> Eliminar tareas del flujo de trabajo.
+-> Guardar el flujo actual en un archivo .json.
+-> Cargar un flujo desde un archivo .json.
+-> Ejecutar el flujo.
+-> Cancelar la ejecución del flujo.
 
-De igual forma, GeneSys implementaba en sus orígenes una arquitectura modular que admitía la incorporación de nuevas funcionalidades, sin embargo, para el caso concreto del proyecto de esta asignatura, se va a emplear una versión simplificada de la aplicación que reduce su extensibilidad a costa de hacerla más ligera y fácil de entender. Dicha reducción aún está pendiente de realizarse, por lo que de momento la aplicación completa se encuentra en el repositorio.
+De momento, se han añadido los ficheros de la aplicación al repositorio de GitHub, y se ha aprovechado para resolver una falla de diseño que la aplicación traía de base, que consistía en almacenar como atributo de la interfaz de usuario un dato que realmente iba asociado al flujo de trabajo.
 
 --------------------------------------------------------------------------------
 HITO 2
+
+Modificamos la aplicación del TFG para transformarla en una aplicación que pueda aprovechar todas las ventajas de la nube. Realizamos las siguientes modificaciones sobre el código original:
+
+-> Reducimos la funcionalidad de la aplicación para que la arquitectura sea más sencilla. Originalmente, GeneSys estaba orientada a poseer una gran extensibilidad. Simplificamos el código para que sea menos complejo a costa de reducir la extensibilidad, ya que en la asignatura de CC nos vamos a centrar en emplear las funciones que GeneSys ofrece, no a incorporar otras nuevas.
+
+-> Implementamos un sistema de gestión de usuarios. En la nube, que solo los usuarios autorizados puedan acceder a la aplicación es fundamental. Modificamos la pestaña inicial de la aplicación para incluir un sistema de autenticación de usuarios. La aplicación original permite guardar flujos de trabajo en ficheros json, así como cargarlos desde ellos. Creamos dos roles de usuario, uno básico y otro premium. La idea es simular que el usuario premium es toda persona que pague por disponer de las funcionalidades de la aplicación que permiten guardar y cargar flujos de trabajo GeneSys usando ficheros .json.
+
+-> En hitos posteriores, cuando despleguemos una base de datos en un contenedor, los usuarios y sus contraseñas se almacenarán en ella. De momento, contamos con un usuario básico y otro premium (más sus contraseñas) de prueba en un fichero .json.
 
 --------------------------------------------------------------------------------
 HITO 3
