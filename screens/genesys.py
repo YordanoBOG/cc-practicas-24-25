@@ -198,24 +198,13 @@ class WorkflowScreen(GridLayout):
         self.add_widget(self.cancel_workflow_button)
         self.cancel_workflow_button.disabled = True
 
-        # Create a button which allows you to return to the main menu
-        self.main_menu_button = Button(text='Return to main menu (the current workflow will be deleted. It is recommended to save it first)',
-                                       halign='center',
-                                       on_press=self.return_to_main_menu)
-        self.add_widget(self.main_menu_button)
-
         # Show current workflow in a non-editable text window
         self.show_workflow_info()
     
     def open_add_tasks(self, instance):
-        workflow_type = self.__workflow.get_parameters()['workflow_type']
         self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        if workflow_type.__eq__("PATRIC"): # Open the menu to manipulate a PATRIC workflow
-            task_screen = patric_protein_processing.PatricTaskScreen(workflow=self.__workflow)
-            self.parent.add_widget(task_screen)
-        # elif sentences if there are more developed task groups for a workflow
-        else:
-            self.return_to_main_menu()
+        task_screen = patric_protein_processing.PatricTaskScreen(workflow=self.__workflow)
+        self.parent.add_widget(task_screen)
 
     def rm_last_task(self, instance):
         self.__workflow.remove_last_task()
@@ -250,7 +239,7 @@ class WorkflowScreen(GridLayout):
         self.add_tasks_button.disabled = True
         self.save_workflow_button.disabled = True
         self.load_workflow_button.disabled = True
-        self.main_menu_button.disabled = True
+        #self.main_menu_button.disabled = True
         self.cancel_workflow_button.disabled = False # Able cancel button
         self.workflow_thread.start()
 
@@ -293,7 +282,7 @@ class WorkflowScreen(GridLayout):
         self.add_tasks_button.disabled = False
         self.save_workflow_button.disabled = False
         self.load_workflow_button.disabled = False
-        self.main_menu_button.disabled = False
+        #self.main_menu_button.disabled = False
         self.cancel_workflow_button.disabled = True
 
     def cancel_workflow(self, instance):
@@ -313,12 +302,6 @@ class WorkflowScreen(GridLayout):
         elif res > 1:
             ctypes.pythonapi.PyThreadState_SetAsyncExc(thread.ident, None)
             raise SystemError("PyThreadState_SetAsyncExc failed")
-    
-    def return_to_main_menu(self, instance):
-        self.__workflow.clean()
-        self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        menu_screen = MenuScreen() # Open the main menu
-        self.parent.add_widget(menu_screen)
 
     def show_workflow_info(self): # Workflow info is shown through a function because it might be called from other methods that modify the workflow
         scroll_view = ScrollView(size_hint=(None, None), size=(Window.width, 250))
@@ -333,96 +316,3 @@ class WorkflowScreen(GridLayout):
         scroll_view.add_widget(workflow_info_label)
         scroll_view.id = 'WorkflowScrollView' # It is crucial to asign an ID to this widget as we may need to remove it when we clean the workflow
         self.add_widget(scroll_view)
-
-###############################################################################
-###############################################################################
-###############################################################################
-###############################################################################
-# This screen preceeds the creation of a workflow and asks the user to give
-# a .txt pathname where to save the results given by workflow's tasks
-
-class SelectResultsPathnameWorkflowScreen(GridLayout):
-
-    __workflow = None
-
-    def __init__(self, type:str, workflow=Workflow(), **kwargs): # "type" specifies the type of workflow that is going to be created (the module that is going to be used)
-        super(SelectResultsPathnameWorkflowScreen, self).__init__(**kwargs) # One should not forget to call super in order to implement the functionality of the original class being overloaded. Also note that it is good practice not to omit the **kwargs while calling super, as they are sometimes used internally.
-        
-        self.__workflow = workflow
-        self.__workflow_type = type
-        self.rows = 2
-        self.cols = 2
-        
-        # Add text boxes
-        self.add_widget(Label(text="Introduce the pathname of the .txt results file of the workflow (<./workflow_results.txt> by default): "))
-        self.txtpathname = TextInput(multiline=False)
-        self.add_widget(self.txtpathname)
-
-        # Create a button with margins
-        exec_create_workflow_button = Button(text='Create workflow',
-                                             halign='center',
-                                             size_hint=(None, None),
-                                             size=(300, 100),
-                                             on_press=self.create_workflow)
-        exec_create_workflow_button.bind(texture_size=exec_create_workflow_button.setter('size'))
-        self.add_widget(exec_create_workflow_button)
-
-        # Create a button which allows us to return to the main menu
-        self.main_menu_button = Button(text='Return to main menu', 
-                                       halign='center',
-                                       size_hint=(None, None),
-                                       size=(300, 100),
-                                       on_press=self.return_to_main_menu)
-        self.main_menu_button.bind(texture_size=self.main_menu_button.setter('size'))
-        self.add_widget(self.main_menu_button)
-
-    def create_workflow(self, instance): # 'instance' is the name and reference to the object instance of the Class CustomBnt. You use it to gather information about the pressed Button. instance.text would be the text on the Button
-        # Load workflow from json file
-        txt_pathname = self.txtpathname.text
-        if txt_pathname.__eq__(""):
-            txt_pathname = "./workflow_results.txt"
-        if check_txt_format(txt_pathname):
-            tasks_empty_list = []
-            workflow_parameters = {
-                'workflow_type': self.__workflow_type,
-                'returned_info': '',
-                'returned_value': -1,
-                'tasks': tasks_empty_list,
-                'results_file': txt_pathname
-            }
-            self.__workflow.set_parameters(workflow_parameters)            
-            self.clear_widgets() # Clean the objects in the screen before adding the new ones
-            workflow_screen = WorkflowScreen(workflow=self.__workflow)
-            self.parent.add_widget(workflow_screen)
-        else:
-            self.txtpathname.text = "NOT A TXT FORMAT"
-
-    def return_to_main_menu(self, instance):
-        self.__workflow.clean()
-        self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        menu_screen = MenuScreen() # Open the main menu
-        self.parent.add_widget(menu_screen)
-
-###############################################################################
-###############################################################################
-###############################################################################
-###############################################################################
-
-class MenuScreen(GridLayout): # This screen will show via buttons all the available functionality of the app
-    def __init__(self, **kwargs):
-        super(MenuScreen, self).__init__(**kwargs) # One should not forget to call super in order to implement the functionality of the original class being overloaded. Also note that it is good practice not to omit the **kwargs while calling super, as they are sometimes used internally.
-        
-        self.rows = 1 # We ask the GridLayout to manage its children in 1 column and 1 row. New rows or columns must be added for each new module that it is implemented
-        self.cols = 1
-
-        # Button that opens the menu that allows manipulating all options concerning a workflow
-        patric_workflow_menu_button = Button(text='Create new PATRIC protein manipulation GeneSys workflow',
-                                             halign='center',
-                                             on_press=self.open_patric_workflow_menu)
-        self.add_widget(patric_workflow_menu_button)
-
-    def open_patric_workflow_menu(self, instance): # menu_key specifies which set of task can be added to the workflow, and it will determine which workflow manipulation screen must be open
-        self.clear_widgets() # Clean the objects in the screen before adding the new ones
-        select_results_screen = SelectResultsPathnameWorkflowScreen(type='PATRIC') # Open the isolate codes menu
-        self.parent.add_widget(select_results_screen)
-
