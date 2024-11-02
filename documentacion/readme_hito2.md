@@ -48,9 +48,9 @@ Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script
 
 ![Captura desde 2024-11-02 16-58-39](https://github.com/user-attachments/assets/e5e85881-c54f-4f92-94d8-3034bbd6cad2)
 
-El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo invoke_tests.py. ACTUALIZA ESTA FOTO Y ESTA DESCRIPCIÓN CUANDO EL HITO 2 ESTÉ COMPLETO.
+El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo invoke_tests.py. ACTUALIZA ESTA FOTO Y ESTA DESCRIPCIÓN CUANDO EL HITO 2 ESTÉ COMPLETO. CAPTURA DE REQUIREMENTS.TXT Y EL DEB DE LAS INSTRUCCIONES DE BVBRC.
 
-![Captura desde 2024-11-02 17-53-09](https://github.com/user-attachments/assets/eb0a088a-5e29-4cd5-a0a4-ca80bcbbb91e)
+CAPTURA
 
 De primeras, en invoke_tests.py solo se incluye una línea para verificar que el archivo se ejecuta correctamente tras hacer un push.
 
@@ -61,3 +61,4 @@ Hacemos un push y en la pestaña actions de GitHub podemos ver que el archivo se
 ![Captura desde 2024-11-02 17-04-20](https://github.com/user-attachments/assets/67376c56-8b99-4aa7-8be2-5ecc9382bfdf)
 
 Ahora transformamos el archivo en un verdadero ejecutor de tests con la biblioteca Python invoke.
+ENSEÑAR ARCHIVO Y TODAS LAS LOCALIZACIONES A LAS QUE HACE REFERENCIA.

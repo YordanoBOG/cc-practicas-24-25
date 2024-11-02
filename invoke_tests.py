@@ -10,7 +10,7 @@ def test():
     """
     Ejecución de las pruebas unitarias
     """
-    tests_result = subprocess.run(['python3', 'tests/tests.py']) # Create the fasta file
+    tests_result = subprocess.run(['pytest', 'tests/tests_hito2.py']) # Create the fasta file
     if tests_result.returncode == 0:
         print("\n----------------------\nTests ejecutados correctamente")
 
