@@ -1,7 +1,7 @@
 Hito 2: Integración continua
 Objetivo
 
-El principal objetivo de este hito es añadir tests y la infraestructura virtual de la aplicación, gestores de dependencias y/o tareas, necesaria para que se ejecuten los tests, además de añadir integración continua (CI) al proyecto.
+El principal objetivo de este hito es añadir tests y la infraestructura virtual de la aplicación, gestores de dependencias y/o tareas necesarias para que se ejecuten los tests, además de añadir integración continua (CI) al proyecto.
 
 Explicación
 
@@ -36,7 +36,6 @@ Esta es la puntuación de las diferentes rúbricas. En todas ellas se tendrá qu
 ¿Qué es un gestor de tareas? Make, por ejemplo: un archivo que ejecuta determiandas tareas. Invoke en Python.
 ¿Biblioteca de aserciones? pytest: biblioteca para hacer tests de código en Python. Sirve para comprobar que el test devuelve el resultado que toca.
 ¿Marco de pruebas? Entorno desde el que se realizan los tests. Después usas GitHub action para automatizar que se ejecute un test cada vez que se haga un push.
-¿Qué es una entidad?
 
 Proceso del hito 2.
 La idea es que al hacer un push, esté definido con GitHub actions que se lance la aplicación GeneSys. Después, GitHub actions ejecuta los tests definidos en pytest, que se llaman a través de invoke (pip install invoke/sudo apt install python3-invoke. Llamas a invoke escribiendo invoke en la terminal). Hay que configurar el entorno de pruebas en GitHub con todas las bibliotecas que requiere la aplicación, probablemente crearte un entorno virtual Python.
