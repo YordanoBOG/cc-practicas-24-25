@@ -43,3 +43,12 @@ La idea es que al hacer un push, esté definido con GitHub actions que se lance 
 --------------------------------------------------------------------------------
 
 Antes de implementar los test, realizamos la siguiente modificación sobre la aplicación: eliminamos las primeras pantallas/módulos que se lanzaban al ejecutar GeneSys, para que la arquitectura sea más sencilla. Originalmente, GeneSys estaba orientada a poseer una gran extensibilidad. Con este cambio, simplificamos el código para que sea menos complejo a costa de reducir la extensibilidad, ya que en la asignatura de CC nos vamos a centrar en emplear las funciones que GeneSys ofrece, no a incorporar otras nuevas.
+
+Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script Python que empleará la biblioteca invoke para ejecutar varios tests de prueba sobre GeneSys cada vez que se haga un push. Creamos un nuevo archivo en nuestro repositorio de GitHub en una carpeta nueva: .github/workflows/genesys_tests.yml.
+captura
+El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo invoke_tests.py
+captura
+De primeras, en invoke_tests.py solo se incluye una línea para verificar que el archivo se ejecuta correctamente tras hacer un push.
+captura
+Hacemos un push y en la pestaña actions de GitHub podemos ver que el archivo se ha ejecutado correctamente.
+captura
