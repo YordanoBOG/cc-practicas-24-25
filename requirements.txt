@@ -1,5 +1,5 @@
-kivy -v 2.3.0
-pandas -v 2.1.2
-biopython -v 1.83
-invoke -v 1.4.1
-pytest -v 6.2.5
+kivy==2.3.0
+pandas==2.1.2
+biopython==1.83
+invoke==1.4.1
+pytest==6.2.5
