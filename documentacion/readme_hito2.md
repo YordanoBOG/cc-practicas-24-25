@@ -48,7 +48,7 @@ Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script
 
 ![Captura desde 2024-11-02 16-58-39](https://github.com/user-attachments/assets/e5e85881-c54f-4f92-94d8-3034bbd6cad2)
 
-El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo invoke_tests.py.
+El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo invoke_tests.py. ACTUALIZA ESTA FOTO Y ESTA DESCRIPCIÓN CUANDO EL HITO 2 ESTÉ COMPLETO.
 
 ![Captura desde 2024-11-02 17-53-09](https://github.com/user-attachments/assets/eb0a088a-5e29-4cd5-a0a4-ca80bcbbb91e)
 
