@@ -16,7 +16,7 @@ Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script
 
 ![Captura desde 2024-11-02 16-58-39](https://github.com/user-attachments/assets/e5e85881-c54f-4f92-94d8-3034bbd6cad2)
 
-El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo tests_hito2.py con la función pytest de la biblioteca invoke, y especificando el directorio de GitHub actual como el entorno del que tomar las rutas relativas para los tests.
+El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo tests_hito2.py con la biblioteca pytest, y especificando el directorio de GitHub actual como el entorno del que tomar las rutas relativas para los tests.
 
 ![Captura desde 2024-11-03 14-44-34](https://github.com/user-attachments/assets/a1aeb01e-d740-4826-8b16-46024b2600f3)
 
