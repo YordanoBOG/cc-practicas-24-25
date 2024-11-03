@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main  # Specify the branches on which to run the workflow
-
+      
 jobs:
   run-python-genesys-tests:
     runs-on: ubuntu-22.04  # Use the same version of Ubuntu of the laptop as the environment
