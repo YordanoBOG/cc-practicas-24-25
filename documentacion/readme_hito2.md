@@ -39,9 +39,9 @@ Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script
 
 ![Captura desde 2024-11-02 16-58-39](https://github.com/user-attachments/assets/e5e85881-c54f-4f92-94d8-3034bbd6cad2)
 
-El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo tests_hito2.py con la función pytest de la biblioteca invoke.
+El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo tests_hito2.py con la función pytest de la biblioteca invoke, y especificando el directorio de GitHub actual como el entorno del que tomar las rutas relativas para los tests.
 
-CAPTURA YML
+![Captura desde 2024-11-03 14-44-34](https://github.com/user-attachments/assets/a1aeb01e-d740-4826-8b16-46024b2600f3)
 
 Entre las dependencias instaladas vía yml, se incluye la instalación de un set de herramientas de línea de comandos que sirven para manipular datos genéticos llamadas bvbrc-cli, y se instalan llamando a dpkg sobre un archivo .deb que se encuentra incluido en el repositorio, y que contiene esas herramientas.
 
@@ -60,3 +60,4 @@ Hacemos un push y en la pestaña actions de GitHub podemos ver que el archivo se
 ![Captura desde 2024-11-03 13-25-33](https://github.com/user-attachments/assets/9665d238-6b30-4bb4-a217-0dc6b4faa278)
 
 Ahora transformamos el archivo en un verdadero ejecutor de tests de GeneSys. Nos centraremos en testear la lógica interna de la aplicación para corroborar que se puede definir, guardar, cargar y ejecutar un flujo de trabajo correctamente.
+
