@@ -1,35 +1,14 @@
 Hito 2: Integración continua
 
-Preparar un proyecto para integración continua implica varios pasos:
-
-    Elegir el gestor de tareas desde donde se deberán ejecutar los test.
-    Elegir una biblioteca de aserciones que permita llevar a cabo, fácilmente, la comparación entre resultado esperado y obtenido. Esta elección se tiene que llevar a cabo incluso cuando el lenguaje incluya una biblioteca de aserciones estándar. Puede haber bibliotecas más potentes, o simplemente usar otro estilo: generalmente se confronta TDD frente a BDD, pero por eso precisamente tienes que justificar el estilo elegido.
-    Buscar un sistema de prueba del código, es decir, un test runner que encuentre, ejecute y escriba informes sobre los tests siguiendo las buenas prácticas en el lenguaje correspondiente. Se tratará, en general, de una librería o marco, casi siempre acompañada de una herramienta de línea de órdenes, que siga los estándares y sea flexible; como en el caso anterior, también se tiene que justificar esa elección, porque en la mayoría de los lenguajes habrá varias opciones donde elegir. En algunos casos los test runners son parte de un testing framework que incluye también bibliotecas de aserciones, pero se tendrá que justificar la elección de cada uno de ellos de forma independiente".
-    Integrar las pruebas dentro de las herramientas de construcción del proyecto usando las convenciones estándar de la herramienta y el lenguaje; por ejemplo, incluir un objetivo make test dentro de un Makefile (si ese es el gestor de tareas que se ha elegido). El uso de estas herramientas de construcción permite que tanto en local como en remoto, se lancen los tests exactamente de la misma forma.
-    Buscar un sistema online de prueba del código que sea estándar y flexible, es decir, una web gratuita de integración continua tal como GitHub Actions.
-    Finalmente, tras darse de alta, configurar el sistema de integración continua de forma que lance los tests automáticamente. Se puede usar Circle-CI, Jenkins, Travis, GitHub Actions, en general cualquier sistema que se pueda conectar a GitHub, es decir, que se active automáticamente al hacer un push a tu repositorio en GitHub. También se pueden usar varios, GitHub envía automáticamente un mensaje a todos los sistemas configurados cuando se hace push, siempre que estén configurados.
-
-Entrega de la práctica
-
-Se tendrá que haber actualizado el repositorio y añadir al fichero de este hito el nombre del proyecto y un enlace al mismo y hacer un pull request.
-Valoración
-
-Esta es la puntuación de las diferentes rúbricas. En todas ellas se tendrá que tener en cuenta que lo importante no es la "elección correcta", sino mostrar que el estudiante tiene madurez para tomar una decisión técnica que afectará al resto del proyecto.
-
-    1.5 puntos: Elección y configuración del gestor de tareas.
-    1.5 puntos: Elección y uso de la biblioteca de aserciones.
-    1.5 puntos: Elección y uso del marco de pruebas.
-    4 puntos: Integración continua funcionando y correcta justificación del sistema elegido.
-    1.5 puntos: Correcta implementación y ejecución de los tests para testear algunos aspectos de la lógica de negocio de la aplicación a desarrollar.
-
 --------------------------------------------------------------------------------
 
-¿Qué es un gestor de tareas? Make, por ejemplo: un archivo que ejecuta determiandas tareas. Invoke en Python.
-¿Biblioteca de aserciones? pytest: biblioteca para hacer tests de código en Python. Sirve para comprobar que el test devuelve el resultado que toca.
-¿Marco de pruebas? Entorno desde el que se realizan los tests. Después usas GitHub action para automatizar que se ejecute un test cada vez que se haga un push.
+Vamos a usar GitHub actions como sistema de integración continua, ya que se encuentra incorporado en GitHub y permite integrar con fluidez los tests que vamos a realizar.
 
-Proceso del hito 2.
-La idea es que al hacer un push, esté definido con GitHub actions que se lance la aplicación GeneSys. Después, GitHub actions ejecuta los tests definidos en pytest, que se llaman a través de invoke (pip install invoke/sudo apt install python3-invoke. Llamas a invoke escribiendo invoke en la terminal). Hay que configurar el entorno de pruebas en GitHub con todas las bibliotecas que requiere la aplicación, probablemente crearte un entorno virtual Python.
+Emplearemos la biblioteca de aserciones pytest para hacer los tests en Python, ya que es la biblioteca estándar para este tipo de tareas en el lenguaje, lo que facilita diseñar los tests y evitar problemas de integridad.
+
+Usaremos un archivo yml como gestor de tareas, que estará configurado para instalar las dependencias necesarias para los tests y realizar las pruebas con pytest cada vez que se haga un push en el repositorio de GitHub.
+
+El marco de pruebas será un entorno Ubuntu 22.04 equivalente al de la máquina local en el que llevaremos a cabo el desarrollo del código, para evitar que los tests ejecutados localmente den resultados distintos al ejecutarse en remoto.
 
 --------------------------------------------------------------------------------
 
@@ -59,5 +38,22 @@ Hacemos un push y en la pestaña actions de GitHub podemos ver que el archivo se
 
 ![Captura desde 2024-11-03 13-25-33](https://github.com/user-attachments/assets/9665d238-6b30-4bb4-a217-0dc6b4faa278)
 
-Ahora transformamos el archivo en un verdadero ejecutor de tests de GeneSys. Nos centraremos en testear la lógica interna de la aplicación para corroborar que se puede definir, guardar, cargar y ejecutar un flujo de trabajo correctamente.
+Ahora transformamos el archivo en un verdadero ejecutor de tests de GeneSys. Nos centraremos en testear la lógica interna de la aplicación para corroborar que se puede definir, guardar, cargar y ejecutar un flujo de trabajo correctamente. Definimos un flujo de trabajo como variable global y ejecutamos un primer test que comprueba la correcta integridad del flujo creado.
 
+![Captura desde 2024-11-03 15-44-49](https://github.com/user-attachments/assets/02333a2a-e1d1-4254-9ebd-14aaf0949db8)
+
+Después definimos otro test que crea las 5 tareas de preprocesamiento que la aplicación va a llevar a cabo y las añade al flujo de trabajo.
+
+![Captura desde 2024-11-03 15-45-08](https://github.com/user-attachments/assets/e0f9a582-a973-404c-87bf-57033c95866e)
+
+Las siguientes dos pruebas testean las funciones de guardado y carga del flujo de trabajo. Guardamos el flujo, lo vaciamos de tareas y lo cargamos de nuevo a partir de los datos guardados.
+
+![Captura desde 2024-11-03 15-45-18](https://github.com/user-attachments/assets/85ff7fbc-ec9a-488e-a4cb-2d5d3b5a831a)
+
+Por último, ejecutamos el flujo de trabajo. Si las tareas estás correctamente definidas en él, devolverá un 0 en la variable returned_value una vez se haya ejecutado, así que comprobamos esa variable tras la ejecución.
+
+![Captura desde 2024-11-03 15-45-27](https://github.com/user-attachments/assets/273e54d4-76e3-492f-b765-c126bebf398c)
+
+Hacemos un push y comprobamos que los tests se han ejecutado correctamente.
+
+![Captura desde 2024-11-03 15-45-37](https://github.com/user-attachments/assets/d22efba4-413c-4001-8698-367f63ff3525)
