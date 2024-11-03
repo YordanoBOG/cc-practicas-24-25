@@ -48,9 +48,9 @@ Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script
 
 ![Captura desde 2024-11-02 16-58-39](https://github.com/user-attachments/assets/e5e85881-c54f-4f92-94d8-3034bbd6cad2)
 
-El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo invoke_tests.py.
+El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo tests_hito2.py con la función pytest de la biblioteca invoke.
 
-CAPTURA YML
+![Captura desde 2024-11-03 13-21-41](https://github.com/user-attachments/assets/29f53a42-7e13-4f75-bd7f-3f3239074f9a)
 
 Entre las dependencias instaladas vía yml, se incluye la instalación de un set de herramientas de línea de comandos que sirven para manipular datos genéticos llamadas bvbrc-cli, y se instalan llamando a dpkg sobre un archivo .deb que se encuentra incluido en el repositorio, y que contiene esas herramientas.
 
@@ -60,18 +60,12 @@ El resto de dependencias están especificadas en el archivo requirements.txt del
 
 ![Captura desde 2024-11-03 12-52-28](https://github.com/user-attachments/assets/0230b6c2-b0c9-4bdf-a757-26f8316469da)
 
-De primeras, en invoke_tests.py solo se incluye una línea para verificar que el archivo se ejecuta correctamente tras hacer un push.
+De primeras, en tests_hito2.py solo se incluye una prueba exitosa para verificar que el yml funciona.
 
-![Captura desde 2024-11-02 17-04-04](https://github.com/user-attachments/assets/72046e5f-f5c4-4911-94be-bfab347790fc)
+![Captura desde 2024-11-03 13-25-44](https://github.com/user-attachments/assets/0c30b699-970e-4224-8406-6bbf2f9c8e3d)
 
 Hacemos un push y en la pestaña actions de GitHub podemos ver que el archivo se ha ejecutado correctamente.
 
-![Captura desde 2024-11-02 17-04-20](https://github.com/user-attachments/assets/67376c56-8b99-4aa7-8be2-5ecc9382bfdf)
+![Captura desde 2024-11-03 13-25-33](https://github.com/user-attachments/assets/9665d238-6b30-4bb4-a217-0dc6b4faa278)
 
-Ahora transformamos el archivo en un verdadero ejecutor de tests con la herramienta invoke de Python. Usamos la herramienta subprocess de Python para ejecutar un test de prueba vía línea de comandos de Ubuntu.
-
-El test de prueba, de primeras, se limita a devolver un resultado exitoso.
-
-Hacemos un push y comprobamos que el resultado es correcto.
-
-Y seguimos
+Ahora transformamos el archivo en un verdadero ejecutor de tests de GeneSys.
