@@ -41,7 +41,7 @@ Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script
 
 El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo tests_hito2.py con la función pytest de la biblioteca invoke.
 
-![Captura desde 2024-11-03 13-21-41](https://github.com/user-attachments/assets/29f53a42-7e13-4f75-bd7f-3f3239074f9a)
+CAPTURA YML
 
 Entre las dependencias instaladas vía yml, se incluye la instalación de un set de herramientas de línea de comandos que sirven para manipular datos genéticos llamadas bvbrc-cli, y se instalan llamando a dpkg sobre un archivo .deb que se encuentra incluido en el repositorio, y que contiene esas herramientas.
 
