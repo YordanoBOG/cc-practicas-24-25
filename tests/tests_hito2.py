@@ -13,7 +13,7 @@ WORKFLOW = Workflow() # Usamos una variable global WORKFLOW
 # matches the expected output. If the assertion fails, pytest will raise an error, marking
 # the test as failed.
 def test_crear_workflow(): # Comprobar los valores por defecto del flujo de trabajo
-    assert len(WORKFLOW.get_tasks())==0 and WORKFLOW.get_parameters['results_file']=="./workflow_results.txt"
+    assert len(WORKFLOW.get_tasks())==0 and WORKFLOW.get_parameters()['results_file']=="./workflow_results.txt"
 
 def test_aniadir_tarea_leer_csv():
     #global WORKFLOW # Declarar la variable global dentro de la función para poder modificarla
