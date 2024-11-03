@@ -27,4 +27,4 @@ jobs:
       - name: Run Python Script
         # python3 invoke_tests.py
         run: |
-          pytest tests_hito2.py
+          pytest tests/tests_hito2.py
