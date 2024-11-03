@@ -25,5 +25,6 @@ jobs:
           sudo dpkg -i bvbrc-cli-1.040.deb || sudo apt-get install -f -y; fi
 
       - name: Run Python Script
+        # python3 invoke_tests.py
         run: |
-          python3 invoke_tests.py
+          pytest tests_hito2.py
