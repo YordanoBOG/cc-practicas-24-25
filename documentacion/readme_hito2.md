@@ -10,9 +10,9 @@ Usaremos un archivo yml como gestor de tareas, que estará configurado para inst
 
 --------------------------------------------------------------------------------
 
-Antes de implementar los test, realizamos la siguiente modificación sobre la aplicación: eliminamos las primeras pantallas/módulos que se lanzaban al ejecutar GeneSys, para que la arquitectura sea más sencilla. Originalmente, GeneSys estaba orientada a poseer una gran extensibilidad. Con este cambio, simplificamos el código para que sea menos complejo a costa de reducir la extensibilidad, ya que en la asignatura de CC nos vamos a centrar en emplear las funciones que GeneSys ofrece, no a incorporar otras nuevas.
+Antes de implementar los test, realizamos una pequeña modificación sobre la aplicación: eliminamos las primeras pantallas/módulos que se lanzaban al ejecutar GeneSys, para que la arquitectura sea más sencilla. Originalmente, GeneSys estaba orientada a poseer una gran extensibilidad. Con este cambio, simplificamos el código para que sea menos complejo a costa de reducir la extensibilidad, ya que en la asignatura de CC nos vamos a centrar en emplear las funciones que GeneSys ofrece, no a incorporar otras nuevas.
 
-Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script Python que empleará la biblioteca invoke para ejecutar varios tests de prueba sobre GeneSys cada vez que se haga un push. Creamos un nuevo archivo en nuestro repositorio de GitHub en una carpeta nueva: .github/workflows/genesys_tests.yml.
+Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script yml que instalará dependencias y lanzará el fichero Python que ejecutará varios tests de prueba sobre GeneSys cada vez que se haga un push. Creamos un nuevo archivo en nuestro repositorio de GitHub en una carpeta nueva: .github/workflows/genesys_tests.yml.
 
 ![Captura desde 2024-11-02 16-58-39](https://github.com/user-attachments/assets/e5e85881-c54f-4f92-94d8-3034bbd6cad2)
 
