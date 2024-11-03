@@ -26,6 +26,6 @@ jobs:
 
       - name: Run Python tests
         env:
-          PYTHONPATH: ${{ github.workspace }}/modules  # Add modules to PYTHONPATH
+          PYTHONPATH: ${{ github.workspace }}  # Add modules to PYTHONPATH
         run: |
           pytest tests/tests_hito2.py
