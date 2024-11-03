@@ -8,8 +8,6 @@ Emplearemos la biblioteca de aserciones pytest para hacer los tests en Python, y
 
 Usaremos un archivo yml como gestor de tareas, que estará configurado para instalar las dependencias necesarias para los tests y realizar las pruebas con pytest cada vez que se haga un push en el repositorio de GitHub.
 
-El marco de pruebas será un entorno Ubuntu 22.04 equivalente al de la máquina local en el que llevaremos a cabo el desarrollo del código, para evitar que los tests ejecutados localmente den resultados distintos al ejecutarse en remoto.
-
 --------------------------------------------------------------------------------
 
 Antes de implementar los test, realizamos la siguiente modificación sobre la aplicación: eliminamos las primeras pantallas/módulos que se lanzaban al ejecutar GeneSys, para que la arquitectura sea más sencilla. Originalmente, GeneSys estaba orientada a poseer una gran extensibilidad. Con este cambio, simplificamos el código para que sea menos complejo a costa de reducir la extensibilidad, ya que en la asignatura de CC nos vamos a centrar en emplear las funciones que GeneSys ofrece, no a incorporar otras nuevas.
