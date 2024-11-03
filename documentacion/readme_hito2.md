@@ -68,5 +68,10 @@ Hacemos un push y en la pestaña actions de GitHub podemos ver que el archivo se
 
 ![Captura desde 2024-11-02 17-04-20](https://github.com/user-attachments/assets/67376c56-8b99-4aa7-8be2-5ecc9382bfdf)
 
-Ahora transformamos el archivo en un verdadero ejecutor de tests con la biblioteca Python invoke.
-ENSEÑAR ARCHIVO Y TODAS LAS LOCALIZACIONES A LAS QUE HACE REFERENCIA.
+Ahora transformamos el archivo en un verdadero ejecutor de tests con la herramienta invoke de Python. Usamos la herramienta subprocess de Python para ejecutar un test de prueba vía línea de comandos de Ubuntu.
+
+El test de prueba, de primeras, se limita a devolver un resultado exitoso.
+
+Hacemos un push y comprobamos que el resultado es correcto.
+
+Y seguimos
