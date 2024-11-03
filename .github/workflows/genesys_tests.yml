@@ -26,4 +26,4 @@ jobs:
 
       - name: Run Python Script
         run: |
-          python invoke_tests.py  # Replace with the path to your Python script
+          python3 invoke_tests.py
