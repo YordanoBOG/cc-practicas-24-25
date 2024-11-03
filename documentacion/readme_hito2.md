@@ -48,9 +48,17 @@ Tras modificar la aplicación, preparamos GitHub actions para ejecutar un script
 
 ![Captura desde 2024-11-02 16-58-39](https://github.com/user-attachments/assets/e5e85881-c54f-4f92-94d8-3034bbd6cad2)
 
-El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo invoke_tests.py. ACTUALIZA ESTA FOTO Y ESTA DESCRIPCIÓN CUANDO EL HITO 2 ESTÉ COMPLETO. CAPTURA DE REQUIREMENTS.TXT Y EL DEB DE LAS INSTRUCCIONES DE BVBRC.
+El .yml está configurado para que, cada vez que se haga un push, se instalen las dependencias especificadas en requirements.txt en un entorno Ubuntu de la misma versión que el Ubuntu de nuestra máquina local (22.04) y a continuación se lance el archivo invoke_tests.py.
 
-CAPTURA
+![Captura desde 2024-11-03 12-52-15](https://github.com/user-attachments/assets/5481d07e-d99d-4905-8bf4-55686c28a61b)
+
+Entre las dependencias instaladas vía yml, se incluye la instalación de un set de herramientas de línea de comandos que sirven para manipular datos genéticos llamadas bvbrc-cli, y se instalan llamando a dpkg sobre un archivo .deb que se encuentra incluido en el repositorio, y que contiene esas herramientas.
+
+![Captura desde 2024-11-03 12-52-50](https://github.com/user-attachments/assets/52dbb4ae-3a04-44ee-a62e-6f862bcc6ea2)
+
+El resto de dependencias están especificadas en el archivo requirements.txt del repositorio.
+
+![Captura desde 2024-11-03 12-52-28](https://github.com/user-attachments/assets/0230b6c2-b0c9-4bdf-a757-26f8316469da)
 
 De primeras, en invoke_tests.py solo se incluye una línea para verificar que el archivo se ejecuta correctamente tras hacer un push.
 
