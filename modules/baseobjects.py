@@ -146,6 +146,7 @@ class Workflow(Task):
     #__workflow_type = "" # This attribute specifies for which module a workflow is being defined
     __tasks = [] # empty list of tasks
     __results_file = "./workflow_results.txt" # Path to a .txt file that will save the returned info and returned value of the workflow
+    _returned_value = -1
 
     def __init__(self, tasks = []):
         for task in tasks:
@@ -170,6 +171,9 @@ class Workflow(Task):
         #self.__workflow_type = parameters['workflow_type']
         self.__tasks = parameters['tasks'] # PRE: there is a tag called "tasks" previously defined in the dictionary
         self.__results_file = parameters['results_file']
+    
+    def get_returned_value(self) -> int:
+        return self._returned_value
     
     """
     GET METHODS

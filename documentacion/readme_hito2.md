@@ -59,4 +59,4 @@ Hacemos un push y en la pestaña actions de GitHub podemos ver que el archivo se
 
 ![Captura desde 2024-11-03 13-25-33](https://github.com/user-attachments/assets/9665d238-6b30-4bb4-a217-0dc6b4faa278)
 
-Ahora transformamos el archivo en un verdadero ejecutor de tests de GeneSys.
+Ahora transformamos el archivo en un verdadero ejecutor de tests de GeneSys. Nos centraremos en testear la lógica interna de la aplicación para corroborar que se puede definir, guardar, cargar y ejecutar un flujo de trabajo correctamente.
