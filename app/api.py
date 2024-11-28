@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from app.app import app  # Import the app instance from `app/__init__.py`
+from app import app  # Import the app instance from `app/__init__.py`
 
 @app.route('/crearworkflow', methods=['GET'])
 def crearworkflow():
