@@ -7,4 +7,4 @@ En cada hito el fichero README.md describirá el estado del proyecto actual, y s
 
 [HITO 2](./documentacion/readme_hito2.md)
 
-HITO 3
+[HITO 3](./documentacion/readme_hito3.md)
