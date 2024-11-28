@@ -143,7 +143,6 @@ class Workflow(Task):
     re-applied over different data in order to make efficient bioinformatic analyses
     """
 
-    #__workflow_type = "" # This attribute specifies for which module a workflow is being defined
     __tasks = [] # empty list of tasks
     __results_file = "./workflow_results.txt" # Path to a .txt file that will save the returned info and returned value of the workflow
     _returned_value = -1
@@ -158,7 +157,6 @@ class Workflow(Task):
             It allows to implement Reflection
         """
         parameters = super().get_parameters()
-        #parameters['workflow_type'] = self.__workflow_type
         parameters['tasks'] = self.__tasks
         parameters['results_file'] = self.__results_file
         return parameters
@@ -168,7 +166,6 @@ class Workflow(Task):
             for a Task necessary for a Task to apply its functionality.
         """
         super().set_parameters(parameters)
-        #self.__workflow_type = parameters['workflow_type']
         self.__tasks = parameters['tasks'] # PRE: there is a tag called "tasks" previously defined in the dictionary
         self.__results_file = parameters['results_file']
     
