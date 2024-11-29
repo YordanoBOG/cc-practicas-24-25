@@ -25,7 +25,6 @@ def test_crearworkflow():
 def test_crearworkflowparametros():
     response = requests.post("http://localhost:8000/crearworkflowparametros", json={"returned_value": 0})
     assert response.status_code == 200
-    #assert response.json()["Respuesta"] == "OK"
     assert response.json()["returned value"] == 0
 
 '''def test_funcionalidad2():
