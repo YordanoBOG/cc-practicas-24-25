@@ -48,11 +48,10 @@ def crear_workflow_parametros():
     if "returned_value" not in parametros:
         parametros['returned_value'] = -1
 
-    return jsonify({"Respuesta": "OK"})
-
     new_workflow = Workflow()
     new_workflow.set_parameters(parameters=parametros)
     new_workflow_parameters = new_workflow.get_parameters()
+    return jsonify({"Respuesta": "OK"})
     return jsonify({"workflow": new_workflow,
                     "tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
