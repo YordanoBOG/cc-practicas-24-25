@@ -2,7 +2,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-# Se debe poner la ruta absoluta del entorno de ejecución, que parte del fichero raíz
+# Se debe poner la ruta absoluta del entorno de ejecución
 from app.api import crear_workflow
 from app.api import crear_workflow_parametros
 from app.api import aniadir_tarea_isolate_column

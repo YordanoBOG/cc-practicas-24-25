@@ -3,8 +3,6 @@ import requests
 
 from modules.baseobjects import Workflow
 
-WORKFLOW = Workflow() # Usaremos una variable global WORKFLOW para algunos tests
-
 def test_crearworkflow():
     response = requests.get("http://localhost:8000/crearworkflow")
     assert response.status_code == 200

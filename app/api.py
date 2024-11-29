@@ -1,7 +1,7 @@
 import json
 import logging
 from flask import Flask, request, jsonify
-from app import app  # Import the app instance from `app/__init__.py`
+from app import app
 
 from modules.PATRIC_protein_processing.isolate_column import IsolateColumn
 from modules.PATRIC_protein_processing.generate_fasta import GenerateFasta
@@ -186,7 +186,4 @@ def ejecutar_workflow():
     WORKFLOW.run()
     return jsonify({"returned value": WORKFLOW.get_parameters()['returned_value']})
 
-###############################################################################
-###############################################################################
-###############################################################################
 
