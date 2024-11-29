@@ -18,17 +18,15 @@ def test_crearworkflow():
     response = requests.get("http://localhost:8000/crearworkflow")
     logging.info(f"Respuesta recibida: {str(response)}")
     assert response.status_code == 200
-    assert response.json() == {"tareas": [],
-                               "returned value": -1,
-                               "results file": "./workflow_results.txt"}
+    assert response.json()["tareas"] == []
+    assert response.json()["returned value"] == -1
+    assert response.json()["results file"] == "./workflow_results.txt"
 
 def test_crearworkflowparametros():
     response = requests.post("http://localhost:8000/crearworkflowparametros", json={"returned_value": 0})
     assert response.status_code == 200
-    assert response.json()["Respuesta"] == "OK"
-    '''assert response.json() == {"tareas": [],
-                                  "returned value": "0",
-                                  "results file": "./workflow_results.txt"}'''
+    #assert response.json()["Respuesta"] == "OK"
+    assert response.json()["returned value"] == 0
 
 '''def test_funcionalidad2():
     response = requests.post("http://localhost:8000/funcionalidad2", json={"parametro1": "valor"})

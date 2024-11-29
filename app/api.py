@@ -27,7 +27,8 @@ def crear_workflow():
     app.logger.info("Llamada a /crearworkflow")
     new_workflow = Workflow()
     new_workflow_parameters = new_workflow.get_parameters()
-    return jsonify({"tareas": new_workflow_parameters['tasks'],
+    return jsonify({"workflow": new_workflow,
+                    "tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
                     "results file": new_workflow_parameters['results_file']})
 
@@ -50,10 +51,9 @@ def crear_workflow_parametros():
     if "returned_info" not in parametros:
         parametros['returned_info'] = ""
 
-    #new_workflow = Workflow()
-    #new_workflow.set_parameters(parameters=parametros)
-    #new_workflow_parameters = new_workflow.get_parameters()
-    return jsonify({"Respuesta": "OK"})
+    new_workflow = Workflow()
+    new_workflow.set_parameters(parameters=parametros)
+    new_workflow_parameters = new_workflow.get_parameters()
     return jsonify({"workflow": new_workflow,
                     "tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
