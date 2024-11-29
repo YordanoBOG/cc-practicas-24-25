@@ -68,6 +68,12 @@ Finalmente, para automatizar el despliegue y testeo de la API con cada push que 
 
 -------------------------------------------------------------------------------
 
+En esta captura se puede apreciar la organización actual del repositorio, donde las carpetas se han organizado con vistas a desacoplar la lógica de negocio (contenida en los directorios "kv_files", "modules", "screens" y "utils") de la API (que se lanza con "app-py", se define en el directorio "app", y se testea a través del yml en ".github/workflows" y los ficheros del directorio "tests").
+
+![Captura desde 2024-11-29 06-28-11](https://github.com/user-attachments/assets/e22238d1-3b63-4a2d-a217-a97f106a14e2)
+
+-------------------------------------------------------------------------------
+
 Si hacemos un push en nuestro repositorio GitHub, podremos ver que se ejecutan tanto los tests del hito 2 como los de la API del hito 3.
 
 \Capturas
