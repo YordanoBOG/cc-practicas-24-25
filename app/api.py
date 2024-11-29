@@ -75,7 +75,7 @@ def aniadir_tarea_isolate_column():
     isolate_column_task = IsolateColumn(csv_path=parametros['csv_path'], col_name=parametros['col_name'])
     WORKFLOW.add_task(isolate_column_task)
     # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
-    return jsonify({"nueva tarea": WORKFLOW.get_tasks[-1].to_dict()})
+    return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
 
 ###############################################################################
 ###############################################################################
