@@ -4,7 +4,7 @@ En este hito vamos a crear un microservicio sobre la base de la funcionalidad de
 
 Comenzamos definiendo nuestra API incorporando un archivo "app/api.py" que incluye los endpoints para acceder a la funcionalidad de nuestra API: únicamente habilitamos las funcionalidades que nos interesa ofrecer al usuario. Dichos endpoints incluyen mensajes de log que informan por pantalla cada vez que se produce una llamada a cualquiera de ellos.
 
-Las funciones de nuestra API van a ir ligadas al manejo de flujos de trabajo para datos genéticos, en concreto, se podrá
+Las funciones de nuestra API van a ir ligadas al manejo de flujos de trabajo para datos genéticos, en concreto, se podrá 
 
 \capturas de api.py
 
@@ -23,6 +23,10 @@ Para testear la API, creamos un nuevo fichero de test en "tests/test_api.py", qu
 Finalmente, para automatizar el despliegue y testeo de la API con cada push que se haga a la rama main del repositorio, añadimos una nueva tarea al archivo ".github/workflow/genesys_tests.yml" del hito anterior, que se encargará de lanzar el script Python que pone en marcha la API junto al archivo que ejecuta los tests sobre ella.
 
 \captura de la nueva sección de genesys_tests.yml
+
+Si hacemos un push en nuestro repositorio GitHub, podremos ver que se ejecutan tanto los tests del hito 2 como los de la API del hito 3.
+
+\Capturas
 
 -------------------------------------------------------------------------------
 
