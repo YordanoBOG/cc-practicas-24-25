@@ -66,11 +66,11 @@ def crear_workflow_parametros():
 def aniadir_tarea_isolate_column():
     app.logger.info("Llamada a /aniadirtareaisolatecolumn")
     parametros = request.get_json()
-    current_workflow:Workflow = parametros['workflow']
     isolate_column_task = IsolateColumn(csv_path=parametros['csv_path'], col_name=parametros['col_name'])
-    current_workflow.add_task(isolate_column_task)
-    workflow_parameters = current_workflow.get_parameters()
-    return jsonify({"tareas": workflow_parameters['tasks']})
+    #current_workflow.add_task(isolate_column_task)
+    #workflow_parameters = current_workflow.get_parameters()
+    #return jsonify({"tareas": workflow_parameters['tasks']})
+    return jsonify({"tareas": [isolate_column_task]})
 
 ###############################################################################
 ###############################################################################

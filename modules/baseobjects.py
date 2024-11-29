@@ -258,13 +258,21 @@ class Workflow(Task):
             print("Error. Unable to open or create {}".format(path))
 
         try:
+            tasks_dictionary = self.turn_into_dict_format()
+            with open(path, "w+") as f_json:
+                json.dump(tasks_dictionary, f_json)
+        except:
+            print("Error. Unable to write on file {}".format(path))
+
+
+    def turn_into_dict_format(self):
+        try:
             list_dict_task = [] # List of dictionaries where each dictionary encapsulates a task
             for task in self.get_tasks():
                 list_dict_task.append(task.to_dict())
-            with open(path, "w+") as f_json:
-                json.dump(list_dict_task, f_json)
-        except:
-            print("Error. Unable to write on file {}".format(path))
+            return list_dict_task
+        except Exception as e:
+            print("Error while turning the workflow into dictionary format: %s", e)
 
 
     def get_from_json(self, json_path):
@@ -276,17 +284,21 @@ class Workflow(Task):
                     data = json.load(file)
                 
                 # Iterate over the data of the file, which corresponds to a list of dictionaries, each dictionary corresponding to a task
-                try:
-                    for task in data:
-                        new_task = Task()
-                        new_task = new_task.from_dict(task) # FALLA PORQUE NO LE ESTÁS PASANDO LOS ARGUMENTOS NECESARIOS AL CONSTRUCTOR DE ISOLATECOLUMN. SE SOLUCIONA DETERMINANDO VALORES POR DEFECTO PARA ESOS ARGUMENTOS EN LOS CONSTRUCTORES
-                        self.add_task(new_task=new_task)
-                except Exception as e:
-                    print("Error while processing the data contained in json file: %s", e)
+                self.load_from_dict_format(data=data)
             except:
                 print("Error. Unable to open{}".format(json_path))
         else:
             print("Error. Unable to find path {}".format(json_path))
+
+   
+    def load_from_dict_format(self, data):
+        try:
+            for task in data:
+                new_task = Task()
+                new_task = new_task.from_dict(task)
+                self.add_task(new_task=new_task)
+        except Exception as e:
+            print("Error while processing the data contained in json format: %s", e)
     
     """
     STR

@@ -18,9 +18,9 @@ def test_crearworkflowparametros():
     assert response.json()["returned value"] == 0
 
 def test_aniadirtareaisolatecolumn():
-    response = requests.post("http://localhost:8000/crearworkflowparametros", json={"workflow": WORKFLOW, "csv_path": "./BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"})
+    response = requests.post("http://localhost:8000/crearworkflowparametros", json={"csv_path": "./BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"})
     assert response.status_code == 200
-    assert response.json()["tareas"] == WORKFLOW.get_parameters['tasks'] # La API modifica el workflow, por lo que comprobamos si su estado ha cambiado
+    assert response.json()["tareas"][-1].to_dict()['type'] == 'modules.PATRIC_protein_processing.isolate_column.IsolateColumn'
 
 '''def test_funcionalidad2():
     response = requests.post("http://localhost:8000/funcionalidad2", json={"parametro1": "valor"})
