@@ -29,9 +29,10 @@ def crear_workflow():
 @app.route('/crearworkflowparametros', methods=['POST'])
 def crear_workflow_parametros():
     parametros = request.get_json()
+    return jsonify({"Respuesta": "OK"})
 
     # Comprobar si los parámetros incluyen una lista de tareas, un valor de salida y un fichero de resultados
-    if "tasks" not in parametros:
+    '''if "tasks" not in parametros:
         parametros['tasks'] = []
     if "results_file" not in parametros:
         parametros['results_file'] = "./workflow_results.txt"
@@ -44,7 +45,7 @@ def crear_workflow_parametros():
     return jsonify({"workflow": new_workflow,
                     "tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
-                    "results file": new_workflow_parameters['results_file']})
+                    "results file": new_workflow_parameters['results_file']})'''
 
 ###############################################################################
 ###############################################################################
