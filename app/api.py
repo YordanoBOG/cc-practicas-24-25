@@ -76,7 +76,7 @@ def aniadir_tarea_isolate_column():
     #current_workflow.add_task(isolate_column_task)
     #workflow_parameters = current_workflow.get_parameters()
     #return jsonify({"tareas": workflow_parameters['tasks']})
-    return jsonify({"tareas": [isolate_column_task]})
+    return jsonify({"nueva tarea": isolate_column_task.to_dict()})
 
 ###############################################################################
 ###############################################################################
