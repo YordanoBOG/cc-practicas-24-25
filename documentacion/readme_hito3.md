@@ -76,13 +76,6 @@ En esta captura se puede apreciar la organización actual del repositorio, donde
 
 Si hacemos un push en nuestro repositorio GitHub, podremos ver que se ejecutan tanto los tests del hito 2 como los de la API del hito 3.
 
-\Capturas
-
--------------------------------------------------------------------------------
-
-La valoración se distribuirá en las siguientes rúbricas:
-
-    2 puntos: Justificación técnica del framework elegido para el microservicio. Entorno empleado para implementar el microservicio.
-    4 puntos: Diseño en general de la API, las rutas (o tareas), tests y documentación de todo, de forma que reflejen correctamente un diseño por capas que desacopla la lógica de negocio de la API.
-    2 puntos: Uso de logs para registrar la actividad de la API, incluyendo la justificación del framework y herramienta elegida. Los logs permiten revisar qué hace la persona que accede a la API.
-    2 puntos: Correcta ejecución de los tests. (De los tests de la API, porque los del hito 2 supuestamente ya los tienes).
+![Captura desde 2024-11-29 06-38-36](https://github.com/user-attachments/assets/e6340d77-f756-45f7-b296-7f0a1b0e1d9f)
+![Captura desde 2024-11-29 06-39-51](https://github.com/user-attachments/assets/9227e1d4-5d31-4e92-be81-a0a99f7b562f)
+![Captura desde 2024-11-29 06-40-02](https://github.com/user-attachments/assets/a0053261-f79c-45cb-996c-60976e550bec)
