@@ -44,21 +44,35 @@ Junto a eso, eliminamos el archivo "main.py" que originalmente lanzaba la aplica
 
 ![Captura desde 2024-11-29 06-24-05](https://github.com/user-attachments/assets/c42d59ff-f64a-4b71-90de-bd3f78271283)
 
-Para testear la API, creamos un nuevo fichero de test en "tests/test_api.py", que se encargará de evaluar los endpoints del servicio.
+-------------------------------------------------------------------------------
 
-\capturas de test_api.py
+Para testear la API, creamos un nuevo fichero de test en "tests/test_api.py", que se encargará de evaluar los endpoints del servicio ejecutando un total de 12 pruebas independientes.
+
+Primero creamos un nuevo flujo dos veces, una con los parámetros por defecto y otra con los parámetros personalizados.
+
+![Captura desde 2024-11-29 06-29-02](https://github.com/user-attachments/assets/fada7c4f-242b-47d6-b370-672f58cc74fc)
+
+Después, añadimos las cinco tareas posibles al flujo.
+
+![Captura desde 2024-11-29 06-30-14](https://github.com/user-attachments/assets/41fd8c13-2376-450b-a6ee-bb8f807fa2aa)
+
+Guardamos el flujo en un archivo JSON, lo vaciamos de contenido, lo volvemos a cargar desde ese archivo y lo ejecutamos.
+
+![Captura desde 2024-11-29 06-31-10](https://github.com/user-attachments/assets/803cb815-e6aa-46f0-9e0e-589ac56dab8a)
+
+-------------------------------------------------------------------------------
 
 Finalmente, para automatizar el despliegue y testeo de la API con cada push que se haga a la rama main del repositorio, añadimos una nueva tarea al archivo ".github/workflow/genesys_tests.yml" del hito anterior, que se encargará de lanzar el script Python que pone en marcha la API junto al archivo que ejecuta los tests sobre ella.
 
 \captura de la nueva sección de genesys_tests.yml
+
+-------------------------------------------------------------------------------
 
 Si hacemos un push en nuestro repositorio GitHub, podremos ver que se ejecutan tanto los tests del hito 2 como los de la API del hito 3.
 
 \Capturas
 
 -------------------------------------------------------------------------------
-
-Diseñar una API consistente en una serie de rutas (en el caso de un API REST), testear la API usando una biblioteca específica que te provea el microservicio y crear la infraestructura necesaria para comenzar a ejecutarlo.
 
 La valoración se distribuirá en las siguientes rúbricas:
 
