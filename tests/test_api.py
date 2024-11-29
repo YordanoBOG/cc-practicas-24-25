@@ -12,10 +12,10 @@ def test_crearworkflow():
                                "results file": "./workflow_results.txt"}
 
 def test_crearworkflowparametros():
-    response = requests.post("http://localhost:8000/crearworkflowparametros", json={"returned_value": 0})
+    response = requests.post("http://localhost:8000/crearworkflowparametros", json={"returned_value": "0"})
     assert response.status_code == 200
     assert response.json() == {"tareas": [],
-                               "returned value": 0,
+                               "returned value": "0",
                                "results file": "./workflow_results.txt"}
 
 '''def test_funcionalidad2():
