@@ -2,19 +2,47 @@ Hito 3: Diseño de microservicios
 
 En este hito vamos a crear un microservicio sobre la base de la funcionalidad desarrollada en el hito anterior. Para ello, nos serviremos de la biblioteca Flask de Python, que permite definir endpoints para APIs de una forma sencilla y rápida, perfecta para un principiante como yo. Uniremos Flask con las herramientas aprendidas en el hito 2 (Automatización de pruebas con un archivo .yml, pytest y GitHub actions). Por tanto, usaremos el entorno de GitHub actions para desplegar una API hecha con la biblioteca Flask de Python sobre la que realizaremos tests, todo orquestrado a través de un archivo .yml.
 
+-------------------------------------------------------------------------------
+
 Comenzamos definiendo nuestra API incorporando un archivo "app/api.py" que incluye los endpoints para acceder a la funcionalidad de nuestra API: únicamente habilitamos las funcionalidades que nos interesa ofrecer al usuario. Dichos endpoints incluyen mensajes de log que informan por pantalla cada vez que se produce una llamada a cualquiera de ellos.
 
-Las funciones de nuestra API van a ir ligadas al manejo de flujos de trabajo para datos genéticos, en concreto, se podrá 
+Las funciones de nuestra API van a ir ligadas al manejo de flujos de trabajo para datos genéticos, en concreto, se podrá crear un flujo/workflow vacío:
 
-\capturas de api.py
+![Captura desde 2024-11-29 06-10-14](https://github.com/user-attachments/assets/6dea7ed8-8a74-4b12-a444-b7b6d41b27ca)
 
-Por temas de organización, definimos la aplicación en un archivo __init__.py situado en la misma ruta "app/__init__.py". En dicho archivo se define la aplicación Flask que hemos implementado, y se importan todas las funcionalidades disponibles a través de la API
+Y un flujo con unos parámetros específicos:
 
-\captura de init
+![Captura desde 2024-11-29 06-10-50](https://github.com/user-attachments/assets/a63ac0a8-bd23-4c6b-af51-afc87c2d979d)
+
+También habrá endpoints específicos para incluir cada una de las posibles tareas que se le pueden añadir al flujo:
+
+![Captura desde 2024-11-29 06-11-08](https://github.com/user-attachments/assets/3d500638-08be-407f-9faf-8ae91f0bd77b)
+![Captura desde 2024-11-29 06-11-22](https://github.com/user-attachments/assets/612c5e12-cb2f-453f-bb83-269d950145d9)
+![Captura desde 2024-11-29 06-11-35](https://github.com/user-attachments/assets/635e0b87-83f5-4eae-bc45-19e1b975720b)
+
+Se incluye la posibilidad tanto de eleiminar la última tarea al flujo como de eliminar todas las que tenga:
+
+![Captura desde 2024-11-29 06-11-47](https://github.com/user-attachments/assets/dc4277ff-086b-4427-ac44-35c20acae4ad)
+
+El flujo puede guardarse y cargarse en un archivo JSON almacenado en una ruta personalizada:
+
+![Captura desde 2024-11-29 06-11-58](https://github.com/user-attachments/assets/a2d82dab-0d36-432b-b002-a40742d857ad)
+
+Y por último, pero no menos importante, el flujo puede ejecutarse:
+
+![Captura desde 2024-11-29 06-12-14](https://github.com/user-attachments/assets/87ae6c86-f4f1-4f3a-beaa-c357b516755b)
+
+Para el diseño del tipo de solicitudes, se han decidido establecer como "GET" aquellas que no necesitan transmitir información a la API, y como "POST" las demás.
+
+Por temas de organización, definimos la aplicación en un archivo __init__.py situado en la ruta "app/__init__.py". En dicho archivo se define la aplicación Flask que hemos implementado, y se importan todas las funcionalidades disponibles a través de la API
+
+![Captura desde 2024-11-29 06-22-00](https://github.com/user-attachments/assets/ae2afb45-b8dd-4c44-89bb-d5eeba3d1cf0)
+
+-------------------------------------------------------------------------------
 
 Junto a eso, eliminamos el archivo "main.py" que originalmente lanzaba la aplicación, y en su lugar creamos un archivo "app.py" en el fichero raíz, que pone a punto la API para recibir solicitudes.
 
-\captura de app.py
+![Captura desde 2024-11-29 06-24-05](https://github.com/user-attachments/assets/c42d59ff-f64a-4b71-90de-bd3f78271283)
 
 Para testear la API, creamos un nuevo fichero de test en "tests/test_api.py", que se encargará de evaluar los endpoints del servicio.
 
