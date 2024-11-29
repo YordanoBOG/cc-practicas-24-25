@@ -265,6 +265,7 @@ class Workflow(Task):
                 list_dict_task.append(task.to_dict())
             with open(path, "w+") as f_json:
                 json.dump(list_dict_task, f_json)
+            return 0
         except:
             print("Error. Unable to write on file {}".format(path))
 
@@ -293,6 +294,7 @@ class Workflow(Task):
                     new_task = Task()
                     new_task = new_task.from_dict(task)
                     self.add_task(new_task=new_task)
+                return 0
             except:
                 print("Error. Unable to open{}".format(json_path))
         else:

@@ -151,6 +151,31 @@ def limpiar_workflow():
 ###############################################################################
 ###############################################################################
 
+@app.route('/guardarworkflowcomojson', methods=['POST'])
+def guardar_workflow_como_json():
+    parametros = request.get_json()
+    ruta_json = parametros['archivo_json']
+    result = WORKFLOW.generate_json(path=ruta_json)
+    return jsonify({"exito": result})
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+@app.route('/cargarworkflowdesdejson', methods=['POST'])
+def cargar_workflow_desde_json():
+    parametros = request.get_json()
+    ruta_json = parametros['archivo_json']
+    result = WORKFLOW.get_from_json(json_path=ruta_json)
+    if result == 0:
+        return jsonify({"num_tareas": WORKFLOW.get_len_workflow()})
+    else:
+        return jsonify({"num_tareas": -1})
+
+###############################################################################
+###############################################################################
+###############################################################################
+
 @app.route('/ejecutarworkflow', methods=['GET'])
 def ejecutar_workflow():
     WORKFLOW.run()
