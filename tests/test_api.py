@@ -22,8 +22,25 @@ def test_aniadirtareaisolatecolumn():
     assert response.status_code == 200
     assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.isolate_column.IsolateColumn'
 
-'''def test_funcionalidad2():
-    response = requests.post("http://localhost:8000/funcionalidad2", json={"parametro1": "valor"})
+def test_aniadirtareageneratefasta():
+    response = requests.post("http://localhost:8000/aniadirtareageneratefasta", json={"path_to_protein_codes_csv": "./BVBRC_slatt_protein_small_new.csv", "fasta_folder_path": "./proteins.fasta"})
     assert response.status_code == 200
-    assert response.json() == {"resultado": "Funcionalidad2 ejecutada con valor"}'''
+    assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.generate_fasta.GenerateFasta'
+
+def test_aniadirtareareducesample():
+    response = requests.post("http://localhost:8000/aniadirtareareducesample", json={"fasta_pathname": "./proteins.fasta", "pathname_to_reduced_proteins": "./reduced_proteins.fasta"})
+    assert response.status_code == 200
+    assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.reduce_sample.ReduceSample'
+
+def test_aniadirtareaget30kb():
+    response = requests.post("http://localhost:8000/aniadirtareaget30kb", json={"pathname_to_reduced_proteins": "./reduced_proteins.fasta", "pathname_to_feature_proteins": "./feature_regions.fasta"})
+    assert response.status_code == 200
+    assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.get_30kb_upanddown.Get30KbProteins'
+
+def test_aniadirtareareconocercodones():
+    response = requests.post("http://localhost:8000/aniadirtareareconocercodones", json={"pathname_to_feature_proteins": "./feature_regions.fasta", "pathname_to_excel_results": "./final_results.xlsx"})
+    assert response.status_code == 200
+    assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.get_codons_from_features.GetCodonsFromFeatures'
+
+
 

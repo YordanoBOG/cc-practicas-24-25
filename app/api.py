@@ -81,6 +81,58 @@ def aniadir_tarea_isolate_column():
 ###############################################################################
 ###############################################################################
 
+@app.route('/aniadirtareageneratefasta', methods=['POST'])
+def aniadir_tarea_gen_fasta():
+    app.logger.info("Llamada a /aniadirtareageneratefasta")
+    parametros = request.get_json()
+    generate_fasta_task = GenerateFasta(path_to_protein_codes_csv=parametros['path_to_protein_codes_csv'], fasta_folder_path=parametros['fasta_folder_path'])
+    WORKFLOW.add_task(generate_fasta_task)
+    # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
+    return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+@app.route('/aniadirtareareducesample', methods=['POST'])
+def aniadir_tarea_reduce_sample():
+    app.logger.info("Llamada a /aniadirtareareducesample")
+    parametros = request.get_json()
+    reduce_sample_task = ReduceSample(fasta_pathname=parametros['fasta_pathname'], pathname_to_reduced_proteins=parametros['pathname_to_reduced_proteins'])
+    WORKFLOW.add_task(reduce_sample_task)
+    # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
+    return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+@app.route('/aniadirtareaget30kb', methods=['POST'])
+def aniadir_tarea_get_30kb():
+    app.logger.info("Llamada a /aniadirtareaget30kb")
+    parametros = request.get_json()
+    get_30_kb_task = Get30KbProteins(pathname_to_reduced_proteins=parametros['pathname_to_reduced_proteins'], pathname_to_feature_proteins=parametros['pathname_to_feature_proteins'])
+    WORKFLOW.add_task(get_30_kb_task)
+    # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
+    return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+@app.route('/aniadirtareareconocercodones', methods=['POST'])
+def aniadir_tarea_recognize_codons():
+    app.logger.info("Llamada a /aniadirtareareconocercodones")
+    parametros = request.get_json()
+    recognize_codons_task = GetCodonsFromFeatures(pathname_to_feature_proteins=parametros['pathname_to_feature_proteins'], pathname_to_excel_results=parametros['pathname_to_excel_results'])
+    WORKFLOW.add_task(recognize_codons_task)
+    # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
+    return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
+
+###############################################################################
+###############################################################################
+###############################################################################
+
 @app.route('/eliminarultimatarea', methods=['POST'])
 def eliminar_ultima_tarea():
     parametros = request.get_json()
