@@ -42,5 +42,13 @@ def test_aniadirtareareconocercodones():
     assert response.status_code == 200
     assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.get_codons_from_features.GetCodonsFromFeatures'
 
+def test_eliminarultimatareaworkflow():
+    response = requests.get("http://localhost:8000/eliminarultimatareaworkflow")
+    assert response.status_code == 200
+    assert response.json()["exito"] == 0
 
+def test_limpiarworkflow():
+    response = requests.get("http://localhost:8000/limpiarworkflow")
+    assert response.status_code == 200
+    assert response.json()["exito"] == 0
 

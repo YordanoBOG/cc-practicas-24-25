@@ -203,6 +203,7 @@ class Workflow(Task):
         """
         if self.get_len_workflow() > 0:
             (self.__tasks).pop()
+        return 0
 
 
     def clean(self):
@@ -211,6 +212,7 @@ class Workflow(Task):
         """
         while self.get_len_workflow() > 0:
             self.remove_last_task()
+        return 0
 
 
     def run(self):

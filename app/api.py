@@ -133,25 +133,19 @@ def aniadir_tarea_recognize_codons():
 ###############################################################################
 ###############################################################################
 
-@app.route('/eliminarultimatarea', methods=['POST'])
+@app.route('/eliminarultimatareaworkflow', methods=['GET'])
 def eliminar_ultima_tarea():
-    parametros = request.get_json()
-    current_workflow:Workflow = parametros['workflow']
-    current_workflow.remove_last_task()
-    workflow_parameters = current_workflow.get_parameters()
-    return jsonify({"tareas": workflow_parameters['tasks']})
+    result = WORKFLOW.remove_last_task()
+    return jsonify({"exito": result})
 
 ###############################################################################
 ###############################################################################
 ###############################################################################
 
-@app.route('/limpiarworkflow', methods=['POST'])
+@app.route('/limpiarworkflow', methods=['GET'])
 def limpiar_workflow():
-    parametros = request.get_json()
-    current_workflow:Workflow = parametros['workflow']
-    current_workflow.clean()
-    workflow_parameters = current_workflow.get_parameters()
-    return jsonify({"tareas": workflow_parameters['tasks']})
+    result = WORKFLOW.clean()
+    return jsonify({"exito": result})
 
 ###############################################################################
 ###############################################################################
