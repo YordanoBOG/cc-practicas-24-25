@@ -55,18 +55,20 @@ def crear_workflow_parametros():
     new_workflow_parameters = new_workflow.get_parameters()
     return jsonify({"tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
-                    "results file": new_workflow_parameters['results_file']})
+                    "results file": new_workflow_parameters['results_file'],
+                    "returned info": new_workflow_parameters['returned_info']})
 
 ###############################################################################
 ###############################################################################
 ###############################################################################
 
-@app.route('/aniadirtarea', methods=['POST'])
-def aniadir_tarea():
-    parametros = request.json
+@app.route('/aniadirtareaisolatecolumn', methods=['POST'])
+def aniadir_tarea_isolate_column():
+    app.logger.info("Llamada a /aniadirtareaisolatecolumn")
+    parametros = request.get_json()
     current_workflow:Workflow = parametros['workflow']
-    new_task = parametros['new_task']
-    current_workflow.add_task(new_task)
+    isolate_column_task = IsolateColumn(csv_path=parametros['csv_path'], col_name=parametros['col_name'])
+    current_workflow.add_task(isolate_column_task)
     workflow_parameters = current_workflow.get_parameters()
     return jsonify({"tareas": workflow_parameters['tasks']})
 
@@ -76,7 +78,7 @@ def aniadir_tarea():
 
 @app.route('/eliminarultimatarea', methods=['POST'])
 def eliminar_ultima_tarea():
-    parametros = request.json
+    parametros = request.get_json()
     current_workflow:Workflow = parametros['workflow']
     current_workflow.remove_last_task()
     workflow_parameters = current_workflow.get_parameters()
@@ -88,7 +90,7 @@ def eliminar_ultima_tarea():
 
 @app.route('/limpiarworkflow', methods=['POST'])
 def limpiar_workflow():
-    parametros = request.json
+    parametros = request.get_json()
     current_workflow:Workflow = parametros['workflow']
     current_workflow.clean()
     workflow_parameters = current_workflow.get_parameters()
