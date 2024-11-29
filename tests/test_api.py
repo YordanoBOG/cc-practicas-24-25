@@ -18,7 +18,7 @@ def test_crearworkflowparametros():
     assert response.json()["returned value"] == 0
 
 def test_aniadirtareaisolatecolumn():
-    response = requests.post("http://localhost:8000/crearworkflowparametros", json={"csv_path": "./BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"})
+    response = requests.post("http://localhost:8000/aniadirtareaisolatecolumn", json={"csv_path": "./BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"})
     assert response.status_code == 200
     assert response.json()["tareas"][-1].to_dict()['type'] == 'modules.PATRIC_protein_processing.isolate_column.IsolateColumn'
 
