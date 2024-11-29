@@ -38,7 +38,7 @@ def crear_workflow():
 @app.route('/crearworkflowparametros', methods=['POST'])
 def crear_workflow_parametros():
     app.logger.info(f"Llamada a /crearworkflowparametros")
-    parametros = request.get_json()
+    parametros = request.json()
     app.logger.info(f"Llamada a /crearworkflowparametros con parametros:{str(parametros)}")
 
     # Comprobar si los parámetros incluyen una lista de tareas, un valor de salida y un fichero de resultados
