@@ -62,9 +62,9 @@ Guardamos el flujo en un archivo JSON, lo vaciamos de contenido, lo volvemos a c
 
 -------------------------------------------------------------------------------
 
-Finalmente, para automatizar el despliegue y testeo de la API con cada push que se haga a la rama main del repositorio, añadimos una nueva tarea al archivo ".github/workflow/genesys_tests.yml" del hito anterior, que se encargará de lanzar el script Python que pone en marcha la API junto al archivo que ejecuta los tests sobre ella.
+Finalmente, para automatizar el despliegue y testeo de la API con cada push que se haga a la rama main del repositorio, añadimos una nueva tarea al archivo ".github/workflow/genesys_tests.yml" del hito anterior, que se encargará de lanzar el script Python que pone en marcha la API junto al archivo que ejecuta los tests sobre la API.
 
-\captura de la nueva sección de genesys_tests.yml
+![Captura desde 2024-11-29 06-33-06](https://github.com/user-attachments/assets/070f960d-7ca9-4d9e-9858-225bb5310e99)
 
 -------------------------------------------------------------------------------
 
