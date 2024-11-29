@@ -11,8 +11,8 @@ from modules.PATRIC_protein_processing.get_codons_from_features import GetCodons
 from modules.baseobjects import Workflow
 
 # Configuración de logging
-logging.basicConfig(level=logging.INFO,  # Nivel mínimo para registrar (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-                    format='%(asctime)s - %(levelname)s - %(message)s',  # Formato del log
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
                     handlers=[
                         logging.FileHandler("app.log"),  # Guardar logs en un archivo
                         logging.StreamHandler()          # Mostrar logs en la consola
@@ -135,6 +135,7 @@ def aniadir_tarea_recognize_codons():
 
 @app.route('/eliminarultimatareaworkflow', methods=['GET'])
 def eliminar_ultima_tarea():
+    app.logger.info("Llamada a /eliminarultimatareaworkflow")
     result = WORKFLOW.remove_last_task()
     return jsonify({"exito": result})
 
@@ -144,6 +145,7 @@ def eliminar_ultima_tarea():
 
 @app.route('/limpiarworkflow', methods=['GET'])
 def limpiar_workflow():
+    app.logger.info("Llamada a /limpiarworkflow")
     result = WORKFLOW.clean()
     return jsonify({"exito": result})
 
@@ -153,6 +155,7 @@ def limpiar_workflow():
 
 @app.route('/guardarworkflowcomojson', methods=['POST'])
 def guardar_workflow_como_json():
+    app.logger.info("Llamada a /guardarworkflowcomojson")
     parametros = request.get_json()
     ruta_json = parametros['archivo_json']
     result = WORKFLOW.generate_json(path=ruta_json)
@@ -164,6 +167,7 @@ def guardar_workflow_como_json():
 
 @app.route('/cargarworkflowdesdejson', methods=['POST'])
 def cargar_workflow_desde_json():
+    app.logger.info("Llamada a /cargarworkflowdesdejson")
     parametros = request.get_json()
     ruta_json = parametros['archivo_json']
     result = WORKFLOW.get_from_json(json_path=ruta_json)
@@ -178,6 +182,7 @@ def cargar_workflow_desde_json():
 
 @app.route('/ejecutarworkflow', methods=['GET'])
 def ejecutar_workflow():
+    app.logger.info("Llamada a /ejecutarworkflow")
     WORKFLOW.run()
     return jsonify({"returned value": WORKFLOW.get_parameters()['returned_value']})
 

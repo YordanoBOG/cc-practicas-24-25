@@ -1,40 +1,32 @@
 Hito 3: Diseño de microservicios
 
-En este hito vamos a crear un microservicio sobre la base de la funcionalidad desarrollada en el hito anterior.
+En este hito vamos a crear un microservicio sobre la base de la funcionalidad desarrollada en el hito anterior. Para ello, nos serviremos de la biblioteca Flask de Python, que permite definir endpoints para APIs de una forma sencilla y rápida, perfecta para un principiante como yo. Uniremos Flask con las herramientas aprendidas en el hito 2 (Automatización de pruebas con un archivo .yml, pytest y GitHub actions). Por tanto, usaremos el entorno de GitHub actions para desplegar una API hecha con la biblioteca Flask de Python sobre la que realizaremos tests, todo orquestrado a través de un archivo .yml.
 
-Comenzamos definiendo nuestra API incorporando un archivo "app/api.py" que incluye los endpoints para acceder a la funcionalidad de nuestra apicación.
+Comenzamos definiendo nuestra API incorporando un archivo "app/api.py" que incluye los endpoints para acceder a la funcionalidad de nuestra API: únicamente habilitamos las funcionalidades que nos interesa ofrecer al usuario. Dichos endpoints incluyen mensajes de log que informan por pantalla cada vez que se produce una llamada a cualquiera de ellos.
 
-\captura de api.py
+Las funciones de nuestra API van a ir ligadas al manejo de flujos de trabajo para datos genéticos, en concreto, se podrá
 
-Junto a eso, eliminamos el archivo main.py que originalmente lanzaba la aplicación, y en su lugar creamos el archivo app.py en el fichero raíz, que pone a punto la API para recibir solicitudes.
+\capturas de api.py
+
+Por temas de organización, definimos la aplicación en un archivo __init__.py situado en la misma ruta "app/__init__.py". En dicho archivo se define la aplicación Flask que hemos implementado, y se importan todas las funcionalidades disponibles a través de la API
+
+\captura de init
+
+Junto a eso, eliminamos el archivo "main.py" que originalmente lanzaba la aplicación, y en su lugar creamos un archivo "app.py" en el fichero raíz, que pone a punto la API para recibir solicitudes.
 
 \captura de app.py
 
-Para testear la API, creamos un nuevo fichero de test en tests/test_api.py, que se encargará de evaluar los endpoints del servicio.
+Para testear la API, creamos un nuevo fichero de test en "tests/test_api.py", que se encargará de evaluar los endpoints del servicio.
 
-\captura de test_api.py
+\capturas de test_api.py
 
-Finalmente, para automatizar el despliegue y testeo de la API con cada push que se haga a la rama main del repositorio, añadimos una nueva tarea al archivo .github/workflow/genesys_tests.yml del hito anterior, que se encargará de lanzar el script Python que pone en marcha la API, junto al archivo que ejecuta los tests sobre ella.
+Finalmente, para automatizar el despliegue y testeo de la API con cada push que se haga a la rama main del repositorio, añadimos una nueva tarea al archivo ".github/workflow/genesys_tests.yml" del hito anterior, que se encargará de lanzar el script Python que pone en marcha la API junto al archivo que ejecuta los tests sobre ella.
 
 \captura de la nueva sección de genesys_tests.yml
 
 -------------------------------------------------------------------------------
 
 Diseñar una API consistente en una serie de rutas (en el caso de un API REST), testear la API usando una biblioteca específica que te provea el microservicio y crear la infraestructura necesaria para comenzar a ejecutarlo.
-
-No hagas los tests con postman/swagger o algo de eso, sino a partir del yaml.
-
-Dale al usuario solo la funcionalidad que te interesa proporcionar a través de APIs.
-
-Entrega de la práctica
-
-En este punto, el código que se haya entregado tiene que estar en el siguiente estado:
-
-    Debe incluir, al menos, un servicio de configuración que considere las diferentes posibilidades.
-    Debe tener la estructura general de las clases que se vayan a servir con la API correcta, incluyendo en su caso diseño de excepciones que puedan ocurrir en el curso normal de ejecución de la aplicación.
-    No deben incluir ningún tipo de acceso a datos, pero si lo hacen debe hacerse a través de una single source of truth usando inyección de dependencias. El test de la misma se debe hacer de la misma forma.
-    No es necesario, ni se solicita, que haya una "aplicación" lanzable y se prefiere que no la haya. El código debe ser única y exclusivametne el necesario para testear las rutas, y es conveniente que, en el diseño por capas, se separe la lógica de negocio de la lógica del API y esta, a su vez, del programa o aplicación desde las que se van a usar ambos.
-    En este punto la aplicación puede estar potencialmente en Internet. La comprobación de tipos debe ser exhaustiva, tanto la que provea el sistema de tipos del lenguaje como la que se haga por parte del usuario en caso de que no sea así.
 
 La valoración se distribuirá en las siguientes rúbricas:
 
