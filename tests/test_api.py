@@ -23,9 +23,7 @@ def test_crearworkflow():
                                "results file": "./workflow_results.txt"}
 
 def test_crearworkflowparametros():
-    logging.info("Llamada a /crearworkflowparametros")
     response = requests.post("http://localhost:8000/crearworkflowparametros", json={"returned_value": 0})
-    logging.info(f"Respuesta recibida: {str(response)}")
     assert response.status_code == 200
     assert response.json() == {"Respuesta": "OK"}
     '''assert response.json() == {"tareas": [],
