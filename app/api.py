@@ -22,11 +22,17 @@ logging.basicConfig(level=logging.INFO,  # Nivel mínimo para registrar (DEBUG, 
 ###############################################################################
 ###############################################################################
 
+WORKFLOW:Workflow = Workflow() # Un workflow único para todo el servicio
+
+###############################################################################
+###############################################################################
+###############################################################################
+
 @app.route('/crearworkflow', methods=['GET'])
 def crear_workflow():
     app.logger.info("Llamada a /crearworkflow")
-    new_workflow = Workflow()
-    new_workflow_parameters = new_workflow.get_parameters()
+    WORKFLOW = Workflow()
+    new_workflow_parameters = WORKFLOW.get_parameters()
     return jsonify({"tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
                     "results file": new_workflow_parameters['results_file']})
@@ -50,9 +56,9 @@ def crear_workflow_parametros():
     if "returned_info" not in parametros:
         parametros['returned_info'] = ""
 
-    new_workflow = Workflow()
-    new_workflow.set_parameters(parameters=parametros)
-    new_workflow_parameters = new_workflow.get_parameters()
+    WORKFLOW = Workflow()
+    WORKFLOW.set_parameters(parameters=parametros)
+    new_workflow_parameters = WORKFLOW.get_parameters()
     return jsonify({"tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
                     "results file": new_workflow_parameters['results_file'],
@@ -66,7 +72,7 @@ def crear_workflow_parametros():
 def aniadir_tarea_isolate_column():
     app.logger.info("Llamada a /aniadirtareaisolatecolumn")
     parametros = request.get_json()
-    isolate_column_task = IsolateColumn(csv_path=parametros['csv_path'], col_name=parametros['col_name'])
+    isolate_column_task = IsolateColumn(csv_path='./BVBRC_slatt_protein_small.csv', col_name='BRC ID')
     #current_workflow.add_task(isolate_column_task)
     #workflow_parameters = current_workflow.get_parameters()
     #return jsonify({"tareas": workflow_parameters['tasks']})
