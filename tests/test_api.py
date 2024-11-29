@@ -52,3 +52,8 @@ def test_limpiarworkflow():
     assert response.status_code == 200
     assert response.json()["exito"] == 0
 
+def test_ejecutarworkflow():
+    response = requests.get("http://localhost:8000/ejecutarworkflow")
+    assert response.status_code == 200
+    assert response.json()["returned value"] == 0
+
