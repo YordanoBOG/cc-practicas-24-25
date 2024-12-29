@@ -11,7 +11,7 @@ PATRIC db, and it has not been tested in other contexts.
 
 import csv
 
-from genesys.api.modules.baseobjects import Task
+from api.modules.baseobjects import Task
 
 ##############################################################################
 ##############################################################################

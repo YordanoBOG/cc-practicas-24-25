@@ -1,0 +1,63 @@
+# Useful Docker commands
+# docker ps (-a): List All Containers
+# docker logs <container_name>: View Logs of a Container
+# docker inspect <container_name> (| grep State): Inspect Detailed Info About a Container (or just its state)
+# docker stats: Check Resource Usage
+# docker stop <container_name>: Stop a Running Container
+# docker start <container_name>: Start a Stopped Container
+# docker restart <container_name>: Restart a Container
+# docker rm <container_name>: Remove a Container
+
+# Useful Docker Compose commands
+# docker-compose up: Start Services
+# docker-compose up --build: Rebuild and Start Services
+# docker-compose down: Stops all containers and services and removes the network created by Docker Compose. Volumes and images are preserved unless explicitly removed.
+# docker-compose logs <service_name>: View Service Logs
+# docker-compose restart: Restart Services
+# docker network ls: List All Docker Networks
+# docker network inspect <network_name>: Inspect a Specific Network
+# docker volume ls: List All Volumes
+# docker volume prune: Remove Unused Volumes
+# docker-compose stop: Stop Services Without Removing Containers:
+# docker-compose stop <service_name>: Stops specific service. Example: docker-compose stop mongo
+# docker image prune: Remove Dangling Images
+
+# AHORA HAY QUE LANZAR EL CONTENEDOR Y TESTEAR LOS ENDPOINTS DE LA API DESDE LA MÁQUINA LOCAL, SE ACCEDEN
+# A TRAVÉS DEL NAVEGADOR (SEGURAMENTE), PERO DEBES AVERIGUAR CÓMO ENVIARLES PARÁMETROS SI NO DISPONES DE
+# UNA INTERFAZ PARA ELLO (O CREAR TEMPLATES.HTML SENCILLOS PARA TESTEARLO)
+
+# docker-compose.yml
+version: '3.8'
+
+services:
+  api:
+    build: ./api
+    container_name: genesys_api
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mydb
+    depends_on:
+      - mongo
+    networks:
+      - app_network
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    networks:
+      - app_network
+
+  logger:
+    image: fluent/fluentd:v1.15.3-debian-1.0
+    container_name: logger
+    ports:
+      - "24224:24224"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge

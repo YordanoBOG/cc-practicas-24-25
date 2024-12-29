@@ -1,8 +1,8 @@
 import subprocess
 
-from genesys.api.modules.baseobjects import Task
-from genesys.api.utils.fasta_processing_utils import save_fasta_string, get_fasta_content
-from genesys.api.utils.biopython_utils import get_coincidence_percentage
+from api.modules.baseobjects import Task
+from api.utils.fasta_processing_utils import save_fasta_string, get_fasta_content
+from api.utils.biopython_utils import get_coincidence_percentage
 
 class ReduceSample(Task):
     __limit_percentage = 85

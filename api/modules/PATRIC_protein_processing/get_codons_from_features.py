@@ -12,9 +12,9 @@ corresponding proteins
 #import json
 import pandas as pd
 
-from genesys.api.modules.baseobjects import Task
-from genesys.api.utils.fasta_processing_utils import get_fasta_content
-from genesys.api.utils.biopython_utils import has_valid_stop_codon, from_bases_to_aminoacid
+from api.modules.baseobjects import Task
+from api.utils.fasta_processing_utils import get_fasta_content
+from api.utils.biopython_utils import has_valid_stop_codon, from_bases_to_aminoacid
 
 ##############################################################################
 ##############################################################################

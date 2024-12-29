@@ -2,7 +2,7 @@
 FROM python:3.9-slim
 
 # Set working directory
-WORKDIR /genesys_app
+WORKDIR /app
 
 # Copy application code
 COPY . .
@@ -11,4 +11,4 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run the application
-CMD ["python", "app.py"]
+CMD ["python3", "app.py"]
