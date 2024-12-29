@@ -10,8 +10,8 @@ that surround each protein given by the fasta file, which work as bait
 
 import subprocess
 
-from modules.baseobjects import Task
-from utils.fasta_processing_utils import get_fasta_content
+from genesys.api.modules.baseobjects import Task
+from genesys.api.utils.fasta_processing_utils import get_fasta_content
 
 ##############################################################################
 ##############################################################################

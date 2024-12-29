@@ -14,8 +14,8 @@ PATRIC databases.
 import csv
 import subprocess
 
-from modules.baseobjects import Task
-from utils.fasta_processing_utils import save_fasta_string
+from genesys.api.modules.baseobjects import Task
+from genesys.api.utils.fasta_processing_utils import save_fasta_string
 
 ##############################################################################
 ##############################################################################
