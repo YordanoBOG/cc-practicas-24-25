@@ -1,11 +1,11 @@
 import pytest
 
-from modules.PATRIC_protein_processing.isolate_column import IsolateColumn 
-from modules.PATRIC_protein_processing.generate_fasta import GenerateFasta
-from modules.PATRIC_protein_processing.reduce_sample import ReduceSample
-from modules.PATRIC_protein_processing.get_30kb_upanddown import Get30KbProteins
-from modules.PATRIC_protein_processing.get_codons_from_features import GetCodonsFromFeatures
-from modules.baseobjects import Workflow
+from genesys.api.modules.PATRIC_protein_processing.isolate_column import IsolateColumn 
+from genesys.api.modules.PATRIC_protein_processing.generate_fasta import GenerateFasta
+from genesys.api.modules.PATRIC_protein_processing.reduce_sample import ReduceSample
+from genesys.api.modules.PATRIC_protein_processing.get_30kb_upanddown import Get30KbProteins
+from genesys.api.modules.PATRIC_protein_processing.get_codons_from_features import GetCodonsFromFeatures
+from genesys.api.modules.baseobjects import Workflow
 
 WORKFLOW = Workflow() # Usamos una variable global WORKFLOW
 

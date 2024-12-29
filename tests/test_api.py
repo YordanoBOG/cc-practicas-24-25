@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-from modules.baseobjects import Workflow
+#from genesys.api.modules.baseobjects import Workflow
 
 def test_crearworkflow():
     response = requests.get("http://localhost:8000/crearworkflow")

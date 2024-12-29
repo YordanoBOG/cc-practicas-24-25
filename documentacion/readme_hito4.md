@@ -1,4 +1,29 @@
 Hito 4: Composición de servicios
+
+Instalar docker compose DÍA 1
+
+Preparar fichero compose.yaml en el directorio principal del proyecto que debe ejecutarse para desplegar los contenedores. Preparar la configuración de la arquitectura en formato como-código DÍA 1, 2, 3
+
+Preparar contenedor de la aplicación con su Dockerfile DÍA 1
+
+Preparar contenedor de logs DÍA 2
+
+Preparar contenedor de base de datos MongoDB DÍA 2
+
+Implementar aplicación (map) de puertos, interna y externa, de forma que se puedan usar y testear los servicios DÍA 3
+
+Preparar un test que construya el cluster de contenedores y más tests para testear la API que se ejecuta en los contenedores. Tras eso, el contenedor se deberá subir a GitHub container registry. Esto deberá suceder con cada push. DÍA 3
+
+Implementar usuarios en la base datos y sistema de inicio de sesión DÍA 4
+
+Limitar endpoints a los que se puede acceder según el tipo de usuario DÍA 4
+
+Cambiar los tests para validar la correcta gestión de usuarios DÍA 5
+
+Hacer documentación DÍA 5
+
+--------------------------------------------------------------------------------
+
 Descripción
 
 Un contenedor es una de las formas estándar hoy en día para crear despliegues repetibles de cualquier tipo de aplicación. Cuando una aplicación no cabe en un solo contenedor por la existencia de varios tier (qué es un tier? Ni lo sé ni me importa, solo usa docker compose), o simplemente nodos que sirven para almacenar datos, es necesario usar Docker compose para describir de forma repetible la relación que tales contenedores tienen entre sí. Básicamente aquí te están diciendo que uses docker compose.
@@ -34,8 +59,6 @@ Valoración
     2 puntos: documentación del fichero de composición (compose.yml).
     1,5 puntos: testeo del cúster.
     Falta justificación de qué contenedores usarás y por qué, eso al principio del todo.
-    
-¿Y la interfaz de usuario? No es necesaria, de hecho, elimina las pantallas kivy ¿Por ahora me basta con seguir testeando la aplicación a través de tests? Sí. 
 
 Esencialmente, es meter la API en un contenedor, más un contenedor de logs y otro de base de datos.
 

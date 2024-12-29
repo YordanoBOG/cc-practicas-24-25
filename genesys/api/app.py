@@ -1,7 +1,6 @@
-import json
 import logging
+
 from flask import Flask, request, jsonify
-from app import app
 
 from modules.PATRIC_protein_processing.isolate_column import IsolateColumn
 from modules.PATRIC_protein_processing.generate_fasta import GenerateFasta
@@ -10,7 +9,17 @@ from modules.PATRIC_protein_processing.get_30kb_upanddown import Get30KbProteins
 from modules.PATRIC_protein_processing.get_codons_from_features import GetCodonsFromFeatures
 from modules.baseobjects import Workflow
 
-# Configuración de logging
+###############################################################################
+###############################################################################
+###############################################################################
+
+app = Flask(__name__)
+WORKFLOW:Workflow = Workflow() # Un workflow único para todo el servicio
+
+###############################################################################
+###############################################################################
+###############################################################################
+
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     handlers=[
@@ -18,11 +27,13 @@ logging.basicConfig(level=logging.INFO,
                         logging.StreamHandler()          # Mostrar logs en la consola
                     ])
 
-###############################################################################
-###############################################################################
-###############################################################################
-
-WORKFLOW:Workflow = Workflow() # Un workflow único para todo el servicio
+# Configuración de logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s',
+                    handlers=[
+                        logging.FileHandler("app.log"),  # Guardar logs en un archivo
+                        logging.StreamHandler()          # Mostrar logs en la consola
+                    ])
 
 ###############################################################################
 ###############################################################################
@@ -186,4 +197,6 @@ def ejecutar_workflow():
     WORKFLOW.run()
     return jsonify({"returned value": WORKFLOW.get_parameters()['returned_value']})
 
-
+if __name__ == "__main__":
+    app.logger.info("Lanzando la API de GeneSys")
+    app.run(debug=True, host='0.0.0.0', port=8000)

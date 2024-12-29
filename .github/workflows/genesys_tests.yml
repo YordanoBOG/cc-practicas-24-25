@@ -22,8 +22,8 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt;
-          sudo dpkg -i bvbrc-cli-1.040.deb || sudo apt-get install -f -y; fi
+          if [ -f genesys/api/requirements.txt ]; then pip install -r genesys/api/requirements.txt;
+          sudo dpkg -i genesys/api/bvbrc-cli-1.040.deb || sudo apt-get install -f -y; fi
 
       - name: Run Python tests
         env:
@@ -48,15 +48,15 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt;
-          sudo dpkg -i bvbrc-cli-1.040.deb || sudo apt-get install -f -y; fi
+          if [ -f genesys/api/requirements.txt ]; then pip install -r genesys/api/requirements.txt;
+          sudo dpkg -i genesys/api/bvbrc-cli-1.040.deb || sudo apt-get install -f -y; fi
 
       # Lanzar API. Esperamos 5 segundos para que al servidor le dé tiempo a arrancar
       - name: Start API server
         env:
           PYTHONPATH: ${{ github.workspace }}  # Add modules to PYTHONPATH
         run: |
-          python app.py &
+          python genesys/api/app.py &
           sleep 5
 
       # Ejecutar pruebas
