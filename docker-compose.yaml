@@ -31,11 +31,14 @@ version: '3.8'
 
 services:
   api:
-    build: ./api
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: genesys_api
     ports:
       - "8000:8000"
     environment:
+      - PYTHONPATH=/app
       - MONGO_URI=mongodb://mongo:27017/mydb
     depends_on:
       - mongo
@@ -55,6 +58,10 @@ services:
     container_name: logger
     ports:
       - "24224:24224"
+    #volumes:
+      #- ./logs:/fluentd/log  # Store logs in the shared logs directory
+    #environment:
+      #- FLUENT_UID=0  # Run Fluentd as root to avoid permission issues
     networks:
       - app_network
 
