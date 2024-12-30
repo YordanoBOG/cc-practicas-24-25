@@ -2,12 +2,12 @@ import logging
 
 from flask import Flask, request, jsonify
 
-from modules.PATRIC_protein_processing.isolate_column import IsolateColumn
-from modules.PATRIC_protein_processing.generate_fasta import GenerateFasta
-from modules.PATRIC_protein_processing.reduce_sample import ReduceSample
-from modules.PATRIC_protein_processing.get_30kb_upanddown import Get30KbProteins
-from modules.PATRIC_protein_processing.get_codons_from_features import GetCodonsFromFeatures
-from modules.baseobjects import Workflow
+from api.modules.PATRIC_protein_processing.isolate_column import IsolateColumn
+from api.modules.PATRIC_protein_processing.generate_fasta import GenerateFasta
+from api.modules.PATRIC_protein_processing.reduce_sample import ReduceSample
+from api.modules.PATRIC_protein_processing.get_30kb_upanddown import Get30KbProteins
+from api.modules.PATRIC_protein_processing.get_codons_from_features import GetCodonsFromFeatures
+from api.modules.baseobjects import Workflow
 
 ###############################################################################
 ###############################################################################

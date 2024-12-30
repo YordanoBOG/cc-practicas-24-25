@@ -56,7 +56,7 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}  # Add modules to PYTHONPATH
         run: |
-          python3 api/app.py &
+          python3 app.py &
           sleep 5
 
       # Ejecutar pruebas
