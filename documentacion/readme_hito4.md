@@ -1,20 +1,10 @@
 Hito 4: Composición de servicios
 
-Instalar docker compose DÍA 1
-
-Preparar fichero compose.yaml en el directorio principal del proyecto que debe ejecutarse para desplegar los contenedores. Preparar la configuración de la arquitectura en formato como-código DÍA 1, 2, 3
-
-Preparar contenedor de la aplicación con su Dockerfile DÍA 1
-
-Preparar contenedor de logs DÍA 2
-
-Preparar contenedor de base de datos MongoDB DÍA 2
-
 Implementar aplicación (map) de puertos, interna y externa, de forma que se puedan usar y testear los servicios DÍA 3
 
 Preparar un test que construya el cluster de contenedores y más tests para testear la API que se ejecuta en los contenedores. Tras eso, el contenedor se deberá subir a GitHub container registry. Esto deberá suceder con cada push. DÍA 3
 
-Implementar usuarios en la base datos y sistema de inicio de sesión DÍA 4
+Implementar usuarios en la base datos y un sistema de inicio de sesión DÍA 4
 
 Limitar endpoints a los que se puede acceder según el tipo de usuario DÍA 4
 
