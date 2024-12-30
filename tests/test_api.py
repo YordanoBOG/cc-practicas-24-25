@@ -18,27 +18,27 @@ def test_crearworkflowparametros():
 def test_aniadirtareaisolatecolumn():
     response = requests.post("http://localhost:8000/aniadirtareaisolatecolumn", json={"csv_path": "data/BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"})
     assert response.status_code == 200
-    assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.isolate_column.IsolateColumn'
+    assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.isolate_column.IsolateColumn'
 
 def test_aniadirtareageneratefasta():
     response = requests.post("http://localhost:8000/aniadirtareageneratefasta", json={"path_to_protein_codes_csv": "data/BVBRC_slatt_protein_small_new.csv", "fasta_folder_path": "data/proteins.fasta"})
     assert response.status_code == 200
-    assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.generate_fasta.GenerateFasta'
+    assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.generate_fasta.GenerateFasta'
 
 def test_aniadirtareareducesample():
     response = requests.post("http://localhost:8000/aniadirtareareducesample", json={"fasta_pathname": "data/proteins.fasta", "pathname_to_reduced_proteins": "data/reduced_proteins.fasta"})
     assert response.status_code == 200
-    assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.reduce_sample.ReduceSample'
+    assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.reduce_sample.ReduceSample'
 
 def test_aniadirtareaget30kb():
     response = requests.post("http://localhost:8000/aniadirtareaget30kb", json={"pathname_to_reduced_proteins": "data/reduced_proteins.fasta", "pathname_to_feature_proteins": "data/feature_regions.fasta"})
     assert response.status_code == 200
-    assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.get_30kb_upanddown.Get30KbProteins'
+    assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.get_30kb_upanddown.Get30KbProteins'
 
 def test_aniadirtareareconocercodones():
     response = requests.post("http://localhost:8000/aniadirtareareconocercodones", json={"pathname_to_feature_proteins": "data/feature_regions.fasta", "pathname_to_excel_results": "data/final_results.xlsx"})
     assert response.status_code == 200
-    assert response.json()["nueva tarea"]['type'] == 'modules.PATRIC_protein_processing.get_codons_from_features.GetCodonsFromFeatures'
+    assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.get_codons_from_features.GetCodonsFromFeatures'
 
 def test_guardarworkflowcomojson():
     response = requests.post("http://localhost:8000/guardarworkflowcomojson", json={"archivo_json": "data/workflow.json"})
