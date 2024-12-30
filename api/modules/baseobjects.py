@@ -144,7 +144,7 @@ class Workflow(Task):
     """
 
     __tasks = [] # empty list of tasks
-    __results_file = "./workflow_results.txt" # Path to a .txt file that will save the returned info and returned value of the workflow
+    __results_file = "data/workflow_results.txt" # Path to a .txt file that will save the returned info and returned value of the workflow
     _returned_value = -1
 
     def __init__(self, tasks = []):
