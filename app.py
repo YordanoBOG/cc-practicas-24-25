@@ -61,7 +61,7 @@ def crear_workflow_parametros():
     if "tasks" not in parametros:
         parametros['tasks'] = []
     if "results_file" not in parametros:
-        parametros['results_file'] = "./workflow_results.txt"
+        parametros['results_file'] = "data/workflow_results.txt"
     if "returned_value" not in parametros:
         parametros['returned_value'] = -1
     if "returned_info" not in parametros:
