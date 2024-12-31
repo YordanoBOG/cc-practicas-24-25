@@ -1,6 +1,8 @@
 import logging
 
 from flask import Flask, request, jsonify
+from pymongo import MongoClient
+from gridfs import GridFS
 
 from api.modules.PATRIC_protein_processing.isolate_column import IsolateColumn
 from api.modules.PATRIC_protein_processing.generate_fasta import GenerateFasta
@@ -20,12 +22,10 @@ WORKFLOW:Workflow = Workflow() # Un workflow único para todo el servicio
 ###############################################################################
 ###############################################################################
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s - %(message)s',
-                    handlers=[
-                        logging.FileHandler("app.log"),  # Guardar logs en un archivo
-                        logging.StreamHandler()          # Mostrar logs en la consola
-                    ])
+# MongoDB client setup
+client = MongoClient("mongodb://mongo:27017/") # La ruta del contenedor mongo (al app solo funcionará desplegada en el contenedor a partir de ahora)
+db = client['mydb']
+fs = GridFS(db)
 
 # Configuración de logging
 logging.basicConfig(level=logging.INFO,
@@ -34,6 +34,49 @@ logging.basicConfig(level=logging.INFO,
                         logging.FileHandler("app.log"),  # Guardar logs en un archivo
                         logging.StreamHandler()          # Mostrar logs en la consola
                     ])
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    """Endpoint to upload a file to MongoDB."""
+    file = request.files['file']
+    file_id = fs.put(file, filename=file.filename)
+    app.logger.info(f"File {file.filename} stored with ID {file_id}")
+    return jsonify({"message": f"File stored with ID {file_id}"})
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+@app.route('/download/<filename>', methods=['GET'])
+def download_file(filename):
+    """Endpoint to download a file from MongoDB."""
+    file = fs.find_one({"filename": filename})
+    if not file:
+        app.logger.error(f"File {filename} not found in MongoDB.")
+        return jsonify({"error": "File not found"}), 404
+    response = app.response_class(file.read(), mimetype='application/octet-stream')
+    response.headers.set('Content-Disposition', f'attachment; filename={filename}')
+    app.logger.info(f"File {filename} downloaded from MongoDB.")
+    return response
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+@app.route('/delete/<filename>', methods=['DELETE'])
+def delete_file(filename):
+    """Endpoint to delete a file from MongoDB."""
+    file = fs.find_one({"filename": filename})
+    if not file:
+        app.logger.error(f"File {filename} not found in MongoDB.")
+        return jsonify({"error": "File not found"}), 404
+    fs.delete(file._id)
+    app.logger.info(f"File {filename} deleted from MongoDB.")
+    return jsonify({"message": f"File {filename} deleted successfully"})
 
 ###############################################################################
 ###############################################################################
@@ -194,8 +237,24 @@ def cargar_workflow_desde_json():
 @app.route('/ejecutarworkflow', methods=['GET'])
 def ejecutar_workflow():
     app.logger.info("Llamada a /ejecutarworkflow")
-    WORKFLOW.run()
+    WORKFLOW.run() # Aquí vas a tener que pasar la conexión a la base de datos como parámetro y
+                   # actuar sobre ella. Se asume que ahora el fichero inicial está en la BD (se ha metido manualmente)
+                   # Y debes hacer que el workflow manipule archivos dentro de la BD al ejecutarse, tarea a tarea.
+                   # Revisa que no se usen archivos de la BD en ninguna otra tarea de la aplicación
     return jsonify({"returned value": WORKFLOW.get_parameters()['returned_value']})
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+@app.route('/showinfo', methods=['GET'])
+def show_info_workflow():
+    app.logger.info("Llamada a /showinfo")
+    return jsonify({"returned value": WORKFLOW.show_info()})
+
+###############################################################################
+###############################################################################
+###############################################################################
 
 if __name__ == "__main__":
     app.logger.info("Lanzando la API de GeneSys")
