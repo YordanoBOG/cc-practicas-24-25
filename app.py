@@ -130,15 +130,20 @@ def crear_workflow_parametros():
         parametros['returned_value'] = -1
     if "returned_info" not in parametros:
         parametros['returned_info'] = ""
+    if "containerized" not in parametros:
+        parametros['containerized'] = False
 
     WORKFLOW = Workflow()
     WORKFLOW.set_parameters(parameters=parametros)
     new_workflow_parameters = WORKFLOW.get_parameters()
-    return jsonify({"tareas": new_workflow_parameters['tasks'],
-                    "returned value": new_workflow_parameters['returned_value'],
-                    "results file": new_workflow_parameters['results_file'],
-                    "returned info": new_workflow_parameters['returned_info']})#,
-                    #"containerized": new_workflow_parameters['containerized']})
+    app.logger.info(f"WORKFLOW CREADO: {str(new_workflow_parameters)}")
+    '''"tareas": new_workflow_parameters['tasks'],
+            "returned value": new_workflow_parameters['returned_value'],
+            "results file": new_workflow_parameters['results_file'],
+            "returned info": new_workflow_parameters['returned_info'],
+            "containerized": new_workflow_parameters['containerized']})'''
+    return jsonify({"returned value": 0,
+                    "containerized": False})
 
 ###############################################################################
 ###############################################################################
