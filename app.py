@@ -137,8 +137,8 @@ def crear_workflow_parametros():
     return jsonify({"tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
                     "results file": new_workflow_parameters['results_file'],
-                    "returned info": new_workflow_parameters['returned_info'],
-                    "containerized": new_workflow_parameters['containerized']})
+                    "returned info": new_workflow_parameters['returned_info']})#,
+                    #"containerized": new_workflow_parameters['containerized']})
 
 ###############################################################################
 ###############################################################################
