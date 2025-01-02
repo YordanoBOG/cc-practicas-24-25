@@ -137,6 +137,7 @@ def crear_workflow_parametros():
     WORKFLOW.set_parameters(parameters=parametros)
     new_workflow_parameters = WORKFLOW.get_parameters()
     app.logger.info(f"WORKFLOW CREADO: {str(new_workflow_parameters)}")
+    print(f"WORKFLOW CREADO: {str(new_workflow_parameters)}")
     '''"tareas": new_workflow_parameters['tasks'],
             "returned value": new_workflow_parameters['returned_value'],
             "results file": new_workflow_parameters['results_file'],
