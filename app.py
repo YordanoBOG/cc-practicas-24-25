@@ -105,7 +105,7 @@ def list_files():
 @app.route('/crearworkflow', methods=['GET'])
 def crear_workflow():
     app.logger.info("Llamada a /crearworkflow")
-    WORKFLOW = Workflow(containerized=True)
+    #WORKFLOW = Workflow(containerized=True) # ESTO NO. NO CREAR INSTANCIAS NUEVAS, SOLO MODIFICAR LA EXISTENTE
     new_workflow_parameters = WORKFLOW.get_parameters()
     return jsonify({"tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
@@ -133,7 +133,6 @@ def crear_workflow_parametros():
     if "containerized" not in parametros:
         parametros['containerized'] = False
 
-    WORKFLOW = Workflow()
     WORKFLOW.set_parameters(parameters=parametros)
     new_workflow_parameters = WORKFLOW.get_parameters()
     app.logger.info(f"WORKFLOW CREADO: {str(new_workflow_parameters)}")
@@ -277,7 +276,7 @@ def ejecutar_workflow():
 @app.route('/showinfo', methods=['GET'])
 def show_info_workflow():
     app.logger.info("Llamada a /showinfo")
-    return jsonify({"returned value": WORKFLOW.to_dict()})
+    return jsonify({"workflow info": WORKFLOW.get_parameters()})
 
 ###############################################################################
 ###############################################################################
