@@ -11,9 +11,10 @@ def test_crearworkflow():
     assert response.json()["results file"] == "workflow_results.txt"
 
 def test_crearworkflowparametros():
-    response = requests.post("http://localhost:8000/crearworkflowparametros", json={"returned_value": 0})
+    response = requests.post("http://localhost:8000/crearworkflowparametros", json={"returned_value": 0, "containerized": False})
     assert response.status_code == 200
     assert response.json()["returned value"] == 0
+    assert response.json()["containerized"] == False
 
 def test_aniadirtareaisolatecolumn():
     response = requests.post("http://localhost:8000/aniadirtareaisolatecolumn", json={"csv_path": "BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"})
