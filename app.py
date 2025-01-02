@@ -115,7 +115,7 @@ def crear_workflow():
 ###############################################################################
 ###############################################################################
 ''' Ejemplo: $curl -X POST http://localhost:8000/crearworkflowparametros -H "Content-Type: application/json" \
--d '{"tasks": [], "results_file": "workflow_res.txt", "returned_value": 0, "containerized": "True"}' '''
+-d '{"tasks": [], "results_file": "workflow_res.txt", "returned_value": 0, "containerized": True}' '''
 @app.route('/crearworkflowparametros', methods=['POST'])
 def crear_workflow_parametros():
     app.logger.info("Llamada a /crearworkflowparametros")

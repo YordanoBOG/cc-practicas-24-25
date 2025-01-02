@@ -32,7 +32,7 @@ class Task():
     _returned_info = "" # protected, not private
     _returned_value = -1
     _db_connection = "mongodb://mongo:27017/" # La ruta web al contenedor mongo, si es que lo vamos a usar
-    _containerized = False # If set to True, _db_connection will be employed to save files in the DB instead of the local system
+    _containerized:bool = False # If set to True, _db_connection will be employed to save files in the DB instead of the local system
 
     def __init__(self):
         pass
