@@ -11,7 +11,7 @@ def test_crearworkflow():
     assert response.json()["results file"] == "workflow_results.txt"
 
 def test_crearworkflowparametros():
-    response = requests.post("http://localhost:8000/crearworkflowparametros", json={"returned_value": 0, "containerized": "False"})
+    response = requests.post("http://localhost:8000/crearworkflowparametros", json={"returned_value": 0, "containerized": false})
     assert response.status_code == 200
     assert response.json()["returned value"] == 0
     assert response.json()["containerized"] == False
