@@ -10,6 +10,9 @@ be employed by all GeneSys modules
 from abc import abstractmethod
 from importlib import import_module
 from genericpath import exists
+from pymongo import MongoClient
+from gridfs import GridFS
+import io
 import json
 
 
@@ -28,6 +31,8 @@ class Task():
 
     _returned_info = "" # protected, not private
     _returned_value = -1
+    _db_connection = "mongodb://mongo:27017/" # La ruta web al contenedor mongo, si es que lo vamos a usar
+    _containerized = False # If set to True, _db_connection will be employed to save files in the DB instead of the local system
 
     def __init__(self):
         pass
@@ -39,6 +44,8 @@ class Task():
         parameters = {}
         parameters['returned_info'] = self._returned_info
         parameters['returned_value'] = self._returned_value
+        parameters['db_connection'] = self._db_connection
+        parameters['containerized'] = self._containerized
         return parameters
 
     @abstractmethod    
@@ -47,7 +54,11 @@ class Task():
         """
         self._returned_info = parameters['returned_info']
         self._returned_value = parameters['returned_value']
-        pass
+        self._db_connection = parameters['db_connection']
+        self._containerized = parameters['containerized']
+
+    def set_containerization(self, containerized:bool):
+        self._containerized = containerized
 
     ###### TASK EXECUTION ######
 
@@ -144,11 +155,13 @@ class Workflow(Task):
     """
 
     __tasks = [] # empty list of tasks
-    __results_file = "data/workflow_results.txt" # Path to a .txt file that will save the returned info and returned value of the workflow
+    __results_file = "workflow_results.txt" # Path to a .txt file that will save the returned info and returned value of the workflow
     _returned_value = -1
 
-    def __init__(self, tasks = []):
+    def __init__(self, tasks = [], containerized=False):
+        self._containerized = containerized
         for task in tasks:
+            task.set_containerization(containerized) # All the tasks will use the same executionn context as the workflow
             self.__tasks.append(task)
 
     def get_parameters(self) -> dict:
@@ -239,8 +252,20 @@ class Workflow(Task):
     def __save_results(self):
         try:
             info = self._returned_info + "\n\n--------------\nWORKFLOW'S RETURNED VALUE: " + str(self._returned_value)
-            with open(self.__results_file, 'w+') as results_file:
-                results_file.write(info)
+
+            if self._containerized:
+                # Connect to the database and save the file
+                client = MongoClient(self._db_connection)
+                db = client['mydb']
+                fs = GridFS(db)
+                # Save results to Mongodb
+                string_io = io.StringIO(info) # Convert string to StringIO
+                string_io.seek(0)
+                fs.put(string_io.getvalue().encode('utf-8'), filename=self.__results_file) # Save StringIO content to MongoDB as a .txt file
+
+            else:
+                with open(self.__results_file, 'w+') as results_file:
+                    results_file.write(info)
         except Exception as e:
             print(f"Error. Unable to write workflow's results on file {self.__results_file}: {str(e)}")
 

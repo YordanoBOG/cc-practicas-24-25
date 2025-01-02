@@ -10,6 +10,9 @@ PATRIC db, and it has not been tested in other contexts.
 """
 
 import csv
+import io
+from pymongo import MongoClient
+from gridfs import GridFS
 
 from api.modules.baseobjects import Task
 
@@ -26,10 +29,10 @@ class IsolateColumn(Task):
     __csv_path = ""
     __column_name = ""
     __csv_codes_path = "" # This is the parameter that the next step of a patricproteinprocessing workflow, GenerateFasta, might take as an argument. It is creeated right in the previous step of the workflow
-
+    
     ###### INIT ######
 
-    def __init__(self, csv_path="./", col_name="BRC ID"):
+    def __init__(self, csv_path="./", col_name="BRC ID", db_connection=False):
         super().__init__()
         self.__csv_path = csv_path
         self.__column_name = col_name
@@ -69,40 +72,85 @@ class IsolateColumn(Task):
     
     # This method isolates the requested column form the specified csv path and calls
     # to "save_csv_code_column" to save the column in a new csv
+    # PRE: db_connection is a GridFS instance
     def __process_codes(self):
-        try:
-            with open(self.__csv_path, 'r') as csv_file: # Open csv path
-                csv_reader = csv.DictReader(csv_file) # We trait the csv file as a list
-                
+        if self._containerized:
+            try:
+                # Read file from MongoDB
+                client = MongoClient(self._db_connection)
+                db = client['mydb']
+                fs = GridFS(db)
+                file = fs.find_one({"filename": self.__csv_path})
+
+                file_content = file.read().decode('utf-8')
+                csv_reader = csv.DictReader(io.StringIO(file_content))
+
                 # Isolate column's values
                 try:
                     gotten_column = [row[self.__column_name] for row in csv_reader]
-                
+
                     # Save column
                     self._returned_info = f"Column '{self.__column_name}' found. Starting saving..."
-                    self.__save_csv_code_column(gotten_column) # call that will save the column in a new csv
+                    self.__save_csv_code_column(data=gotten_column, db=fs)  # Call to save the column in MongoDB
 
                 except Exception as e:
                     self._returned_info = f"Unexpected error occurred while trying to access the column: {e}\nPlease, verify that the specified column exists"
                     self._returned_value = 1
 
-        except FileNotFoundError:
-            self._returned_info = f"Cannot find '{self.__csv_path}' file"
-            self._returned_value = 2
+            except Exception as e:
+                self._returned_info = f"Unexpected error occurred: {e}"
+                self._returned_value = 3
         
-        except Exception as e:
-            self._returned_info = f"Unexpected error occurred: {e}"
-            self._returned_value = 3
+        else:
+            try:
+                with open(self.__csv_path, 'r') as csv_file: # Open csv path
+                    csv_reader = csv.DictReader(csv_file) # We trait the csv file as a list
+                    
+                    # Isolate column's values
+                    try:
+                        gotten_column = [row[self.__column_name] for row in csv_reader]
+                    
+                        # Save column
+                        self._returned_info = f"Column '{self.__column_name}' found. Starting saving..."
+                        self.__save_csv_code_column(data=gotten_column, db=False) # call that will save the column in a new csv
+
+                    except Exception as e:
+                        self._returned_info = f"Unexpected error occurred while trying to access the column: {e}\nPlease, verify that the specified column exists"
+                        self._returned_value = 1
+
+            except FileNotFoundError:
+                self._returned_info = f"Cannot find '{self.__csv_path}' file"
+                self._returned_value = 2
+            
+            except Exception as e:
+                self._returned_info = f"Unexpected error occurred: {e}"
+                self._returned_value = 3
     
+
     # It saves a given column of data in the specified csv path
-    def __save_csv_code_column(self, data):
+    def __save_csv_code_column(self, data, db):
         try:
-            with open(self.__csv_codes_path, 'w', newline='') as csv_file:
-                csv_file.write(str(self.__column_name)+'\n') # write column's name
+            if db:
+                output = io.StringIO()
+                csv_writer = csv.writer(output)
+                csv_writer.writerow([self.__column_name])  # Write column's name
                 for row in data:
-                    csv_file.write(str(row)+'\n')   # write each row
-            self._returned_info += "\nnew CSV file was saved succesfully"
-            self._returned_value = 0
+                    csv_writer.writerow([row])  # Write each row
+
+                # Save the new file to MongoDB
+                output.seek(0)
+                db.put(output.getvalue().encode('utf-8'), filename=self.__csv_codes_path)
+
+                self._returned_info += "\nnew CSV file was saved successfully in MongoDB"
+                self._returned_value = 0
+
+            else:
+                with open(self.__csv_codes_path, 'w', newline='') as csv_file:
+                    csv_file.write(str(self.__column_name)+'\n') # write column's name
+                    for row in data:
+                        csv_file.write(str(row)+'\n')   # write each row
+                self._returned_info += "\nnew CSV file was saved succesfully"
+                self._returned_value = 0
 
         except Exception as e:
             self._returned_info += f"\nUnexpected error occurred: {e}"

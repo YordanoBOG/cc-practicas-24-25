@@ -38,7 +38,7 @@ logging.basicConfig(level=logging.INFO,
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+# Ejemplo: $curl -F "file=@./BVBRC_slatt_protein_small.csv" http://localhost:8000/upload
 @app.route('/upload', methods=['POST'])
 def upload_file():
     """Endpoint to upload a file to MongoDB."""
@@ -50,7 +50,7 @@ def upload_file():
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+# Ejemplo: $curl -O http://localhost:8000/download/BVBRC_slatt_protein_small.csv
 @app.route('/download/<filename>', methods=['GET'])
 def download_file(filename):
     """Endpoint to download a file from MongoDB."""
@@ -66,7 +66,7 @@ def download_file(filename):
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+# Ejemplo: $curl -X DELETE http://localhost:8000/delete/BVBRC_slatt_protein_small.csv
 @app.route('/delete/<filename>', methods=['DELETE'])
 def delete_file(filename):
     """Endpoint to delete a file from MongoDB."""
@@ -81,11 +81,31 @@ def delete_file(filename):
 ###############################################################################
 ###############################################################################
 ###############################################################################
+# Ejemplo: $curl -X GET http://localhost:8000/consultdb
+@app.route('/consultdb', methods=['GET'])
+def list_files(self):
+    """Endpoint to consult all the alocated file in the database"""
+    result_dict = {}
+    files = [file.filename for file in fs.find()] # Retrieve and print all filenames in MongoDB GridFS
+    if not files:
+        result_dict['message'] = 'There are no data in the database'
+    else:
+        result_dict['Files in database'] = len(files)
+        count = 0
+        for filename in files:
+            count += 1
+            result_dict[f'File {count}'] = str(filename)
+    app.logger.info("All the stored data of the database were recovered")
+    return jsonify(result_dict)
 
+###############################################################################
+###############################################################################
+###############################################################################
+# Ejemplo: $curl -X GET http://localhost:8000/crearworkflow
 @app.route('/crearworkflow', methods=['GET'])
 def crear_workflow():
     app.logger.info("Llamada a /crearworkflow")
-    WORKFLOW = Workflow()
+    WORKFLOW = Workflow(containerized=True)
     new_workflow_parameters = WORKFLOW.get_parameters()
     return jsonify({"tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
@@ -94,7 +114,8 @@ def crear_workflow():
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+''' Ejemplo: $curl -X POST http://localhost:8000/crearworkflowparametros -H "Content-Type: application/json" \
+-d '{"tasks": [], "results_file": "workflow_res.txt", "returned_value": 0}' '''
 @app.route('/crearworkflowparametros', methods=['POST'])
 def crear_workflow_parametros():
     app.logger.info("Llamada a /crearworkflowparametros")
@@ -104,7 +125,7 @@ def crear_workflow_parametros():
     if "tasks" not in parametros:
         parametros['tasks'] = []
     if "results_file" not in parametros:
-        parametros['results_file'] = "data/workflow_results.txt"
+        parametros['results_file'] = "workflow_results.txt"
     if "returned_value" not in parametros:
         parametros['returned_value'] = -1
     if "returned_info" not in parametros:
@@ -112,16 +133,19 @@ def crear_workflow_parametros():
 
     WORKFLOW = Workflow()
     WORKFLOW.set_parameters(parameters=parametros)
+    WORKFLOW.set_containerization(True) # Containarization is mandatory when using the API
     new_workflow_parameters = WORKFLOW.get_parameters()
     return jsonify({"tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
                     "results file": new_workflow_parameters['results_file'],
-                    "returned info": new_workflow_parameters['returned_info']})
+                    "returned info": new_workflow_parameters['returned_info'],
+                    "containerized": new_workflow_parameters['containerized']})
 
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+''' Ejemplo: $curl -X POST http://localhost:8000/aniadirtareaisolatecolumn -H "Content-Type: application/json" \
+-d '{"csv_path": "BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"}' '''
 @app.route('/aniadirtareaisolatecolumn', methods=['POST'])
 def aniadir_tarea_isolate_column():
     app.logger.info("Llamada a /aniadirtareaisolatecolumn")
@@ -233,7 +257,7 @@ def cargar_workflow_desde_json():
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+# Ejemplo: $curl -X GET http://localhost:8000/ejecutarworkflow
 @app.route('/ejecutarworkflow', methods=['GET'])
 def ejecutar_workflow():
     app.logger.info("Llamada a /ejecutarworkflow")
