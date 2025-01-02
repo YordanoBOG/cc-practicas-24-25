@@ -83,7 +83,7 @@ def delete_file(filename):
 ###############################################################################
 # Ejemplo: $curl -X GET http://localhost:8000/consultdb
 @app.route('/consultdb', methods=['GET'])
-def list_files(self):
+def list_files():
     """Endpoint to consult all the alocated file in the database"""
     result_dict = {}
     files = [file.filename for file in fs.find()] # Retrieve and print all filenames in MongoDB GridFS
@@ -115,7 +115,7 @@ def crear_workflow():
 ###############################################################################
 ###############################################################################
 ''' Ejemplo: $curl -X POST http://localhost:8000/crearworkflowparametros -H "Content-Type: application/json" \
--d '{"tasks": [], "results_file": "workflow_res.txt", "returned_value": 0, "containerized": True}' '''
+-d '{"tasks": [], "results_file": "workflow_res.txt", "returned_value": 0, "containerized": "True"}' '''
 @app.route('/crearworkflowparametros', methods=['POST'])
 def crear_workflow_parametros():
     app.logger.info("Llamada a /crearworkflowparametros")
@@ -138,13 +138,11 @@ def crear_workflow_parametros():
     new_workflow_parameters = WORKFLOW.get_parameters()
     app.logger.info(f"WORKFLOW CREADO: {str(new_workflow_parameters)}")
     print(f"WORKFLOW CREADO: {str(new_workflow_parameters)}")
-    '''"tareas": new_workflow_parameters['tasks'],
-            "returned value": new_workflow_parameters['returned_value'],
-            "results file": new_workflow_parameters['results_file'],
-            "returned info": new_workflow_parameters['returned_info'],
-            "containerized": new_workflow_parameters['containerized']})'''
-    return jsonify({"returned value": 0,
-                    "containerized": False})
+    return jsonify({"tareas": new_workflow_parameters['tasks'],
+                    "returned value": new_workflow_parameters['returned_value'],
+                    "results file": new_workflow_parameters['results_file'],
+                    "returned info": new_workflow_parameters['returned_info'],
+                    "containerized": new_workflow_parameters['containerized']})
 
 ###############################################################################
 ###############################################################################
@@ -275,7 +273,7 @@ def ejecutar_workflow():
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+# Ejemplo: $curl -X GET http://localhost:8000/showinfo
 @app.route('/showinfo', methods=['GET'])
 def show_info_workflow():
     app.logger.info("Llamada a /showinfo")

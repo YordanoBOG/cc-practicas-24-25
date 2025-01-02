@@ -44,7 +44,6 @@ class Task():
         parameters = {}
         parameters['returned_info'] = self._returned_info
         parameters['returned_value'] = self._returned_value
-        parameters['db_connection'] = self._db_connection
         parameters['containerized'] = self._containerized
         return parameters
 
@@ -54,11 +53,13 @@ class Task():
         """
         self._returned_info = parameters['returned_info']
         self._returned_value = parameters['returned_value']
-        self._db_connection = parameters['db_connection']
         self._containerized = parameters['containerized']
 
     def set_containerization(self, containerized:bool):
         self._containerized = containerized
+
+    '''def set_db_connection(self, db_con:str): # No es necesario por ahora
+        self._db_connection = db_con#'''
 
     ###### TASK EXECUTION ######
 
