@@ -9,6 +9,9 @@ that surround each protein given by the fasta file, which work as bait
 """
 
 import subprocess
+import io
+from pymongo import MongoClient
+from gridfs import GridFS
 
 from api.modules.baseobjects import Task
 from api.utils.fasta_processing_utils import get_fasta_content
@@ -59,7 +62,15 @@ class Get30KbProteins(Task):
 
     def __get_proteins_from_fasta(self, fasta_pathname):
         result = False
-        get_prot_res = get_fasta_content(fasta_path=fasta_pathname) # Returns a tuple where the first element is a boolean of the result
+        get_prot_res = None
+        if self._containerized:
+            client = MongoClient("mongodb://mongo:27017/")
+            db = client['mydb']
+            fs = GridFS(db)
+            get_prot_res = get_fasta_content(fasta_path=fasta_pathname, db=fs)
+        else:
+            get_prot_res = get_fasta_content(fasta_path=fasta_pathname)
+        
         if get_prot_res[0]:
             result = get_prot_res[1]
         else:

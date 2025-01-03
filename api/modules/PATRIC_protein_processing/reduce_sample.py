@@ -1,4 +1,7 @@
 import subprocess
+import io
+from pymongo import MongoClient
+from gridfs import GridFS
 
 from api.modules.baseobjects import Task
 from api.utils.fasta_processing_utils import save_fasta_string, get_fasta_content
@@ -53,7 +56,14 @@ class ReduceSample(Task):
     ###### FILL CLASS VALUES METHODS #####
 
     def __get_proteins_from_fasta(self):
-        get_prot_res = get_fasta_content(fasta_path=self.__fasta_pathname) # Returns a tuple where the first element is a boolean of the result
+        get_prot_res = None
+        if self._containerized:
+            client = MongoClient("mongodb://mongo:27017/")
+            db = client['mydb']
+            fs = GridFS(db)
+            get_prot_res = get_fasta_content(fasta_path=self.__fasta_pathname, db=fs)
+        else:
+            get_prot_res  = get_fasta_content(fasta_path=self.__fasta_pathname)  # Returns a tuple where the first element is a boolean of the result
         if get_prot_res[0]:
             self.__proteins = get_prot_res[1]
         else:
@@ -142,16 +152,28 @@ class ReduceSample(Task):
     # Create a .fasta file with the reduced protein sample in the pathname specified in class' parameters
     def __generate_reduced_fasta(self):
         try:
-            touch_fasta = subprocess.run(['touch', self.__pathname_to_reduced_proteins]) # Create the fasta file
-            if touch_fasta.returncode == 0:
-                fasta_file = open(self.__pathname_to_reduced_proteins, 'w')
+            fasta_file = io.TextIOWrapper()
+            if self._containerized:
+                client = MongoClient("mongodb://mongo:27017/")
+                db = client['mydb']
+                fs = GridFS(db)
+                for protein_key, protein_string in self.__reduced_proteins.items():
+                    self._returned_info += save_fasta_string(protein_string, protein_key, fasta_file) # Call the function that saves the .fasta file. It receives the code and the result of the script itself
+                fasta_file.seek(0)
+                fasta_content = fasta_file.read()
+                fs.put(fasta_content.encode('utf-8'), filename=self.__pathname_to_reduced_proteins, content_type="text/plain")
+            else:
+                touch_fasta = subprocess.run(['touch', self.__pathname_to_reduced_proteins]) # Create the fasta file
+                if touch_fasta.returncode == 0:
+                    fasta_file = open(self.__pathname_to_reduced_proteins, 'w')
+                else:
+                    self._returned_info += f"\n\nUnexpected error occurred while creating the reduced proteins .fasta file: {touch_fasta.stderr}"
                 for protein_key, protein_string in self.__reduced_proteins.items():
                     self._returned_info += save_fasta_string(protein_string, protein_key, fasta_file) # Call the function that saves the .fasta file. It receives the code and the result of the script itself
                 fasta_file.close()
-                self._returned_info += f"\n\n.fasta file {self.__pathname_to_reduced_proteins} was writen succesfully"
-                self._returned_value = 0
-            else:
-                self._returned_info += f"\n\nUnexpected error occurred while creating the reduced proteins .fasta file: {touch_fasta.stderr}"
+
+            self._returned_info += f"\n\n.fasta file {self.__pathname_to_reduced_proteins} was writen succesfully"
+            self._returned_value = 0
         except Exception as e:
             self._returned_info += f"\n\nUnexpected error occurred while getting protein strings from protein codes: {e}"
 

@@ -149,3 +149,8 @@
 2025-01-03 08:54:23,835 - INFO - 127.0.0.1 - - [03/Jan/2025 08:54:23] "POST /cargarworkflowdesdejson HTTP/1.1" 200 -
 2025-01-03 08:54:34,029 - INFO - Llamada a /showinfo
 2025-01-03 08:54:34,030 - INFO - 127.0.0.1 - - [03/Jan/2025 08:54:34] "GET /showinfo HTTP/1.1" 200 -
+2025-01-03 08:55:33,835 - INFO -  * Detected change in '/home/bruno/Documentos/UGR/IngInformatica/Master/cuatrimestre1/CloudComputing/practicas/Hitos/api/modules/baseobjects.py', reloading
+2025-01-03 08:55:34,301 - INFO -  * Restarting with stat
+2025-01-03 08:55:34,795 - INFO - Lanzando la API de GeneSys
+2025-01-03 08:55:34,804 - WARNING -  * Debugger is active!
+2025-01-03 08:55:34,804 - INFO -  * Debugger PIN: 547-649-531

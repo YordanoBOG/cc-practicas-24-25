@@ -11,6 +11,9 @@ corresponding proteins
 
 #import json
 import pandas as pd
+import io
+from pymongo import MongoClient
+from gridfs import GridFS
 
 from api.modules.baseobjects import Task
 from api.utils.fasta_processing_utils import get_fasta_content

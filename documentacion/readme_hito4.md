@@ -4,12 +4,6 @@ Implementar aplicación (map) de puertos, interna y externa, de forma que se pue
 
 Preparar un test que construya el cluster de contenedores y más tests para testear la API que se ejecuta en los contenedores. Tras eso, el contenedor se deberá subir a GitHub container registry. Esto deberá suceder con cada push. DÍA 3
 
-Implementar usuarios en la base datos y un sistema de inicio de sesión DÍA 4
-
-Limitar endpoints a los que se puede acceder según el tipo de usuario DÍA 4
-
-Cambiar los tests para validar la correcta gestión de usuarios DÍA 5
-
 Hacer documentación DÍA 5
 
 --------------------------------------------------------------------------------

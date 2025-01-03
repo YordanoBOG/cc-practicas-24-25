@@ -277,50 +277,79 @@ class Workflow(Task):
         :param path: file where dictionary generates will be saved
         :type: str
         """
-        if exists(path):
-            print("File {} already exists, so it will be overwritten".format(path))
-
-        try:
-            open(path, "w")
-        except:
-            print("Error. Unable to open or create {}".format(path))
-
-        try:
-            list_dict_task = [] # List of dictionaries where each dictionary encapsulates a task
-            for task in self.get_tasks():
-                list_dict_task.append(task.to_dict())
-            with open(path, "w+") as f_json:
+        if self._containerized:
+            client = MongoClient(self._db_connection)
+            db = client['mydb']
+            fs = GridFS(db)
+            f_json = io.TextIOWrapper()
+            try:
+                list_dict_task = [] # List of dictionaries where each dictionary encapsulates a task
+                for task in self.get_tasks():
+                    list_dict_task.append(task.to_dict())
                 json.dump(list_dict_task, f_json)
-            return 0
-        except:
-            print("Error. Unable to write on file {}".format(path))
+                f_json.seek(0)
+                content = f_json.read()
+                f_json_string = io.StringIO(content)
+                fs.put(f_json_string.getvalue().encode('utf-8'), filename=path)
+                return 0
+            except:
+                print("Error. Unable to write on file {}".format(path))
+
+        else:
+            if exists(path):
+                print("File {} already exists, so it will be overwritten".format(path))
+            try:
+                open(path, "w")
+            except:
+                print("Error. Unable to open or create {}".format(path))
+            try:
+                list_dict_task = [] # List of dictionaries where each dictionary encapsulates a task
+                for task in self.get_tasks():
+                    list_dict_task.append(task.to_dict())
+                with open(path, "w+") as f_json:
+                    json.dump(list_dict_task, f_json)
+                return 0
+            except:
+                print("Error. Unable to write on file {}".format(path))
 
 
     def get_from_json(self, json_path = "./workflow.json", containerized:bool = False):
         self.clean() # First, we delete all previous data from the workflow
-        '''if containerized:
+        if containerized:
             try:
-                pass
-            except Exception as e:
-                print(f"Error. Unable to read{json_path}: {e}")
+                client = MongoClient(self._db_connection)
+                db = client['mydb']
+                fs = GridFS(db)
+                file = fs.find_one({"filename": json_path})
+                file_content = file.read().decode('utf-8')
+                data = json.load(file_content)
 
-        else:'''
-        if exists(json_path):
-            try:
-                # Read and parse the json file
-                with open(json_path, "r") as file:
-                    data = json.load(file)
-                
-                # Iterate over the data of the file, which corresponds to a list of dictionaries, each dictionary corresponding to a task
+                 # Iterate over the data of the file, which corresponds to a list of dictionaries, each dictionary corresponding to a task
                 for task in data:
                     new_task = Task(containerized=containerized)
                     new_task = new_task.from_dict(task)
                     self.add_task(new_task=new_task)
                 return 0
             except Exception as e:
-                print(f"Error. Unable to open {json_path}: {e}")
+                print(f"Error. Unable to read{json_path}: {e}")
+
         else:
-            print("Error. Unable to find path {}".format(json_path))
+            if exists(json_path):
+                try:
+                    # Read and parse the json file
+                    with open(json_path, "r") as file:
+                        data = json.load(file)
+                    
+                    # Iterate over the data of the file, which corresponds to a list of dictionaries, each dictionary corresponding to a task
+                    for task in data:
+                        new_task = Task(containerized=containerized)
+                        new_task = new_task.from_dict(task)
+                        self.add_task(new_task=new_task)
+                    return 0
+                except Exception as e:
+                    print(f"Error. Unable to open {json_path}: {e}")
+            else:
+                print("Error. Unable to find path {}".format(json_path))
 
    
     def to_dict(self):
@@ -336,17 +365,6 @@ class Workflow(Task):
             return dict_workflow
         except Exception as e:
             print("Error while turning the workflow into dictionary format: %s", e)
-
-    
-    '''def load_from_dict_format(self, data):
-        try:
-            for task in data:
-                new_task = Task()
-                new_task = new_task.from_dict(task)
-                self.add_task(new_task=new_task)
-        except Exception as e:
-            print("Error while processing the data contained in json format: %s", e)
-    '''
     
     """
     STR

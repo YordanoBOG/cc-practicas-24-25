@@ -13,6 +13,9 @@ PATRIC databases.
 
 import csv
 import subprocess
+import io
+from pymongo import MongoClient
+from gridfs import GridFS
 
 from api.modules.baseobjects import Task
 from api.utils.fasta_processing_utils import save_fasta_string
@@ -68,22 +71,32 @@ class GenerateFasta(Task):
     # to BV-BRC CLI commands in order to get the protein string and save it in as a new fasta file
     def __acces_codes(self):
         try:
-            with open(self.__csv_codes_path, 'r') as csv_file: # Open csv codes path
-                csv_reader = csv.DictReader(csv_file) # We trait the csv file as a list
-                
-                # If the csv file has more than a column, then it is not a proper csv file
-                if len(csv_reader.fieldnames) != 1:
-                    self._returned_info = "ERROR. CSV codes file must have only one column, corresponding to PATRIC protein codes\n"
-                    self._returned_value = 1
-                else:
-                    try:
-                        column_name = csv_reader.fieldnames[0] # We know that there is only one column so the first column is the column that we are looking for
-                        codes_column = [row[column_name] for row in csv_reader] # Isolate the codes of the column in a list
-                        self.__obtain_protein_strings(codes_column) # Method that creates a fasta file in the proper path
-                        self._returned_value = 0
-                    except Exception as e:
-                        self._returned_info = f"Unexpected error occurred while trying to access the CSV codes file: {e}\n"
-                        self._returned_value = 2
+            csv_reader = None
+            if self._containerized:
+                # Read file from MongoDB
+                client = MongoClient(self._db_connection)
+                db = client['mydb']
+                fs = GridFS(db)
+                file = fs.find_one({"filename": self.__csv_codes_path})
+                file_content = file.read().decode('utf-8')
+                csv_reader = csv.DictReader(io.StringIO(file_content))
+            else:
+                with open(self.__csv_codes_path, 'r') as csv_file: # Open csv codes path
+                    csv_reader = csv.DictReader(csv_file) # We trait the csv file as a list
+                    
+            # If the csv file has more than a column, then it is not a proper csv file
+            if len(csv_reader.fieldnames) != 1:
+                self._returned_info = "ERROR. CSV codes file must have only one column, corresponding to PATRIC protein codes\n"
+                self._returned_value = 1
+            else:
+                try:
+                    column_name = csv_reader.fieldnames[0] # We know that there is only one column so the first column is the column that we are looking for
+                    codes_column = [row[column_name] for row in csv_reader] # Isolate the codes of the column in a list
+                    self.__obtain_protein_strings(codes_column) # Method that creates a fasta file in the proper path
+                    self._returned_value = 0
+                except Exception as e:
+                    self._returned_info = f"Unexpected error occurred while trying to access the CSV codes file: {e}\n"
+                    self._returned_value = 2
 
         except FileNotFoundError:
             self._returned_info = f"Cannot find '{self.__csv_codes_path}' file"
@@ -99,7 +112,11 @@ class GenerateFasta(Task):
         try:
             touch_result = subprocess.run(['touch', self.__fasta_pathname]) # Create the fasta file
             if touch_result.returncode == 0:
-                fasta_file = open(self.__fasta_pathname, 'w') # Open .fasta file where we will save all the encountered unique proteins
+                fasta_file = None
+                if self._containerized:
+                    fasta_file = io.TextIOWrapper(encoding='utf-8')
+                else:
+                    fasta_file = open(self.__fasta_pathname, 'w') # Open .fasta file where we will save all the encountered unique proteins
                 procesed_proteins = [] # List where we will locate all the protein strings that we have already saved as fasta files
                 for protein_code in codes:
                     # We specify the path 'utils/getprotein.sh' because we assume that we are executing this script from genesys.py context
@@ -123,7 +140,17 @@ class GenerateFasta(Task):
                         # Error
                         self._returned_info += f"\nError while getting {protein_code} code: {get_protein_bash_command_result.stderr}"
                         self._returned_value = 4
-                fasta_file.close()
+                if self._containerized:
+                    # Save the file into MongoDB database
+                    fasta_file.seek(0)
+                    content = fasta_file.read()
+                    string_fasta = io.StringIO(content)
+                    client = MongoClient(self._db_connection)
+                    db = client['mydb']
+                    fs = GridFS(db)
+                    fs.put(string_fasta.getvalue().encode('utf-8'), filename=self.__fasta_pathname)
+                else:
+                    fasta_file.close()
             else:
                 self._returned_info += f"\nUnexpected error occurred while creating the .fasta file: {touch_result.stderr}"
                 self._returned_value = 5

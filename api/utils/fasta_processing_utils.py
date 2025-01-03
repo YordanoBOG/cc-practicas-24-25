@@ -9,6 +9,8 @@ GeneSys module and maybe they should be moved to a more generic utils file that 
 any modules
 """
 
+import io
+
 
 ###############################################################################
 ###############################################################################
@@ -17,7 +19,7 @@ any modules
 # This function receives a protein string, its correspond BVRC ID code and
 # an openned file in which that protein would be stored in fasta format.
 # It returns an explanation message
-def save_fasta_string(string, identifier, fasta_file):
+def save_fasta_string(string, identifier, fasta_file:io.TextIOWrapper):
     result = f"\nProtein still not processed\n"
     try:
         # Write the identifier line
@@ -53,10 +55,19 @@ def split_fasta_sequence(sequence) -> list:
 ###############################################################################
 ###############################################################################
 # Reads a .fasta file and returns its corresponding contained strings in a dictionary
-def get_fasta_content(fasta_path):
+def get_fasta_content(fasta_path, db=False):
     try:
+        fasta_file = None
+        if db:
+            file = db.find_one({"filename": fasta_path})
+            binary_content = file.read()
+            bytes_io = io.BytesIO(binary_content)
+            fasta_file = io.TextIOWrapper(bytes_io, encoding='utf-8')
+            fasta_file.seek(0)
+        else:
+            fasta_file = open(fasta_path, 'r') # Open input file for reading
+
         proteins = {}
-        fasta_file = open(fasta_path, 'r') # Open input file for reading
         current_sequence_id = None # Here we will store the identifier line of a protein
         current_sequence = [] # Here we will store all the aminoacid lines corresponding to a same protein
 
