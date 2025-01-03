@@ -311,7 +311,7 @@ class Workflow(Task):
             print("Error while turning the workflow into dictionary format: %s", e)
 
 
-    def get_from_json(self, containerized:bool, json_path):
+    def get_from_json(self, json_path, containerized:bool=False):
         self.clean() # First, we delete all previous data from the workflow
         if containerized:
             try:
