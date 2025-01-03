@@ -44,22 +44,12 @@ jobs:
         tags: logger-test:latest
 
     - name: Start containers with Docker Compose
-      run: docker-compose up -d
+      run: docker-compose up --build
 
-    - name: Run tests on API service
+    - name: Test API service
       run: |
-        sleep 60  # Wait for the service to start
-        curl -X GET http://localhost:8000/health
-
-    - name: Run tests on Mongo service
-      run: |
-        sleep 5  # Wait for Mongo to initialize
-        docker exec -it mongo_db mongo --eval "db.runCommand({ ping: 1 })"
-
-    - name: Run tests on Logger service
-      run: |
-        sleep 5  # Wait for Fluentd to initialize
-        curl -X POST -d '{"message": "test"}' http://localhost:24224/test.tag
+        ./test_api_container.sh
 
     - name: Teardown containers
       run: docker-compose down --volumes
+
