@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sleep 300;
+sleep 180; # Esperar a que se ejecute docker-compose
 
 # Operaciones con la base de datos
 curl -X DELETE http://localhost:8000/delete/BVBRC_slatt_protein_small.csv;
@@ -17,5 +17,4 @@ curl -X POST http://localhost:8000/crearworkflowparametros -H "Content-Type: app
 curl -X POST http://localhost:8000/aniadirtareaisolatecolumn -H "Content-Type: application/json" \
 -d '{"containerized": true, "csv_path": "BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"}';
 
-# Logger
-curl -X POST -d '{"message": "test"}' http://localhost:24224/test.tag
+
