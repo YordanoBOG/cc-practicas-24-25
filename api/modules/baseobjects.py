@@ -160,7 +160,7 @@ class Workflow(Task):
     _returned_value = -1
 
     def __init__(self, tasks = [], containerized=False):
-        super.__init__(containerized=containerized)
+        super().__init__(containerized=containerized)
         for task in tasks:
             task.set_containerization(containerized) # All the tasks will use the same executionn context as the workflow
             self.__tasks.append(task)
