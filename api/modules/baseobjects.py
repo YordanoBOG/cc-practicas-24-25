@@ -296,6 +296,33 @@ class Workflow(Task):
             print("Error. Unable to write on file {}".format(path))
 
 
+    def get_from_json(self, json_path = "./workflow.json", containerized:bool = False):
+        self.clean() # First, we delete all previous data from the workflow
+        '''if containerized:
+            try:
+                pass
+            except Exception as e:
+                print(f"Error. Unable to read{json_path}: {e}")
+
+        else:'''
+        if exists(json_path):
+            try:
+                # Read and parse the json file
+                with open(json_path, "r") as file:
+                    data = json.load(file)
+                
+                # Iterate over the data of the file, which corresponds to a list of dictionaries, each dictionary corresponding to a task
+                for task in data:
+                    new_task = Task(containerized=containerized)
+                    new_task = new_task.from_dict(task)
+                    self.add_task(new_task=new_task)
+                return 0
+            except Exception as e:
+                print(f"Error. Unable to open {json_path}: {e}")
+        else:
+            print("Error. Unable to find path {}".format(json_path))
+
+   
     def to_dict(self):
         try:
             dict_workflow = {} # List of dictionaries where each dictionary encapsulates a task
@@ -310,34 +337,7 @@ class Workflow(Task):
         except Exception as e:
             print("Error while turning the workflow into dictionary format: %s", e)
 
-
-    def get_from_json(self, json_path, containerized:bool=False):
-        self.clean() # First, we delete all previous data from the workflow
-        if containerized:
-            try:
-                pass
-            except Exception as e:
-                print(f"Error. Unable to read{json_path}: {e}")
-
-        else:
-            if exists(json_path):
-                try:
-                    # Read and parse the json file
-                    with open(json_path, "r") as file:
-                        data = json.load(file)
-                    
-                    # Iterate over the data of the file, which corresponds to a list of dictionaries, each dictionary corresponding to a task
-                    for task in data:
-                        new_task = Task()
-                        new_task = new_task.from_dict(task)
-                        self.add_task(new_task=new_task)
-                    return 0
-                except:
-                    print("Error. Unable to open{}".format(json_path))
-            else:
-                print("Error. Unable to find path {}".format(json_path))
-
-   
+    
     '''def load_from_dict_format(self, data):
         try:
             for task in data:

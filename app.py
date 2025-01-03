@@ -233,7 +233,8 @@ def limpiar_workflow():
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+''' Ejemplo: $curl -X POST http://localhost:8000/guardarworkflowcomojson -H "Content-Type: application/json" \
+-d '{"archivo_json": "workflow_api.json"}' '''
 @app.route('/guardarworkflowcomojson', methods=['POST'])
 def guardar_workflow_como_json():
     app.logger.info("Llamada a /guardarworkflowcomojson")
@@ -245,13 +246,15 @@ def guardar_workflow_como_json():
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+''' Ejemplo: $curl -X POST http://localhost:8000/cargarworkflowdesdejson -H "Content-Type: application/json" \
+-d '{"containerized": true, "archivo_json": "workflow_api.json"}' '''
 @app.route('/cargarworkflowdesdejson', methods=['POST'])
 def cargar_workflow_desde_json():
     app.logger.info("Llamada a /cargarworkflowdesdejson")
     parametros = request.get_json()
+    contenedor = parametros['containerized']
     ruta_json = parametros['archivo_json']
-    result = WORKFLOW.get_from_json(json_path=ruta_json)
+    result = WORKFLOW.get_from_json(containerized=contenedor, json_path=ruta_json)
     if result == 0:
         return jsonify({"num_tareas": WORKFLOW.get_len_workflow()})
     else:

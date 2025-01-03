@@ -34,7 +34,7 @@ def test_guardar_y_borrar_workflow():
     assert len(WORKFLOW.get_tasks())==0
 
 def test_cargar_workflow():
-    WORKFLOW.get_from_json(containerized=False, json_path="workflow.json")
+    WORKFLOW.get_from_json(json_path="workflow.json", containerized=False)
     assert len(WORKFLOW.get_tasks())==5
 
 def test_ejecutar_workflow():

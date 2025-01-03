@@ -1,0 +1,1 @@
+[{"type": "api.modules.PATRIC_protein_processing.isolate_column.IsolateColumn", "returned_info": "", "returned_value": -1, "containerized": false, "csv_path": "BVBRC_slatt_protein_small.csv", "column_name": "BRC ID", "csv_codes_path": "BVBRC_slatt_protein_small_new.csv"}]
