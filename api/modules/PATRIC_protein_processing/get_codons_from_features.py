@@ -11,9 +11,6 @@ corresponding proteins
 
 #import json
 import pandas as pd
-import io
-from pymongo import MongoClient
-from gridfs import GridFS
 
 from api.modules.baseobjects import Task
 from api.utils.fasta_processing_utils import get_fasta_content
@@ -70,7 +67,7 @@ class GetCodonsFromFeatures(Task):
     # This method isolates the ID's column from the specified csv path and calls
     # to BV-BRC CLI commands in order to get the protein string and save it in as a new fasta file
     def __get_codons(self):
-        read_features_result = get_fasta_content(self.__pathname_to_feature_proteins) # Returns a tuple
+        read_features_result = get_fasta_content(self.__pathname_to_feature_proteins, db=False) # Returns a tuple
         if read_features_result[0]: # If the first value of the tuple is True, it means the funtion "get_fasta_content" was succesful
             codons_dict = self.__recognize_stop_codons(read_features_result[1]) # Isolate codons of each bait
             self.__save_results(codons_dict) # Save found codons
