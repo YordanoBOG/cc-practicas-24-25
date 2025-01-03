@@ -13,7 +13,7 @@ class ReduceSample(Task):
 
     ###### INIT ######
 
-    def __init__(self, containerized:bool, fasta_pathname="./proteins.fasta", 
+    def __init__(self, containerized:bool=False, fasta_pathname="./proteins.fasta", 
                  pathname_to_reduced_proteins="./reduced_proteins.fasta",
                  percentage=85):
         super().__init__(containerized=containerized)
