@@ -311,24 +311,31 @@ class Workflow(Task):
             print("Error while turning the workflow into dictionary format: %s", e)
 
 
-    def get_from_json(self, json_path):
+    def get_from_json(self, containerized:bool, json_path):
         self.clean() # First, we delete all previous data from the workflow
-        if exists(json_path):
+        if containerized:
             try:
-                # Read and parse the json file
-                with open(json_path, "r") as file:
-                    data = json.load(file)
-                
-                # Iterate over the data of the file, which corresponds to a list of dictionaries, each dictionary corresponding to a task
-                for task in data:
-                    new_task = Task()
-                    new_task = new_task.from_dict(task)
-                    self.add_task(new_task=new_task)
-                return 0
-            except:
-                print("Error. Unable to open{}".format(json_path))
+                pass
+            except Exception as e:
+                print(f"Error. Unable to read{json_path}: {e}")
+
         else:
-            print("Error. Unable to find path {}".format(json_path))
+            if exists(json_path):
+                try:
+                    # Read and parse the json file
+                    with open(json_path, "r") as file:
+                        data = json.load(file)
+                    
+                    # Iterate over the data of the file, which corresponds to a list of dictionaries, each dictionary corresponding to a task
+                    for task in data:
+                        new_task = Task()
+                        new_task = new_task.from_dict(task)
+                        self.add_task(new_task=new_task)
+                    return 0
+                except:
+                    print("Error. Unable to open{}".format(json_path))
+            else:
+                print("Error. Unable to find path {}".format(json_path))
 
    
     '''def load_from_dict_format(self, data):

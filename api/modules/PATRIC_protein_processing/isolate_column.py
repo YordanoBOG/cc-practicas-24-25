@@ -32,7 +32,7 @@ class IsolateColumn(Task):
     
     ###### INIT ######
 
-    def __init__(self, containerized:bool=False, csv_path="./", col_name="BRC ID"):
+    def __init__(self, containerized:bool, csv_path="./", col_name="BRC ID"):
         super().__init__(containerized=containerized)
         self.__csv_path = csv_path
         self.__column_name = col_name

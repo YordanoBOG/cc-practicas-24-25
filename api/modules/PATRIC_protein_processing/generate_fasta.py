@@ -29,8 +29,8 @@ class GenerateFasta(Task):
 
     ###### INIT ######
 
-    def __init__(self, path_to_protein_codes_csv="./", fasta_folder_path="./proteins.fasta"):
-        super().__init__()
+    def __init__(self, containerized:bool, path_to_protein_codes_csv="./", fasta_folder_path="./proteins.fasta"):
+        super().__init__(containerized=containerized)
         self.__csv_codes_path = path_to_protein_codes_csv
         self.__fasta_pathname = fasta_folder_path # This is the fasta file in which we will save protein strings
 

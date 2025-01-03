@@ -28,9 +28,9 @@ class GetCodonsFromFeatures(Task):
 
     ###### INIT ######
 
-    def __init__(self, pathname_to_feature_proteins = "./feature_regions.fasta",
+    def __init__(self, containerized:bool, pathname_to_feature_proteins = "./feature_regions.fasta",
                  pathname_to_excel_results = "./check_stop_codons.xlsx"):
-        super().__init__()
+        super().__init__(containerized=containerized)
         self.__pathname_to_feature_proteins = pathname_to_feature_proteins
         self.__pathname_to_excel_results = pathname_to_excel_results
     
