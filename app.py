@@ -7,8 +7,6 @@ from gridfs import GridFS
 from api.modules.PATRIC_protein_processing.isolate_column import IsolateColumn
 from api.modules.PATRIC_protein_processing.generate_fasta import GenerateFasta
 from api.modules.PATRIC_protein_processing.reduce_sample import ReduceSample
-from api.modules.PATRIC_protein_processing.get_30kb_upanddown import Get30KbProteins
-from api.modules.PATRIC_protein_processing.get_codons_from_features import GetCodonsFromFeatures
 from api.modules.baseobjects import Workflow
 
 ###############################################################################
@@ -184,34 +182,6 @@ def aniadir_tarea_reduce_sample():
     parametros = request.get_json()
     reduce_sample_task = ReduceSample(containerized=parametros['containerized'], fasta_pathname=parametros['fasta_pathname'], pathname_to_reduced_proteins=parametros['pathname_to_reduced_proteins'])
     WORKFLOW.add_task(reduce_sample_task)
-    # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
-    return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
-
-###############################################################################
-###############################################################################
-###############################################################################
-''' Ejemplo: $curl -X POST http://localhost:8000/aniadirtareaisolatecolumn -H "Content-Type: application/json" \
--d '{"containerized": true, "pathname_to_reduced_proteins": "reduced_samples.fasta", "pathname_to_feature_proteins": "feature_regions.fasta"}' '''
-@app.route('/aniadirtareaget30kb', methods=['POST'])
-def aniadir_tarea_get_30kb():
-    app.logger.info("Llamada a /aniadirtareaget30kb")
-    parametros = request.get_json()
-    get_30_kb_task = Get30KbProteins(containerized=parametros['containerized'], pathname_to_reduced_proteins=parametros['pathname_to_reduced_proteins'], pathname_to_feature_proteins=parametros['pathname_to_feature_proteins'])
-    WORKFLOW.add_task(get_30_kb_task)
-    # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
-    return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
-
-###############################################################################
-###############################################################################
-###############################################################################
-''' Ejemplo: $curl -X POST http://localhost:8000/aniadirtareaisolatecolumn -H "Content-Type: application/json" \
--d '{"containerized": true, "pathname_to_feature_proteins": "feature_regions.fasta", "pathname_to_excel_results": "final_results.xlsx"}' '''
-@app.route('/aniadirtareareconocercodones', methods=['POST'])
-def aniadir_tarea_recognize_codons():
-    app.logger.info("Llamada a /aniadirtareareconocercodones")
-    parametros = request.get_json()
-    recognize_codons_task = GetCodonsFromFeatures(containerized=parametros['containerized'], pathname_to_feature_proteins=parametros['pathname_to_feature_proteins'], pathname_to_excel_results=parametros['pathname_to_excel_results'])
-    WORKFLOW.add_task(recognize_codons_task)
     # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
     return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
 

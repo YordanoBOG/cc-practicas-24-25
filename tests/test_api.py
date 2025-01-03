@@ -31,16 +31,6 @@ def test_aniadirtareareducesample():
     assert response.status_code == 200
     assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.reduce_sample.ReduceSample'
 
-def test_aniadirtareaget30kb():
-    response = requests.post("http://localhost:8000/aniadirtareaget30kb", json={"containerized": False, "pathname_to_reduced_proteins": "reduced_proteins.fasta", "pathname_to_feature_proteins": "feature_regions.fasta"})
-    assert response.status_code == 200
-    assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.get_30kb_upanddown.Get30KbProteins'
-
-def test_aniadirtareareconocercodones():
-    response = requests.post("http://localhost:8000/aniadirtareareconocercodones", json={"pathname_to_feature_proteins": "feature_regions.fasta", "pathname_to_excel_results": "final_results.xlsx"})
-    assert response.status_code == 200
-    assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.get_codons_from_features.GetCodonsFromFeatures'
-
 def test_guardarworkflowcomojson():
     response = requests.post("http://localhost:8000/guardarworkflowcomojson", json={"archivo_json": "workflow.json"})
     assert response.status_code == 200
@@ -59,7 +49,7 @@ def test_limpiarworkflow():
 def test_cargarworkflowdesdejson():
     response = requests.post("http://localhost:8000/cargarworkflowdesdejson", json={"containerized": False, "archivo_json": "workflow.json"})
     assert response.status_code == 200
-    assert response.json()["num_tareas"] == 5
+    assert response.json()["num_tareas"] == 3
 
 def test_ejecutarworkflow():
     response = requests.get("http://localhost:8000/ejecutarworkflow")
