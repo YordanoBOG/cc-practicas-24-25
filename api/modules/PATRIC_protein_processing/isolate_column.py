@@ -32,8 +32,8 @@ class IsolateColumn(Task):
     
     ###### INIT ######
 
-    def __init__(self, csv_path="./", col_name="BRC ID", db_connection=False):
-        super().__init__()
+    def __init__(self, containerized:bool, csv_path="./", col_name="BRC ID"):
+        super().__init__(containerized=containerized)
         self.__csv_path = csv_path
         self.__column_name = col_name
         self.__csv_codes_path = self.__csv_path[:-4] + "_new.csv"

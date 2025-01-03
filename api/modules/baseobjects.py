@@ -34,8 +34,8 @@ class Task():
     _db_connection = "mongodb://mongo:27017/" # La ruta web al contenedor mongo, si es que lo vamos a usar
     _containerized:bool = False # If set to True, _db_connection will be employed to save files in the DB instead of the local system
 
-    def __init__(self):
-        pass
+    def __init__(self, containerized:bool):
+        self._containerized = containerized
     
     @abstractmethod    
     def get_parameters(self) -> dict:
@@ -296,15 +296,19 @@ class Workflow(Task):
             print("Error. Unable to write on file {}".format(path))
 
 
-    '''def turn_into_dict_format(self):
+    def to_dict(self):
         try:
-            list_dict_task = [] # List of dictionaries where each dictionary encapsulates a task
+            dict_workflow = {} # List of dictionaries where each dictionary encapsulates a task
+            dict_workflow['Containerized:'] = self._containerized
+            dict_workflow['Results file:'] = self.__results_file
+            dict_workflow['Returned value:'] = self._returned_value
+            i = 0
             for task in self.get_tasks():
-                list_dict_task.append(task.to_dict())
-            return list_dict_task
+                i += 1
+                dict_workflow[f'Task {i}:'] = task.to_dict()
+            return dict_workflow
         except Exception as e:
             print("Error while turning the workflow into dictionary format: %s", e)
-    '''
 
 
     def get_from_json(self, json_path):
@@ -358,6 +362,6 @@ class Workflow(Task):
         result = '\n'
         for task in self.get_tasks():
             result += (task.show_info()) + '\n---------------\n'
-        result += 'results file: ' + str(self.__results_file) + '\n'
+        result += 'Results file: ' + str(self.__results_file) + '\n'
         return result
         

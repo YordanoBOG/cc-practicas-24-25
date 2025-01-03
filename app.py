@@ -105,11 +105,13 @@ def list_files():
 @app.route('/crearworkflow', methods=['GET'])
 def crear_workflow():
     app.logger.info("Llamada a /crearworkflow")
-    #WORKFLOW = Workflow(containerized=True) # ESTO NO. NO CREAR INSTANCIAS NUEVAS, SOLO MODIFICAR LA EXISTENTE
-    new_workflow_parameters = WORKFLOW.get_parameters()
-    return jsonify({"tareas": new_workflow_parameters['tasks'],
-                    "returned value": new_workflow_parameters['returned_value'],
-                    "results file": new_workflow_parameters['results_file']})
+    default_workflow = Workflow()
+    WORKFLOW.set_parameters(default_workflow.get_parameters())
+    workflow_new_parameters = WORKFLOW.get_parameters()
+    return jsonify({"tareas": workflow_new_parameters['tasks'],
+                    "returned value": workflow_new_parameters['returned_value'],
+                    "results file": workflow_new_parameters['results_file'],
+                    "containerized": workflow_new_parameters['containerized']})
 
 ###############################################################################
 ###############################################################################
@@ -140,19 +142,18 @@ def crear_workflow_parametros():
     return jsonify({"tareas": new_workflow_parameters['tasks'],
                     "returned value": new_workflow_parameters['returned_value'],
                     "results file": new_workflow_parameters['results_file'],
-                    "returned info": new_workflow_parameters['returned_info'],
                     "containerized": new_workflow_parameters['containerized']})
 
 ###############################################################################
 ###############################################################################
 ###############################################################################
 ''' Ejemplo: $curl -X POST http://localhost:8000/aniadirtareaisolatecolumn -H "Content-Type: application/json" \
--d '{"csv_path": "BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"}' '''
+-d '{"containerized": true, "csv_path": "BVBRC_slatt_protein_small.csv", "col_name": "BRC ID"}' '''
 @app.route('/aniadirtareaisolatecolumn', methods=['POST'])
 def aniadir_tarea_isolate_column():
     app.logger.info("Llamada a /aniadirtareaisolatecolumn")
     parametros = request.get_json()
-    isolate_column_task = IsolateColumn(csv_path=parametros['csv_path'], col_name=parametros['col_name'])
+    isolate_column_task = IsolateColumn(containerized=parametros['containerized'], csv_path=parametros['csv_path'], col_name=parametros['col_name'])
     WORKFLOW.add_task(isolate_column_task)
     # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
     return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
@@ -212,7 +213,7 @@ def aniadir_tarea_recognize_codons():
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+# Ejemplo: $curl -X GET http://localhost:8000/eliminarultimatareaworkflow
 @app.route('/eliminarultimatareaworkflow', methods=['GET'])
 def eliminar_ultima_tarea():
     app.logger.info("Llamada a /eliminarultimatareaworkflow")
@@ -222,7 +223,7 @@ def eliminar_ultima_tarea():
 ###############################################################################
 ###############################################################################
 ###############################################################################
-
+# Ejemplo: $curl -X GET http://localhost:8000/limpiarworkflow
 @app.route('/limpiarworkflow', methods=['GET'])
 def limpiar_workflow():
     app.logger.info("Llamada a /limpiarworkflow")
@@ -276,7 +277,7 @@ def ejecutar_workflow():
 @app.route('/showinfo', methods=['GET'])
 def show_info_workflow():
     app.logger.info("Llamada a /showinfo")
-    return jsonify({"workflow info": WORKFLOW.get_parameters()})
+    return jsonify({"workflow info": WORKFLOW.to_dict()})
 
 ###############################################################################
 ###############################################################################
