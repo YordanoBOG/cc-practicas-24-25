@@ -16,33 +16,6 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Build API container
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./Dockerfile
-        platforms: linux/amd64,linux/arm64
-        push: false
-        tags: api-test:latest
-
-    - name: Build Mongo container
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./mongo.Dockerfile
-        platforms: linux/amd64,linux/arm64
-        push: false
-        tags: mongo-test:latest
-
-    - name: Build Logger container
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./logger.Dockerfile
-        platforms: linux/amd64,linux/arm64
-        push: false
-        tags: logger-test:latest
-
     - name: Start containers with Docker Compose
       run: docker-compose up --build
 
