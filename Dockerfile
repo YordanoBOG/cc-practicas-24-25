@@ -8,7 +8,8 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies
-RUN apt-get install gcc
+#RUN apt-get update
+RUN apt-get install build-essential
 RUN pip install --no-cache-dir -r api/requirements.txt
 RUN dpkg -i api/bvbrc-cli-1.040.deb || apt-get update && apt-get install -f -y
 
