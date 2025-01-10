@@ -17,10 +17,10 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
     - name: Install Docker compose
-      run: apt-get install docker-compose
+      run: sudo apt-get install docker-compose
 
     - name: Start containers with Docker Compose
-      run: docker-compose up --build
+      run: sudo docker-compose up --build
 
     - name: Test API service
       run: |
