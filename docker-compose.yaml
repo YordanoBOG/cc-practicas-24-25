@@ -45,6 +45,20 @@ services:
     networks:
       - app_network
 
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile_tests
+    container_name: genesys_tests
+    ports:
+      - "8001:8001" # Se cambia puerto externo
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      - api
+    networks:
+      - app_network
+
   mongo:
     image: mongo:6.0
     container_name: mongo_db
@@ -58,10 +72,6 @@ services:
     container_name: logger
     ports:
       - "24224:24224"
-    #volumes:
-      #- ./logs:/fluentd/log  # Store logs in the shared logs directory
-    #environment:
-      #- FLUENT_UID=0  # Run Fluentd as root to avoid permission issues
     networks:
       - app_network
 

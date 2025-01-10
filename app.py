@@ -174,7 +174,7 @@ def aniadir_tarea_gen_fasta():
 ###############################################################################
 ###############################################################################
 ###############################################################################
-''' Ejemplo: $curl -X POST http://localhost:8000/aniadirtareaisolatecolumn -H "Content-Type: application/json" \
+''' Ejemplo: $curl -X POST http://localhost:8000/aniadirtareareducesample -H "Content-Type: application/json" \
 -d '{"containerized": true, "fasta_pathname": "samples.fasta", "pathname_to_reduced_proteins": "reduced_samples.fasta"}' '''
 @app.route('/aniadirtareareducesample', methods=['POST'])
 def aniadir_tarea_reduce_sample():
