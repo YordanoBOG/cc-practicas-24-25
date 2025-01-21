@@ -16,15 +16,37 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
+    # Instalar Docker compose
     - name: Install Docker compose
       run: sudo apt-get install docker-compose
 
+    # Lanzar contenedores en segundo plano para que se puedan seguir ejecutando el resto de tareas
     - name: Start containers with Docker Compose
-      run: sudo docker-compose up --build
+      run: sudo docker-compose up --build &
 
-    # Esperar 3 minutos a que se ejecuten los tests que nos interesa
+    # Esperar 2 minutos a que se lancen los contenedores
     - name: Wait for tests execution
-      run: sleep 180
+      run: sleep 120
+
+    # Ahora vamos a lanzar tests Python que evaluan los endpoints desplegados en el contenedor
+    # Lo primero es preparar el entorno de ejecución Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    # Dependencias necesarias para ejecutar los tests (el resto están instaladas en el contendor correspondiente)
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests==2.25.1 pytest==6.2.5
+
+    # Ejecutar tests
+    - name: Run container tests
+      env:
+        PYTHONPATH: ${{ github.workspace }}  # Add modules to PYTHONPATH
+      run: |
+        pytest tests/test_container.py
 
     # Detener los contenedores tras realizar los tests
     - name: Teardown containers
@@ -32,32 +54,32 @@ jobs:
 
   # Ahora vamos a lanzar tests Python que evaluan los endpoints desplegados en el contenedor
   # Lo primero es preparar el entorno de ejecución Python
-  test-containers:
-    runs-on: ubuntu-latest
+  #test-containers:
+    #runs-on: ubuntu-latest
 
-    steps:
+    #steps:
     # Chequeos
-    - name: Checkout code
-      uses: actions/checkout@v3
+    #- name: Checkout code
+      #uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+    #- name: Set up Python
+      #uses: actions/setup-python@v4
+      #with:
+        #python-version: '3.10'
 
     # Dependencias necesarias para ejecutar los tests (el resto estarán en el contendor)
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests==2.25.1 pytest==6.2.5
+    #- name: Install Dependencies
+      #run: |
+        #python -m pip install --upgrade pip
+        #pip install requests==2.25.1 pytest==6.2.5
 
     # Ejecutar pruebas (Esperamos un minuto de más para que le dé tiempo a los contenedores para inicializarse)
-    - name: Run container tests
-      env:
-        PYTHONPATH: ${{ github.workspace }}  # Add modules to PYTHONPATH
-      run: |
-        sleep 60 &
-        pytest tests/test_container.py
+    #- name: Run container tests
+      #env:
+        #PYTHONPATH: ${{ github.workspace }}  # Add modules to PYTHONPATH
+      #run: |
+        #sleep 60 &
+        #pytest tests/test_container.py
 
     #- name: Test API service
       #run: |
