@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  launch-containers:
+  test-containers:
     runs-on: ubuntu-latest
 
     steps:

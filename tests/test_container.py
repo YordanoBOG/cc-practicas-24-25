@@ -1,10 +1,16 @@
 import pytest
 import requests
 
-def test_crearworkflow():
-    response = requests.post("http://localhost:8000/upload", files={"filename": "BVBRC_slatt_protein_small.csv"})
+# Testear endpoint que permite subir un archivo a la base de datos
+def test_uploadfile():
+    with open("BVBRC_slatt_protein_small.csv", "rb") as file:
+        response = requests.post(
+            "http://localhost:8000/upload",
+            files={"file": file}  # Creamos la estructura de datos con la etiqueta "file"
+                                  # que se espera recibir en el endpoint.
+        )
     assert response.status_code == 200
-    assert response.json()["message"] != ""
+    assert "File stored with ID" in response.json()["message"]
 
 '''
 def test_crearworkflow():
