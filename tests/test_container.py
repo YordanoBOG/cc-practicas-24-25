@@ -2,7 +2,7 @@ import pytest
 import requests
 
 # Testear endpoint que permite subir un archivo a la base de datos
-def test_uploadfile():
+def test_upload_file():
     with open("BVBRC_slatt_protein_small.csv", "rb") as file:
         response = requests.post(
             "http://localhost:8000/upload",
@@ -11,6 +11,31 @@ def test_uploadfile():
         )
     assert response.status_code == 200
     assert "File stored with ID" in response.json()["message"]
+
+def test_download_file():
+    # Upload a file to ensure it exists in the database
+    filename = "BVBRC_slatt_protein_small.csv"
+    #file_content = b"sample,data,for,testing\n1,2,3,4\n"
+    '''with open(filename, "wb") as file:
+        file.write(file_content)
+    
+    with open(filename, "rb") as file:
+        upload_response = requests.post(
+            "http://localhost:8000/upload",
+            files={"file": file}
+        )
+    
+    assert upload_response.status_code == 200
+    upload_message = upload_response.json().get("message", "")
+    assert "File stored with ID" in upload_message'''
+
+    # Test the download endpoint
+    download_response = requests.get(f"http://localhost:8000/download/{filename}")
+    
+    # Validate the response
+    assert download_response.status_code == 200
+    assert download_response.headers["Content-Disposition"] == f"attachment; filename={filename}"
+    print(download_response.content)
 
 '''
 def test_crearworkflow():
