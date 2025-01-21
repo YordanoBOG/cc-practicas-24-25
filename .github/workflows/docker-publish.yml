@@ -22,6 +22,14 @@ jobs:
     - name: Start containers with Docker Compose
       run: sudo docker-compose up --build
 
+    # Esperar 3 minutos a que se ejecuten los tests que nos interesa
+    - name: Wait for tests execution
+      run: sleep 180
+
+    # Detener los contenedores tras realizar los tests
+    - name: Teardown containers
+      run: docker-compose down --volumes
+
   # Ahora vamos a lanzar tests Python que evaluan los endpoints desplegados en el contenedor
   # Lo primero es preparar el entorno de ejecución Python
   test-containers:
@@ -50,10 +58,6 @@ jobs:
       run: |
         sleep 60 &
         pytest tests/test_container.py
-
-    # Detener los contenedores tras realizar los tests
-    - name: Teardown containers
-      run: docker-compose down --volumes
 
     #- name: Test API service
       #run: |
