@@ -12,10 +12,52 @@ def test_upload_file():
     assert response.status_code == 200
     assert "File stored with ID" in response.json()["message"]
 
+# Probar a descargar un documento de la base de datos
 def test_download_file():
-    # Upload a file to ensure it exists in the database
     filename = "BVBRC_slatt_protein_small.csv"
-    #file_content = b"sample,data,for,testing\n1,2,3,4\n"
+    download_response = requests.get(f"http://localhost:8000/download/{filename}")
+    assert download_response.status_code == 200
+    assert download_response.headers["Content-Disposition"] == f"attachment; filename={filename}"
+    print(download_response.content)
+
+# Consultar base de datos
+def test_list_files():
+    list_response = requests.get("http://localhost:8000/consultdb")
+    assert list_response.status_code == 200
+    response_json = list_response.json()
+    assert response_json.get("Files in database") == 1
+    
+    # Subir y validar varios archivos de una vez
+    '''files_to_upload = {
+        "file1.csv": b"file1,content,for,test\n1,2,3,4\n",
+        "file2.csv": b"file2,more,content\n5,6,7,8\n"
+    }
+    
+    for filename, content in files_to_upload.items():
+        with open(filename, "wb") as file:
+            file.write(content)
+        
+        with open(filename, "rb") as file:
+            upload_response = requests.post(
+                "http://localhost:8000/upload",
+                files={"file": file}
+            )
+        assert upload_response.status_code == 200
+        assert "File stored with ID" in upload_response.json().get("message", "")
+    
+    assert list_response.status_code == 200
+    response_json = list_response.json()
+    assert response_json.get("Files in database") == len(files_to_upload)
+    
+    for idx, filename in enumerate(files_to_upload.keys(), start=1):
+        assert response_json.get(f"File {idx}") == filename'''
+
+# Otros tests
+
+# Borrar archivos de la base de datos
+def test_delete_file():
+    filename = "test_delete_file.csv"
+    #file_content = b"delete,test,file,content\n123,456,789,0\n"
     '''with open(filename, "wb") as file:
         file.write(file_content)
     
@@ -29,13 +71,18 @@ def test_download_file():
     upload_message = upload_response.json().get("message", "")
     assert "File stored with ID" in upload_message'''
 
-    # Test the download endpoint
-    download_response = requests.get(f"http://localhost:8000/download/{filename}")
+    # Step 2: Delete the file
+    delete_response = requests.delete(f"http://localhost:8000/delete/{filename}")
     
-    # Validate the response
-    assert download_response.status_code == 200
-    assert download_response.headers["Content-Disposition"] == f"attachment; filename={filename}"
-    print(download_response.content)
+    # Step 3: Validate the response
+    assert delete_response.status_code == 200
+    delete_message = delete_response.json().get("message", "")
+    assert delete_message == f"File {filename} deleted successfully"
+
+    # Step 4: Verify the file no longer exists by attempting to download it
+    download_response = requests.get(f"http://localhost:8000/download/{filename}")
+    assert download_response.status_code == 404
+    assert download_response.json().get("error", "") == "File not found"
 
 '''
 def test_crearworkflow():
