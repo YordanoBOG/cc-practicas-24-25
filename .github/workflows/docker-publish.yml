@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  test-containers:
+  launch-containers:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,9 +22,12 @@ jobs:
     - name: Start containers with Docker Compose
       run: sudo docker-compose up --build
 
-    # Ahora vamos a lanzar tests Python que evaluan los endpoints desplegados en el contenedor
-    # Lo primero es preparar el entorno de ejecución Python
+  # Ahora vamos a lanzar tests Python que evaluan los endpoints desplegados en el contenedor
+  # Lo primero es preparar el entorno de ejecución Python
+  test-containers:
+    runs-on: ubuntu-latest
 
+    steps:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -36,11 +39,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests==2.25.1 pytest==6.2.5
 
-    # Ejecutar pruebas
+    # Ejecutar pruebas (Esperamos un minuto de más para que le dé tiempo a los contenedores para inicializarse)
     - name: Run container tests
       env:
         PYTHONPATH: ${{ github.workspace }}  # Add modules to PYTHONPATH
       run: |
+        sleep 60
         pytest tests/test_container.py
 
     #- name: Test API service
