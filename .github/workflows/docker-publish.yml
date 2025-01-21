@@ -28,6 +28,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Chequeos
+    - name: Checkout code
+      uses: actions/checkout@v3
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -44,8 +48,12 @@ jobs:
       env:
         PYTHONPATH: ${{ github.workspace }}  # Add modules to PYTHONPATH
       run: |
-        sleep 60
+        sleep 60 &
         pytest tests/test_container.py
+
+    # Detener los contenedores tras realizar los tests
+    - name: Teardown containers
+      run: docker-compose down --volumes
 
     #- name: Test API service
       #run: |
