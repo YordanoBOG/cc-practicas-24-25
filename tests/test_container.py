@@ -56,30 +56,13 @@ def test_list_files():
 
 # Borrar archivos de la base de datos
 def test_delete_file():
-    filename = "test_delete_file.csv"
-    #file_content = b"delete,test,file,content\n123,456,789,0\n"
-    '''with open(filename, "wb") as file:
-        file.write(file_content)
-    
-    with open(filename, "rb") as file:
-        upload_response = requests.post(
-            "http://localhost:8000/upload",
-            files={"file": file}
-        )
-    
-    assert upload_response.status_code == 200
-    upload_message = upload_response.json().get("message", "")
-    assert "File stored with ID" in upload_message'''
-
-    # Step 2: Delete the file
+    filename = "BVBRC_slatt_protein_small.csv"
     delete_response = requests.delete(f"http://localhost:8000/delete/{filename}")
-    
-    # Step 3: Validate the response
     assert delete_response.status_code == 200
     delete_message = delete_response.json().get("message", "")
     assert delete_message == f"File {filename} deleted successfully"
 
-    # Step 4: Verify the file no longer exists by attempting to download it
+    # Verificar que el archivo no existe intentando descargarlo
     download_response = requests.get(f"http://localhost:8000/download/{filename}")
     assert download_response.status_code == 404
     assert download_response.json().get("error", "") == "File not found"
