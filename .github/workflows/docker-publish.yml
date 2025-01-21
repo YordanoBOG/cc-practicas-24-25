@@ -25,7 +25,7 @@ jobs:
       run: sudo docker-compose up --build &
 
     # Esperar 2 minutos a que se lancen los contenedores
-    - name: Wait for tests execution
+    - name: Wait for docker compose execution
       run: sleep 120
 
     # Ahora vamos a lanzar tests Python que evaluan los endpoints desplegados en el contenedor

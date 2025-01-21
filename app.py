@@ -75,7 +75,8 @@ def delete_file(filename):
     for file in files:
         fs.delete(file._id)
         app.logger.info(f"File {filename} deleted from MongoDB.")
-    return jsonify({"message": f"File {filename} deleted successfully"})
+    return jsonify({"message": f"File {filename} deleted successfully",
+                    "status_code": 200})
 
 ###############################################################################
 ###############################################################################

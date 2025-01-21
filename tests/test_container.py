@@ -1,10 +1,13 @@
 import pytest
 import requests
 
-def test_de_prueba():
-    assert True
+def test_crearworkflow():
+    response = requests.post("http://localhost:8000/upload", files={"filename": "BVBRC_slatt_protein_small.csv"})
+    assert response.status_code == 200
+    assert response.json()["message"] != ""
 
-'''def test_crearworkflow():
+'''
+def test_crearworkflow():
     response = requests.get("http://localhost:8000/crearworkflow")
     assert response.status_code == 200
     assert response.json()["tareas"] == []
