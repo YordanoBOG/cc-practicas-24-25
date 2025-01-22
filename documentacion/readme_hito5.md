@@ -7,9 +7,16 @@ Descripción
 Hacer un despliegue en la nube, usando una Plataforma como Servicio (PaaS), del proyecto de prácticas desarrollado.
 Explicación
 
+Necesito desplegar una aplicación contenerizada en un PaaS. El PaaS en el que desplegar la aplicación debe cumplir los siguientes requisitos:
+1) El despliegue de la aplicación debe estar en Europa y ser accesible a través de una URL.
+2) El servicio PaaS elegido debe ser gratuito o tener un periodo de prueba gratuito superior a un mes.
+3) La configuración del despliegue debe definirse en un fichero que describa la infraestructura. Se puede hacer o bien con un lenguaje de configuración que provea el PaaS elegido, o bien mediante una secuencia de comandos de la herramienta de línea de órdenes que proporcione el PaaS.
+4) El PaaS debe desplegarse desde el repositorio de GitHub en el que se encuentra la aplicación, de manera que el despliegue se produzca automáticamente con cada push que se haga al repositorio.
+¿Qué servicio PaaS me recomiendas que cumpla estos requisitos?
+
 El principal objetivo de este hito es familiarizarse con las técnicas usadas para desplegar aplicaciones desde un repositorio web a una Plataforma como Servicio (PaaS).
 
-Para ello debe darse de alta en algún servicio PaaS disponible o usar alguno de los PaaS de otros servicios cloud en los que ya se esté dado de alta. Si lo prefiere puede desplegar su propio PaaS en algún IaaS disponible (por ejemplo, OpenStack) .
+Para ello debe darse de alta en algún servicio PaaS disponible o usar alguno de los PaaS de otros servicios cloud en los que ya se esté dado de alta. Si lo prefiere puede desplegar su propio PaaS en algún IaaS disponible (por ejemplo, OpenStack).
 
 Se plantea como objetivo el saber seleccionar el PaaS gratuito (o de pago pero gratuito durante un tiempo o para un nivel determinado servicio) más adecuado para las necesidades de la aplicación que se va a desplegar. El PaaS seleccionado tiene que cumplir tres requisitos:
 
@@ -20,7 +27,7 @@ Se plantea como objetivo el saber seleccionar el PaaS gratuito (o de pago pero g
 Debe abrir una cuenta en el proveedor de PaaS, crear la aplicación en la nube y ponerla en marcha. La herramienta que se use en el PaaS para lanzar la aplicación tendrá que hacer uso de las órdenes que se hayan utilizado en los hitos anteriores. De esta forma se asegura que se ejecuta de la misma forma como se hacía localmente.
 Material adicional
 
-    Apuntes de cursos anteriores sobre Depliegue de aplicaciones en la nube
+    Apuntes de cursos anteriores sobre Despliegue de aplicaciones en la nube
 
 Entrega de la práctica
 

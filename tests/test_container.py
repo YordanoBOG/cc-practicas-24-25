@@ -53,20 +53,6 @@ def test_list_files():
         assert response_json.get(f"File {idx}") == filename'''
 
 # Otros tests
-
-# Borrar archivos de la base de datos
-def test_delete_file():
-    filename = "BVBRC_slatt_protein_small.csv"
-    delete_response = requests.delete(f"http://localhost:8000/delete/{filename}")
-    assert delete_response.status_code == 200
-    delete_message = delete_response.json().get("message", "")
-    assert delete_message == f"File {filename} deleted successfully"
-
-    # Verificar que el archivo no existe intentando descargarlo
-    download_response = requests.get(f"http://localhost:8000/download/{filename}")
-    assert download_response.status_code == 404
-    assert download_response.json().get("error", "") == "File not found"
-
 '''
 def test_crearworkflow():
     response = requests.get("http://localhost:8000/crearworkflow")
@@ -120,3 +106,17 @@ def test_ejecutarworkflow():
     response = requests.get("http://localhost:8000/ejecutarworkflow")
     assert response.status_code == 200
     assert response.json()["returned value"] == 0'''
+
+
+# Borrar archivos de la base de datos
+def test_delete_file():
+    filename = "BVBRC_slatt_protein_small.csv"
+    delete_response = requests.delete(f"http://localhost:8000/delete/{filename}")
+    assert delete_response.status_code == 200
+    delete_message = delete_response.json().get("message", "")
+    assert delete_message == f"File {filename} deleted successfully"
+
+    # Verificar que el archivo no existe intentando descargarlo
+    download_response = requests.get(f"http://localhost:8000/download/{filename}")
+    assert download_response.status_code == 404
+    assert download_response.json().get("error", "") == "File not found"

@@ -1,0 +1,32 @@
+services:
+  - name: genesys_api
+    type: web
+    runtime: docker
+    repo: https://github.com/YordanoBOG/cc-practicas-24-25
+    dockerfilePath: Dockerfile
+    region: frankfurt
+    plan: free
+    branch: main
+    rootDir: .
+    numInstances: 1
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: PAAS
+        value: RENDER
+      - key: PORT
+        value: 8000
+
+  #- name: mongo_db
+    #type: privateService
+    #runtime: docker
+    #region: frankfurt
+    #plan: free
+    #image: mongo:6.0
+    #envVars:
+      #MONGO_DB: mydb
+
+  #- name: logger
+    #runtime: docker
+    #region: frankfurt
+    #plan: free
