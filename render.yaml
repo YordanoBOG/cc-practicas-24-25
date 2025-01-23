@@ -16,22 +16,44 @@ services:
         value: RENDER
       - key: PORT
         value: 8000
-      - key: MONGO_DB
-        fromService:
-          type: pserv
-          name: mongo-db
-          property: connectionString
+      #- key: MONGO_DB
+        #fromService:
+          #type: pserv
+          #name: mongo-db
+          #property: connectionString
+      - key: MONGO_URI
+        value: mongodb://mongo-db:27017/mydb
+      - key: LOGGER_HOST
+        value: logger:24224
 
-  - type: pserv
-    name: mongo-db
+  - name: mongo-db
+    type: pserv
     runtime: docker
+    dockerfilePath: mongo.Dockerfile
+    #image: mongo:6.0
     region: frankfurt
     plan: free
-    autoDeploy: true
-    disk:
-      name: data
-      mountPath: /data/db
-      sizeGB: 10
+    envVars: []
+
+  - name: logger
+    type: pserv
+    runtime: docker
+    dockerfilePath: logger.Dockerfile
+    #image: fluent/fluentd:v1.15.3-debian-1.0
+    region: frankfurt
+    plan: free
+    envVars: []
+
+  #- type: pserv
+    #name: mongo-db
+    #runtime: docker
+    #region: frankfurt
+    #plan: free
+    #autoDeploy: true
+    #disk:
+      #name: data
+      #mountPath: /data/db
+      #sizeGB: 10
 
   #- name: logger
     #runtime: docker
