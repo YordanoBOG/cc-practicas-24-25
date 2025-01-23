@@ -16,17 +16,22 @@ services:
         value: RENDER
       - key: PORT
         value: 8000
+      - key: MONGO_DB
+        fromService:
+          type: pserv
+          name: mongo-db
+          property: connectionString
 
-  # start command: python3 app.py
-
-  #- name: mongo_db
-    #type: privateService
-    #runtime: docker
-    #region: frankfurt
-    #plan: free
-    #image: mongo:6.0
-    #envVars:
-      #MONGO_DB: mydb
+  - type: pserv
+    name: mongo-db
+    runtime: docker
+    region: frankfurt
+    plan: free
+    autoDeploy: true
+    disk:
+      name: data
+      mountPath: /data/db
+      sizeGB: 10
 
   #- name: logger
     #runtime: docker
