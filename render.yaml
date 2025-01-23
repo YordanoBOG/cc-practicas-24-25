@@ -22,9 +22,13 @@ services:
           #name: mongo-db
           #property: connectionString
       - key: MONGO_URI
-        value: mongodb://mongo-db:27017/mydb
+        fromService:
+          type: pserv
+          name: mongo-db
       - key: LOGGER_HOST
-        value: logger:24224
+        fromService:
+          type: pserv
+          name: logger
 
   - name: mongo-db
     type: pserv
