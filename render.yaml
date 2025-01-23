@@ -1,3 +1,5 @@
+# Nombre del servicio: https://genesys-api.onrender.com/
+
 services:
   - name: genesys_api
     type: web
@@ -8,14 +10,14 @@ services:
     plan: free
     branch: main
     rootDir: .
-    numInstances: 1
-    healthCheckPath: /
     autoDeploy: true
     envVars:
       - key: PAAS
         value: RENDER
       - key: PORT
         value: 8000
+
+  # start command: python3 app.py
 
   #- name: mongo_db
     #type: privateService

@@ -26,6 +26,9 @@
 # A TRAVÉS DEL NAVEGADOR (SEGURAMENTE), PERO DEBES AVERIGUAR CÓMO ENVIARLES PARÁMETROS SI NO DISPONES DE
 # UNA INTERFAZ PARA ELLO (O CREAR TEMPLATES.HTML SENCILLOS PARA TESTEARLO)
 
+# Para subir la imagen a docker hub:
+# docker push hitos_api:latest
+
 # docker-compose.yml
 version: '3.8'
 
