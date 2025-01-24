@@ -8,6 +8,12 @@ Entramos en la página oficial de Render y, tras crear una cuenta vinculando Git
 
 Para desplegar un nuevo servicio, debe seleccionarse New -> Web Service. Sin embargo, esta opción permite desplegar un servicio usando la interfaz web, que no es lo que nos interesa. En su lugar, usamos la opción New -> Blueprint, que es el mecanismo para desplegar una nueva infraestructura en formato como código.
 
+De primeras especificamos las opciones del servicio manualmente a través de la web, elegimos el repositorio de GitHub de los hitos de CC.
+
+Y elegimos las opciones genéricas del servicio, entre las que caben destacar plan: free (para usar el servicio PaaS gratuito), region: frankfurt (despliegue en Europa) y autodeploy: true (para que se relance el servicio con cada push al repositorio).
+
+Una vez tenemos el servicio creado, cada vez que se lance buscará un fichero llamado "render.yaml" en la raíz del repositorio de GitHub, que contendrá la especificación de la infraestructura a desplegar, y lo usará como archivo de configuración del servicio. Si no encuentra el fichero o si está mal configurado, fallará.
+
 
 
 

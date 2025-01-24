@@ -1,4 +1,5 @@
 import logging
+import os
 
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
@@ -21,7 +22,13 @@ WORKFLOW:Workflow = Workflow() # Un workflow único para todo el servicio
 ###############################################################################
 
 # MongoDB client setup
-client = MongoClient("mongodb://mongo:27017/") # La ruta del contenedor mongo (al app solo funcionará desplegada en el contenedor a partir de ahora)
+db_url = None
+try:
+    db_url = os.environ.get('MONGO_DB')
+except Exception as e:
+    db_url = "mongodb://mongo:27017/"
+
+client = MongoClient(db_url) # La ruta del contenedor mongo (al app solo funcionará desplegada en el contenedor a partir de ahora)
 db = client['mydb']
 fs = GridFS(db)
 

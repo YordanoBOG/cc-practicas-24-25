@@ -20,9 +20,7 @@ services:
         fromService:
           type: pserv
           name: mongo-db
-          property: connectionString
-      #- key: MONGO_URI
-        #value: mongodb://mongo:27017/mydb
+          envVarKey: MONGO_URI
       - key: LOGGER_HOST
         fromService:
           type: pserv
@@ -35,7 +33,9 @@ services:
     dockerfilePath: mongo.Dockerfile
     region: frankfurt
     plan: free
-    envVars: []
+    envVars:
+      - key: MONGO_URI
+        value: mongodb://mongo:27017/mydb
 
   - name: logger
     type: pserv

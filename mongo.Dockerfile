@@ -1,5 +1,8 @@
 FROM mongo:6.0
 
+# Set working directory
+WORKDIR /mydb
+
 EXPOSE 27017
 
 # Create a directory for SSL certificates
