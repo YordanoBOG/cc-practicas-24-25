@@ -14,15 +14,21 @@ Y elegimos las opciones genéricas del servicio, entre las que caben destacar pl
 
 Una vez tenemos el servicio creado, cada vez que se lance buscará un fichero llamado "render.yaml" en la raíz del repositorio de GitHub, que contendrá la especificación de la infraestructura a desplegar, y lo usará como archivo de configuración del servicio. Si no encuentra el fichero o si está mal configurado, fallará.
 
+Nuestro fichero de configuración de GitHub, de primeras, se encuentra configurado para desplegar la aplicación descrita en el Dockerfile, sin la base de datos Mongo.
 
+En concreto, el fichero describe
 
+Tras realizar un push, Render detecta el archivo render.yaml automáticamente e inicia el despliegue.
 
-Necesito desplegar una aplicación contenerizada en un PaaS. El PaaS en el que desplegar la aplicación debe cumplir los siguientes requisitos:
-1) El despliegue de la aplicación debe estar en Europa y ser accesible a través de una URL.
-2) El servicio PaaS elegido debe ser gratuito o tener un periodo de prueba gratuito superior a un mes.
-3) La configuración del despliegue debe definirse en un fichero que describa la infraestructura. Se puede hacer o bien con un lenguaje de configuración que provea el PaaS elegido, o bien mediante una secuencia de comandos de la herramienta de línea de órdenes que proporcione el PaaS.
-4) El PaaS debe desplegarse desde el repositorio de GitHub en el que se encuentra la aplicación, de manera que el despliegue se produzca automáticamente con cada push que se haga al repositorio.
-¿Qué servicio PaaS me recomiendas que cumpla estos requisitos?
+Dado que nuestra aplicación carece de interfaz, debemos fijarnos en las estructuras de datos devueltas al llamar a la API. Con una orden curl desde el terminal de Ubuntu podemos verificar que la app se encuentra desplegada y que funciona, por ejemplo, creando un nuevo flujo de trabajo.
+
+Otros endpoints que trabajan con la base de datos (como el endpoint que consulta la base de datos) se quedan colgados, ya que la app no es capaz de encontrar la conexión a la base de datos Mongo.
+
+No obstante, de momento hemos conseguido desplegar la aplicación en un PaaS cumpliendo los requisitos solicitados en el hito 5: el despliegue está en Europa, es accesible a través de una URL, el servicio PaaS elegido es gratuito, la configuración del despliegue está definida en un fichero que describe la infraestructura, y el despliegue está sincronizado con GitHub para realizarse automáticamente con cada push.
+
+Ahora tenemos que comunicar la aplicación con una base de datos. Dado que nuestra app trabaja con documentos, necesitamos emplear una base de datos no relacional (en concreto, Mongo). Render permite desplegar un servicio de base de datos Postgre que, de forma gratuita, puede conectarse con la aplicación, pero Postgre es un sistema gestor de bases de datos relacional, por lo que no nos sirve.
+
+Necesitamos desplegar un servicio Mongo
 
 Entrega de la práctica
 
