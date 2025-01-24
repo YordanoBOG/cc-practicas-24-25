@@ -82,9 +82,9 @@ Hacemos un push y comprobamos la terminal log del servicio.
 
 ![Captura desde 2025-01-24 11-35-27](https://github.com/user-attachments/assets/ec20ea36-d459-406d-ad6d-08c9619f18ee)
 
-Vemos que da un error relacionado con las claves SSL. Esto se debe a que el cliente de Render requiere una conexión a Mongo usando este tipo de claves, que típicamente se obtienen a través de organizaciones certificadas.
+Vemos que da un error relacionado con las claves SSL. Esto se debe a que el cliente de Render requiere una conexión a Mongo usando este tipo de claves, que típicamente se obtienen a través de organizaciones certificadas. Dado que no tenemos ninguna clave proporcionada por ninguna organización, vamos a intentar generarla por nuestra cuenta usando una organización inexistente de ejemplo.
 
-Intentamos incluir una clave SSL en nuestro repositorio usando el comando "openssl genrsa -out ca.key 4096" para generar un archivo ca.key con una clave privada y "openssl req -x509 -new -nodes -key ca.key -sha256 -days 365 -out ca.crt -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=example.com"" para generar un archivo ca.crt con el certificado a validar usando dicha clave.
+Para incluir una clave SSL en nuestro repositorio usamos el comando "openssl genrsa -out ca.key 4096", que genera un archivo ca.key con una clave privada. Luego, usamos "openssl req -x509 -new -nodes -key ca.key -sha256 -days 365 -out ca.crt -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=example.com"" para generar un archivo ca.crt con el certificado a validar usando dicha clave. Se puede apreciar que las credenciales usadas en el comando pertenecen a una organizaicón inexistente.
 
 Repetimos el proceso para la instancia de Mongo, con "openssl genrsa -out mongodb.key 4096" para generar la clave privada de la base de datos Mongo en el archivo mongo.key, y "openssl req -new -key mongodb.key -out mongodb.csr -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=mongo-db"" para el certificado en el archivo mongo.csr. Además, combinamos ambos documentos en un nuevo documento mongodb.pem con "cat mongodb.key mongodb.crt > mongodb.pem".
 
@@ -96,7 +96,7 @@ Y actualizamos el Dockerfile de despliegue de Mongo.
 
 ![Captura desde 2025-01-24 11-51-28](https://github.com/user-attachments/assets/44c092bb-71c5-47bb-a71b-5269a02a443a)
 
-Relanzamos el servicio y miramos los logs de mongo_db. Vemos que el servicio se queda un buen rato desplegándose hasta que finalmente falla.
+Relanzamos el servicio y miramos los logs de mongo_db. Vemos que el servicio se queda un buen rato desplegándose hasta que finalmente falla, probablemente debido a que no se ha encontrado ninguna clave asociada a la que hemos creado (porque pertenece a una organización ficticia), lo que ha provocado que el servicio se cuelgue hasta que ha pasado el tiempo de respuesta límite permitido y se ha detenido.
 
 ![Captura desde 2025-01-24 12-03-23](https://github.com/user-attachments/assets/183697e7-1489-4027-88b0-0c5d119242be)
 ![Captura desde 2025-01-24 12-09-32](https://github.com/user-attachments/assets/a7620125-cf20-447a-b32d-b49c58f2d02b)
@@ -113,4 +113,4 @@ Especificamos la ruta al repositorio de GitHub que se nos da: https://github.com
 
 ![Captura desde 2025-01-24 12-13-49](https://github.com/user-attachments/assets/22c2039d-0512-40c2-ae87-c5a01681d154)
 
-Por tanto, si bien el despliegue de la aplicación ha sido exitoso, el hecho de que no podamos usar Postgre para la base de datos nos impide generar un servicio de base de datos como nos gustaría, lo que hace que la aplicación no sirva para casi nada en el PaaS, ya que GeneSys, tal y como se ha planteado en la asignatura, es un sistema especializado para procesar información documental bioinformática en la nube.
+Por tanto, si bien el despliegue de la aplicación ha sido exitoso, el hecho de que no podamos usar Postgre para la base de datos nos impide generar un servicio de base de datos como nos gustaría, lo que hace que la aplicación no sirva para casi nada en el PaaS, ya que GeneSys, tal y como se ha planteado en la asignatura, es un sistema especializado en procesar información documental bioinformática en la nube.
