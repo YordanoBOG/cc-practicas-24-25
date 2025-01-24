@@ -21,15 +21,12 @@ services:
           #type: pserv
           #name: mongo-db
           #property: connectionString
-      - key: MONGO_URI
-        fromService:
-          type: pserv
-          name: mongo-db
-          value: mongodb://mongo:27017/mydb
-      - key: LOGGER_HOST
-        fromService:
-          type: pserv
-          name: logger
+      #- key: MONGO_URI
+        #value: mongodb://mongo:27017/mydb
+      #- key: LOGGER_HOST
+        #fromService:
+          #type: pserv
+          #name: logger
 
   #- name: mongo-db
     #type: pserv
