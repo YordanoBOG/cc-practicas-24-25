@@ -113,4 +113,4 @@ Especificamos la ruta al repositorio de GitHub que se nos da: https://github.com
 
 ![Captura desde 2025-01-24 12-13-49](https://github.com/user-attachments/assets/22c2039d-0512-40c2-ae87-c5a01681d154)
 
-Por tanto, si bien el despliegue de la aplicación ha sido exitoso, el hecho de que no podamos usar Postgre para la base de datos nos impide generar un servicio de base de datos como nos gustaría, lo que hace que la aplicación no sirva para casi nada en el PaaS, ya que GeneSys, tal y como se ha planteado en la asignatura, es un sistema especializado en procesar información documental bioinformática en la nube.
+Por tanto, si bien el despliegue de la aplicación ha sido exitoso, el hecho de que no podamos usar Postgre para la base de datos nos impide generar un servicio de base de datos como nos gustaría, lo que hace que la aplicación no sirva para casi nada en el PaaS, ya que GeneSys, tal y como se ha planteado a lo largo de la asignatura, es un sistema especializado en procesar información documental bioinformática en un entorno contenerizado.
