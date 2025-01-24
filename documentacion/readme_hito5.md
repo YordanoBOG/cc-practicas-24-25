@@ -94,5 +94,23 @@ Metemos todos los documentos en una carpeta específica en el repositorio.
 
 Y actualizamos el Dockerfile de despliegue de Mongo.
 
-Relanzamos el servicio y miramos los logs de mongo_db.
+![Captura desde 2025-01-24 11-51-28](https://github.com/user-attachments/assets/44c092bb-71c5-47bb-a71b-5269a02a443a)
 
+Relanzamos el servicio y miramos los logs de mongo_db. Vemos que el servicio se queda un buen rato desplegándose hasta que finalmente falla.
+
+![Captura desde 2025-01-24 12-03-23](https://github.com/user-attachments/assets/183697e7-1489-4027-88b0-0c5d119242be)
+![Captura desde 2025-01-24 12-09-32](https://github.com/user-attachments/assets/a7620125-cf20-447a-b32d-b49c58f2d02b)
+
+Intentamos una última solución consistente en desplegar la base de datos mongo como un servicio adicional siguiendo la propia guía de render para desplegar una instancia de mongo (https://render.com/docs/deploy-mongodb).
+
+![Captura desde 2025-01-24 12-11-19](https://github.com/user-attachments/assets/95494444-7514-4fc6-a603-425c49389f9f)
+
+Se nos dice que debemos realizar el despliegue como servicio privado.
+
+![Captura desde 2025-01-24 12-12-30](https://github.com/user-attachments/assets/bee08f44-9697-46f5-aba8-9033ff598fa4)
+
+Especificamos la ruta al repositorio de GitHub que se nos da: https://github.com/render-examples/mongodb. Pero cuando llegamos a la pestaña de configuración, vemos que el servicio no tiene una opción gratuita.
+
+![Captura desde 2025-01-24 12-13-49](https://github.com/user-attachments/assets/22c2039d-0512-40c2-ae87-c5a01681d154)
+
+Por tanto, si bien el despliegue de la aplicación ha sido exitoso, el hecho de que no podamos usar Postgre para la base de datos nos impide generar un servicio de base de datos como nos gustaría, lo que hace que la aplicación no sirva para casi nada en el PaaS, ya que GeneSys, tal y como se ha planteado en la asignatura, es un sistema especializado para procesar información documental bioinformática en la nube.
