@@ -2,7 +2,10 @@ FROM mongo:6.0
 
 EXPOSE 27017
 
-# Copy certificates into the container
+# Create a directory for SSL certificates
+RUN mkdir -p /etc/ssl
+
+# Copy the certificate files into the container
 COPY ssl/server.pem /etc/ssl/mongodb.pem
 
 # Start MongoDB with SSL enabled
