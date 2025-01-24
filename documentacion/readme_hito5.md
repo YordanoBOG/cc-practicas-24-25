@@ -58,21 +58,41 @@ Ahora tenemos que comunicar la aplicación con una base de datos. Dado que nuest
 
 Necesitamos desplegar un servicio Mongo. Para ello, intentamos varias soluciones. La primera es intentar definir una configuración de varios servicios en el fichero "render.yaml". Inclumos dos nuevos servicios para la base de datos mongo y para el servicio de logging.
 
+![Captura desde 2025-01-24 11-19-54](https://github.com/user-attachments/assets/14236c62-25e8-4d63-b3ac-7f8e7d7e9fdc)
+
 Ambos servicios se encuentran accesibles en el servicio principal de la aplicación a através de variables de entorno, y poseen sus propios ficheros Dockerfile.
 
 El dockerfile de mongo especifica la imagen de Mongo a usar, la ruta a la base de datos en el contenedor y el puerto desde el que acceder a ella:
 
+![Captura desde 2025-01-24 11-22-31](https://github.com/user-attachments/assets/d7b0dae9-5fd3-481a-8508-a8f5fcabe2d9)
+
 Y el dockerfile del logger, lo mismo:
+
+![Captura desde 2025-01-24 11-22-35](https://github.com/user-attachments/assets/c44fe966-dc3f-4320-8feb-930e4f38a058)
 
 Sin embargo, al redesplegar el servicio, los endpoints de la base de datos siguen sin funcionar.
 
 Para averiguar lo que ocurre, creamos un nuevo servicio por separado de Mongo en Render, solo que esta vez lo desplegamos como servicio web, ya que solo lo vamos a usar para encontrar la configuración de despliegue adecuada para nuestro Dockerfile de mongo. Especificamos dicho Dockerfile en la configuración del servicio.
 
+![Captura desde 2025-01-24 11-29-04](https://github.com/user-attachments/assets/c653774d-aaa6-4af9-899d-7095c3c1110c)
+![Captura desde 2025-01-24 11-29-20](https://github.com/user-attachments/assets/9aae4c32-3a5f-44d0-9c47-e14452ebcde7)
+![Captura desde 2025-01-24 11-29-26](https://github.com/user-attachments/assets/f40a53ca-9214-4478-af48-81cb7d50e73c)
+
 Hacemos un push y comprobamos la terminal log del servicio.
 
-Vemos que
+![Captura desde 2025-01-24 11-35-27](https://github.com/user-attachments/assets/ec20ea36-d459-406d-ad6d-08c9619f18ee)
 
+Vemos que da un error relacionado con las claves SSL. Esto se debe a que el cliente de Render requiere una conexión a Mongo usando este tipo de claves, que típicamente se obtienen a través de organizaciones certificadas.
 
+Intentamos incluir una clave SSL en nuestro repositorio usando el comando "openssl genrsa -out ca.key 4096" para generar un archivo ca.key con una clave privada y "openssl req -x509 -new -nodes -key ca.key -sha256 -days 365 -out ca.crt -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=example.com"" para generar un archivo ca.crt con el certificado a validar usando dicha clave.
 
-    3 puntos: Funcionamiento correcto del despliegue en el PaaS (no sólo el status, sino que correcto funcionamiento de la aplicación).
-    1 punto: Pruebas de las prestaciones de la aplicación desplegada en el PaaS.
+Repetimos el proceso para la instancia de Mongo, con "openssl genrsa -out mongodb.key 4096" para generar la clave privada de la base de datos Mongo en el archivo mongo.key, y "openssl req -new -key mongodb.key -out mongodb.csr -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=mongo-db"" para el certificado en el archivo mongo.csr. Además, combinamos ambos documentos en un nuevo documento mongodb.pem con "cat mongodb.key mongodb.crt > mongodb.pem".
+
+Metemos todos los documentos en una carpeta específica en el repositorio.
+
+![Captura desde 2025-01-24 11-47-11](https://github.com/user-attachments/assets/190e4124-039a-41e7-8fcd-15891f91a1c5)
+
+Y actualizamos el Dockerfile de despliegue de Mongo.
+
+Relanzamos el servicio y miramos los logs de mongo_db.
+
