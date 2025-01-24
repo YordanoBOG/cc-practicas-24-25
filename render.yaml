@@ -21,11 +21,8 @@ services:
           type: pserv
           name: mongo-db
           envVarKey: MONGO_URI
-      #- key: LOGGER_HOST
-        #fromService:
-          #type: pserv
-          #name: logger
-          #value: connectionString
+      - key: LOGGER
+        value: logger:24224
 
   - name: mongo-db
     type: pserv

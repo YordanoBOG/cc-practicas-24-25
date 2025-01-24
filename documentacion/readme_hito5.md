@@ -58,11 +58,21 @@ Ahora tenemos que comunicar la aplicación con una base de datos. Dado que nuest
 
 Necesitamos desplegar un servicio Mongo. Para ello, intentamos varias soluciones. La primera es intentar definir una configuración de varios servicios en el fichero "render.yaml". Inclumos dos nuevos servicios para la base de datos mongo y para el servicio de logging.
 
-Entrega de la práctica
+Ambos servicios se encuentran accesibles en el servicio principal de la aplicación a através de variables de entorno, y poseen sus propios ficheros Dockerfile.
 
-Se tendrá que incluir la URL donde se haya desplegado la aplicación en el PaaS.
+El dockerfile de mongo especifica la imagen de Mongo a usar, la ruta a la base de datos en el contenedor y el puerto desde el que acceder a ella:
 
-    2 puntos: Descripción y justificación de las herramientas usadas para desplegar la aplicación en el PaaS.
-    2 puntos: Descripción de la configuración para el despliegue automático al PaaS desde el repositorio de Github.
+Y el dockerfile del logger, lo mismo:
+
+Sin embargo, al redesplegar el servicio, los endpoints de la base de datos siguen sin funcionar.
+
+Para averiguar lo que ocurre, creamos un nuevo servicio por separado de Mongo en Render, solo que esta vez lo desplegamos como servicio web, ya que solo lo vamos a usar para encontrar la configuración de despliegue adecuada para nuestro Dockerfile de mongo. Especificamos dicho Dockerfile en la configuración del servicio.
+
+Hacemos un push y comprobamos la terminal log del servicio.
+
+Vemos que
+
+
+
     3 puntos: Funcionamiento correcto del despliegue en el PaaS (no sólo el status, sino que correcto funcionamiento de la aplicación).
     1 punto: Pruebas de las prestaciones de la aplicación desplegada en el PaaS.
