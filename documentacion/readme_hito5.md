@@ -1,22 +1,34 @@
 Hito 5: Despliegue de la aplicación en un PaaS. Documentación.
 
-Vamos a relatar el despliegue en servidores europeos de nuestra aplicación contenerizada usando un formato de descripción de la arquitectura en formato código que, además, está vinculado a nuestro repositorio de GitHub y se redespliega con cada push que se hace en él.
+Vamos a relatar el despliegue en servidores europeos de nuestra aplicación contenerizada usando un formato de descripción de la arquitectura en formato código que, además, está vinculado a nuestro repositorio de GitHub y se relanza en el PaaS con cada push.
 
-El PaaS que vamos a usar es Render, porque ofrece una versión gratuita adecuada para probar nuestra aplicación y, si se vincula un despliegue con una rama determinada de un repositorio de GitHub, realiza redespliegues automáticos cada vez que se realiza un push sobre dicha rama. Otras opciones que se valoraron en un inicio fueron Fly.io y Railway.app. Ambas ofrecen soporte para vincular el despliegue con GitHub, así como el uso de un fichero para describir la infraestructura del despliegue en formato como código. No obstante, Fly.io se descartó por no poseer despliegues automáticos con cada push, y Railway.app era mucho más restrictivo para el despliegue de clusters de contenedores, ya que obligaba a desplegar el servicio especificando un dockerfile, mientras que Render admite despliegues de múltiples imágenes especificando distintos dockerfiles.
+El PaaS que vamos a usar es Render, porque ofrece una versión gratuita adecuada para probar nuestra aplicación y, si se vincula un despliegue con una rama determinada de un repositorio de GitHub, realiza redespliegues automáticos cada vez que se realiza un push sobre dicha rama. Otras opciones que se valoraron en un inicio fueron Fly.io y Railway.app. Ambas ofrecen soporte para vincular el despliegue con GitHub, así como el uso de un fichero para describir la infraestructura del despliegue en formato como código. No obstante, Fly.io se descartó por no poseer despliegues automáticos con cada push, y Railway.app era mucho más restrictivo para el despliegue de clusters de contenedores, ya que obligaba a desplegar el servicio especificando un dockerfile, mientras que Render admite despliegues de múltiples imágenes especificando distintos dockerfiles (https://alexfranz.com/posts/deploying-container-apps-2024/).
 
 Entramos en la página oficial de Render y, tras crear una cuenta vinculando GitHub, damos acceso a nuestros repositorios. Ahora podemos crear servicios desplegados sobre el repositorio que seleccionemos.
 
-Para desplegar un nuevo servicio, debe seleccionarse New -> Web Service. Sin embargo, esta opción permite desplegar un servicio usando la interfaz web, que no es lo que nos interesa. En su lugar, usamos la opción New -> Blueprint, que es el mecanismo para desplegar una nueva infraestructura en formato como código.
+![Captura desde 2025-01-24 08-35-15](https://github.com/user-attachments/assets/0d022971-133e-4c55-be7b-e97f9f0098dd)
 
-De primeras especificamos las opciones del servicio manualmente a través de la web, elegimos el repositorio de GitHub de los hitos de CC.
+Para desplegar un nuevo servicio, debe seleccionarse New -> Web Service. Sin embargo, esta opción sirve para desplegar un servicio usando la interfaz web, que no es lo que nos piden hacer. En su lugar, usamos la opción New -> Blueprint, que es el mecanismo para desplegar una infraestructura en formato código.
 
-Y elegimos las opciones genéricas del servicio, entre las que caben destacar plan: free (para usar el servicio PaaS gratuito), region: frankfurt (despliegue en Europa) y autodeploy: true (para que se relance el servicio con cada push al repositorio).
+![Captura desde 2025-01-24 08-36-28](https://github.com/user-attachments/assets/7cab1b54-c57e-4e37-8ab6-77947ad911c6)
 
-Una vez tenemos el servicio creado, cada vez que se lance buscará un fichero llamado "render.yaml" en la raíz del repositorio de GitHub, que contendrá la especificación de la infraestructura a desplegar, y lo usará como archivo de configuración del servicio. Si no encuentra el fichero o si está mal configurado, fallará.
+De primeras especificamos las opciones del servicio manualmente a través de la web, elegimos el repositorio de GitHub de los hitos de CC (cc-practicas-24-25).
 
-Nuestro fichero de configuración de GitHub, de primeras, se encuentra configurado para desplegar la aplicación descrita en el Dockerfile, sin la base de datos Mongo.
+![Captura desde 2025-01-23 18-16-09](https://github.com/user-attachments/assets/bea8908d-7346-46c5-8a54-e56ff70f357e)
 
-En concreto, el fichero describe
+Y seleccionamos las opciones genéricas del servicio, entre las que caben destacar plan: free (para usar el servicio PaaS gratuito), region: frankfurt (despliegue en Europa), branch: main (indicando que se debe desplegar el servicio usando el contenido de la rama main) y autodeploy: true (para que se relance el servicio con cada push al repositorio).
+
+![Captura desde 2025-01-23 18-16-53](https://github.com/user-attachments/assets/2966b67f-cb28-46da-a63e-614703659878)
+
+Una vez tenemos el servicio creado, cada vez que se lance buscará un fichero llamado "render.yaml" en la rama main de nuestro repositorio de GitHub, que contendrá la especificación de la infraestructura a desplegar, y lo usará como archivo de configuración del servicio. Si no encuentra el fichero o si está mal configurado, fallará.
+
+![Captura desde 2025-01-23 18-17-11](https://github.com/user-attachments/assets/fc9376dc-7cb0-4a6d-bf49-ad388ca32ffd)
+
+El fichero de configuración "render.yaml", de primeras, se encuentra configurado para desplegar la aplicación descrita en el Dockerfile, sin la base de datos Mongo.
+
+![Captura desde 2025-01-24 10-34-35](https://github.com/user-attachments/assets/f9fe72ad-6564-44a3-9f72-017ece8860ac)
+
+En concreto, el fichero describe un servicio web llamado "genesys_api", se especifica el repositorio GitHub a partir del que realizar el despligue, la ruta al Dockerfile, las opciones especificadas previamente en el despliegue manual y un par de variables de entorno que especifican el servicio PaaS en el que se despliega la app y el puerto de escucha (ambas variables son opcionales, pues la primera es meramente informativa y la segunda ya va especificada en el Dockerfile).
 
 Tras realizar un push, Render detecta el archivo render.yaml automáticamente e inicia el despliegue.
 
