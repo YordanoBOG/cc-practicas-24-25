@@ -25,6 +25,7 @@ services:
         fromService:
           type: pserv
           name: mongo-db
+          value: mongodb://mongo:27017/mydb
       - key: LOGGER_HOST
         fromService:
           type: pserv
@@ -58,8 +59,3 @@ services:
       #name: data
       #mountPath: /data/db
       #sizeGB: 10
-
-  #- name: logger
-    #runtime: docker
-    #region: frankfurt
-    #plan: free
