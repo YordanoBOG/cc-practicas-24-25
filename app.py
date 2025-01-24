@@ -22,11 +22,11 @@ WORKFLOW:Workflow = Workflow() # Un workflow único para todo el servicio
 ###############################################################################
 
 # MongoDB client setup
-db_url = None
-try:
-    db_url = os.environ.get('MONGO_DB')
-except Exception as e:
-    db_url = "mongodb://mongo:27017/"
+db_url = "mongodb://mongo:27017/"
+#try:
+    #db_url = os.environ.get('MONGO_DB')
+#except Exception as e:
+    #db_url = "mongodb://mongo:27017/"
 
 client = MongoClient(db_url) # La ruta del contenedor mongo (al app solo funcionará desplegada en el contenedor a partir de ahora)
 db = client['mydb']
