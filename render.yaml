@@ -22,7 +22,7 @@ services:
           #name: mongo-db
           #envVarKey: MONGO_URI
       - key: DATABASE_URI
-        value: mongodb://mongo:27017/
+        value: mongodb://mongo:27017/mydb
       - key: LOGGER
         value: logger:24224
     healthCheckPath: /health
@@ -57,11 +57,11 @@ services:
         #value: mongodb://mongo:27017/mydb
     #healthCheckPath: /health
 
-  - type: background
+  - type: pserv
+    runtime: docker
     name: mongo
     region: frankfurt
-    image: mongo:latest
-    port: 27017
+    dockerfilePath: mongo.Dockerfile
     envVars:
       - key: MONGO_INITDB_ROOT_USERNAME
         value: admin
