@@ -22,7 +22,7 @@ services:
           #name: mongo-db
           #envVarKey: MONGO_URI
       - key: DATABASE_URI
-        value: mongodb://mongo:27017/mydb
+        value: mongodb://mongo:27017/
       - key: LOGGER
         value: logger:24224
     healthCheckPath: /health
