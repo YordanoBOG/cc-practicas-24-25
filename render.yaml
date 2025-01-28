@@ -16,23 +16,26 @@ services:
         value: RENDER
       - key: PORT
         value: 8000
-      - key: MONGO_DB
-        fromService:
-          type: pserv
-          name: mongo-db
-          envVarKey: MONGO_URI
+      #- key: MONGO_DB
+        #fromService:
+          #type: pserv
+          #name: mongo-db
+          #envVarKey: MONGO_URI
+      - key: DATABASE_URI
+        value: mongodb://mongo:27017/mydb
       - key: LOGGER
         value: logger:24224
+    healthCheckPath: /health
 
-  - name: mongo-db
-    type: pserv
-    runtime: docker
-    dockerfilePath: mongo.Dockerfile
-    region: frankfurt
-    plan: free
-    envVars:
-      - key: MONGO_URI
-        value: mongodb://mongo:27017/mydb
+  #- name: mongo-db
+    #type: pserv
+    #runtime: docker
+    #dockerfilePath: mongo.Dockerfile
+    #region: frankfurt
+    #plan: free
+    #envVars:
+      #- key: MONGO_URI
+        #value: mongodb://mongo:27017/mydb
 
   - name: logger
     type: pserv
@@ -42,3 +45,29 @@ services:
     plan: free
     envVars: []
 
+
+#services:
+  #- type: web
+    #name: my-app
+    #env: docker
+    #dockerfilePath: ./Dockerfile
+    #port: 8080
+    #envVars:
+      #- key: DATABASE_URI
+        #value: mongodb://mongo:27017/mydb
+    #healthCheckPath: /health
+
+  - type: background
+    name: mongo
+    region: frankfurt
+    image: mongo:latest
+    port: 27017
+    envVars:
+      - key: MONGO_INITDB_ROOT_USERNAME
+        value: admin
+      - key: MONGO_INITDB_ROOT_PASSWORD
+        value: securepassword
+    disk:
+      name: mongo-data
+      mountPath: /data/db
+      sizeGB: 10
