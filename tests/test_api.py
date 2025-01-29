@@ -27,7 +27,7 @@ def test_aniadirtareageneratefasta():
     assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.generate_fasta.GenerateFasta'
 
 def test_aniadirtareareducesample():
-    response = requests.post("http://localhost:8000/aniadirtareareducesample", json={"containerized": False, "fasta_pathname": "proteins.fasta", "pathname_to_reduced_proteins": "reduced_proteins.fasta"})
+    response = requests.post("http://localhost:8000/aniadirtareareducesample", json={"containerized": False, "fasta_pathname": "proteins.fasta", "pathname_to_reduced_proteins": "reduced_proteins.fasta", "percentage": 85})
     assert response.status_code == 200
     assert response.json()["nueva tarea"]['type'] == 'api.modules.PATRIC_protein_processing.reduce_sample.ReduceSample'
 
