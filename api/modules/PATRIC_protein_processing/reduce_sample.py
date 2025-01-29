@@ -152,16 +152,18 @@ class ReduceSample(Task):
     # Create a .fasta file with the reduced protein sample in the pathname specified in class' parameters
     def __generate_reduced_fasta(self):
         try:
-            fasta_file = io.TextIOWrapper()
+            fasta_content = "" # Contenido a guardar en un documento en la base de datos
             if self._containerized:
+                fasta_inutil = open(self.__pathname_to_reduced_proteins, 'w') # Este fasta no lo vamos a guardar
                 client = MongoClient("mongodb://mongo:27017/")
                 db = client['mydb']
                 fs = GridFS(db)
                 for protein_key, protein_string in self.__reduced_proteins.items():
-                    self._returned_info += save_fasta_string(protein_string, protein_key, fasta_file) # Call the function that saves the .fasta file. It receives the code and the result of the script itself
-                fasta_file.seek(0)
-                fasta_content = fasta_file.read()
-                fs.put(fasta_content.encode('utf-8'), filename=self.__pathname_to_reduced_proteins, content_type="text/plain")
+                    save_fasta_result = save_fasta_string(protein_string, protein_key, fasta_inutil)
+                    fasta_content += save_fasta_result[0]
+                    self._returned_info += save_fasta_result[1]
+                fasta_file = io.StringIO(fasta_content)
+                file_id = fs.put(fasta_file.getvalue().encode('utf-8'), filename=self.__pathname_to_reduced_proteins)
             else:
                 touch_fasta = subprocess.run(['touch', self.__pathname_to_reduced_proteins]) # Create the fasta file
                 if touch_fasta.returncode == 0:
@@ -169,7 +171,8 @@ class ReduceSample(Task):
                 else:
                     self._returned_info += f"\n\nUnexpected error occurred while creating the reduced proteins .fasta file: {touch_fasta.stderr}"
                 for protein_key, protein_string in self.__reduced_proteins.items():
-                    self._returned_info += save_fasta_string(protein_string, protein_key, fasta_file) # Call the function that saves the .fasta file. It receives the code and the result of the script itself
+                    save_fasta_result = save_fasta_string(protein_string, protein_key, fasta_file)
+                    self._returned_info += save_fasta_result[1]
                 fasta_file.close()
 
             self._returned_info += f"\n\n.fasta file {self.__pathname_to_reduced_proteins} was writen succesfully"

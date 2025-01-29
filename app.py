@@ -112,8 +112,8 @@ def list_files():
 @app.route('/crearworkflow', methods=['GET'])
 def crear_workflow():
     app.logger.info("Llamada a /crearworkflow")
-    default_workflow = Workflow()
-    WORKFLOW.set_parameters(default_workflow.get_parameters())
+    default_cont_workflow = Workflow(containerized=True)
+    WORKFLOW.set_parameters(default_cont_workflow.get_parameters())
     workflow_new_parameters = WORKFLOW.get_parameters()
     return jsonify({"tareas": workflow_new_parameters['tasks'],
                     "returned value": workflow_new_parameters['returned_value'],
@@ -183,14 +183,17 @@ def aniadir_tarea_gen_fasta():
 ###############################################################################
 ###############################################################################
 ''' Ejemplo: $curl -X POST http://localhost:8000/aniadirtareareducesample -H "Content-Type: application/json" \
--d '{"containerized": true, "fasta_pathname": "samples.fasta", "pathname_to_reduced_proteins": "reduced_samples.fasta"}' '''
+-d '{"containerized": true, "fasta_pathname": "samples.fasta", "pathname_to_reduced_proteins": "reduced_samples.fasta", "percentage": 85}' '''
 @app.route('/aniadirtareareducesample', methods=['POST'])
 def aniadir_tarea_reduce_sample():
     app.logger.info("Llamada a /aniadirtareareducesample")
     parametros = request.get_json()
-    reduce_sample_task = ReduceSample(containerized=parametros['containerized'], fasta_pathname=parametros['fasta_pathname'], pathname_to_reduced_proteins=parametros['pathname_to_reduced_proteins'])
+    reduce_sample_task = ReduceSample(containerized=parametros['containerized'], fasta_pathname=parametros['fasta_pathname'], pathname_to_reduced_proteins=parametros['pathname_to_reduced_proteins'], percentage=parametros['percentage'])
     WORKFLOW.add_task(reduce_sample_task)
     # Devolver la información de la última tarea añadida al workflow para confirmar que se ha añadido la que hemos creado
+    info = WORKFLOW.get_tasks()[-1].to_dict()
+    info.pop('proteins')
+    info.pop('reduced_proteins')
     return jsonify({"nueva tarea": WORKFLOW.get_tasks()[-1].to_dict()})
 
 ###############################################################################

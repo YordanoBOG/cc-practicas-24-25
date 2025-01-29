@@ -16,6 +16,8 @@ import subprocess
 import io
 from pymongo import MongoClient
 from gridfs import GridFS
+from datetime import datetime
+import io
 
 from api.modules.baseobjects import Task
 from api.utils.fasta_processing_utils import save_fasta_string
@@ -112,15 +114,15 @@ class GenerateFasta(Task):
         try:
             touch_result = subprocess.run(['touch', self.__fasta_pathname]) # Create the fasta file
             if touch_result.returncode == 0:
-                fasta_file = None
-                if self._containerized:
-                    fasta_file = io.TextIOWrapper(encoding='utf-8')
-                else:
-                    fasta_file = open(self.__fasta_pathname, 'w') # Open .fasta file where we will save all the encountered unique proteins
+                fasta_sequence = "" # Lo usaremos solo para los datos a almacenar en la base de datos
+                fasta_file = open(self.__fasta_pathname, 'w') # Open .fasta file where we will save all the encountered unique proteins
                 procesed_proteins = [] # List where we will locate all the protein strings that we have already saved as fasta files
                 for protein_code in codes:
                     # We specify the path 'utils/getprotein.sh' because we assume that we are executing this script from genesys.py context
-                    get_protein_bash_command_result = subprocess.run(['modules/PATRIC_protein_processing/getprotein.sh', protein_code], capture_output=True, text=True) # We execute a tiny bash script that executes the proper BV-BRC tool which gets a protein string from its code. The capture_output=True argument captures the output of the command, and text=True decodes the output as text
+                    #if self._containerized:
+                    get_protein_bash_command_result = subprocess.run(['api/modules/PATRIC_protein_processing/getprotein.sh', protein_code], capture_output=True, text=True)
+                    #else:
+                        #get_protein_bash_command_result = subprocess.run(['modules/PATRIC_protein_processing/getprotein.sh', protein_code], capture_output=True, text=True) # We execute a tiny bash script that executes the proper BV-BRC tool which gets a protein string from its code. The capture_output=True argument captures the output of the command, and text=True decodes the output as text
                     if get_protein_bash_command_result.returncode == 0:
                         protein_string = get_protein_bash_command_result.stdout.rsplit(' ', 1)[-1]  # rsplit() is used to split the command_result variable starting from the right side
                                                                                                     # (from the end) using blank spaces as delimiters. The [-1] index retrieves the last
@@ -128,7 +130,9 @@ class GenerateFasta(Task):
                                                                                                     # "id feature.aa_sequence <given_code> <returned_string>" as the employed BV-BRC "feature.aa_sequence" tool returns a 2x2 matrix
                         if protein_string!="feature.aa_sequence\n": # If we have isolated the string "feature.aa_sequence\n", it means that the BV-BRC command that we run in "getprotein.sh" has not found any asociated protein to the code
                             if self.__code_not_procesed(protein_string, procesed_proteins): # Before saving the protein, we check is it was already saved
-                                self._returned_info += save_fasta_string(protein_string, protein_code, fasta_file) # Call the function that saves the .fasta file.
+                                save_fasta_result = save_fasta_string(protein_string, protein_code, fasta_file)
+                                fasta_sequence += save_fasta_result[0]
+                                self._returned_info += save_fasta_result[1]
                                 procesed_proteins.append(protein_string) # We add the protein into the procesed proteins list once it is saved
                             else:
                                 self._returned_info += f"\nProtein with code <{protein_code}> and string <<<<< {protein_string} >>>>>\n turned out to reference an ALREADY SAVED protein sequence\n"
@@ -140,17 +144,28 @@ class GenerateFasta(Task):
                         # Error
                         self._returned_info += f"\nError while getting {protein_code} code: {get_protein_bash_command_result.stderr}"
                         self._returned_value = 4
+                fasta_file.close()
                 if self._containerized:
-                    # Save the file into MongoDB database
-                    fasta_file.seek(0)
-                    content = fasta_file.read()
-                    string_fasta = io.StringIO(content)
+                    # Guardar en la base de datos
                     client = MongoClient(self._db_connection)
                     db = client['mydb']
                     fs = GridFS(db)
-                    fs.put(string_fasta.getvalue().encode('utf-8'), filename=self.__fasta_pathname)
-                else:
-                    fasta_file.close()
+                    '''collection = db["fasta_files"]
+                    document = {
+                        "filename": self.__fasta_pathname,
+                        "content": fasta_sequence,
+                        "timestamp": datetime.now()
+                    }
+                    collection.insert_one(document)
+                    self._returned_info += "\nFASTA file saved to MongoDB.\n"'''
+                    fasta_file = io.StringIO(fasta_sequence)  # Convert string to file-like object
+                    file_id = fs.put(fasta_file.getvalue().encode('utf-8'), filename=self.__fasta_pathname)
+                    #content = fasta_file.read()
+                    #string_io_content = io.StringIO(content) # Convert string to StringIO
+                    #string_io_content.seek(0)
+                    #with open(fasta_file, "rb") as file:
+                    #file_id = fs.put(self.__fasta_pathname.encode('utf-8'), filename=self.__fasta_pathname)
+                    #fasta_file.close()
             else:
                 self._returned_info += f"\nUnexpected error occurred while creating the .fasta file: {touch_result.stderr}"
                 self._returned_value = 5

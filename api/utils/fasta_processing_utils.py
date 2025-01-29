@@ -19,23 +19,27 @@ import io
 # This function receives a protein string, its correspond BVRC ID code and
 # an openned file in which that protein would be stored in fasta format.
 # It returns an explanation message
-def save_fasta_string(string, identifier, fasta_file:io.TextIOWrapper):
+def save_fasta_string(string, identifier, fasta_file):
     result = f"\nProtein still not processed\n"
+    saved_info = "" # Let's return as well the stored info in the file
     try:
         # Write the identifier line
         identifier_line = ">" + identifier + "\n"
         fasta_file.write(identifier_line)
+        saved_info += identifier_line
 
         # Write the aminoacid sequence. We write the sequence in lines of a maximum of 80 characters in order to follow the .fasta structure standard
         protein_lines = split_fasta_sequence(string)
         for line in protein_lines:
             line += "\n"
             fasta_file.write(line) # According to .fasta structure, each line of a fasta file always should have 80 characters or less 
+            saved_info += line
         fasta_file.write("\n") # Write the last line jump
+        saved_info += "\n"
         result = f"\nProtein <{string}> with code <{identifier}> WAS SAVED succesfully\n"
     except Exception as e:
         result = f"\nError while writing the protein in a .fasta file: {e}\n"
-    return result
+    return saved_info, result
 
 
 ###############################################################################
